@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+
+	<context:property-placeholder location="classpath:db.properties" />
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="user" value="${user}"></property>
+		<property name="password" value="${password}"></property>
+		<property name="driverClass" value="${driverClass}"></property>
+		<property name="jdbcUrl" value="${jdbcUrl}"></property>
+
+		<property name="maxPoolSize" value="${max_size}"></property>
+		<property name="minPoolSize" value="${min_size}"></property>
+		<property name="checkoutTimeout" value="${timeout}"></property>
+		<property name="idleConnectionTestPeriod" value="${idle_test_period}"></property>
+		<property name="acquireIncrement" value="${acquire_increment}"></property>
+		<property name="maxStatements" value="${max_statements}"></property>
+	</bean>
+
+	<bean id="funDaoTest" 
+		class="com.sharpower.test.FunDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<bean id="windFarmDaoTest" 
+		class="com.sharpower.test.WindFarnDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<bean id="funServiceTest" 
+		class="com.sharpower.test.FunService">
+		<property name="funDao" ref="funDaoTest"></property>
+		<property name="windFarnDao" ref="windFarmDaoTest"></property>
+	</bean>
+
+	<bean id="funDao" 
+		class="com.sharpower.dao.impl.FunDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="windFarmDao" 
+		class="com.sharpower.dao.impl.WindFarmDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="plcTypeDao"
+		class="com.sharpower.dao.impl.PlcTypeDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>	
+	</bean>
+
+	<bean id="funService" 
+		class="com.sharpower.service.impl.FunServiceImpl">
+		<property name="dao" ref="funDao"></property>
+	</bean>
+	
+	<bean id="windFarmService" 
+		class="com.sharpower.service.impl.WindFarmServiceImpl">
+		<property name="dao" ref="windFarmDao"></property>
+	</bean>
+	
+	<bean id="plcTypeService"
+		class="com.sharpower.service.impl.PlcTypeServiceImpl">
+		<property name="dao" ref="plcTypeDao"></property>
+	</bean>
+	
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="mappingLocations" value="classpath:com/sharpower/entity/*.hbm.xml"></property>
+	</bean>
+
+	<bean name="transactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<bean id="loginAction" 
+		class="com.sharpower.action.LoginAction"
+		scope="prototype">
+	</bean>
+	
+	<bean id="funAction" 
+		class="com.sharpower.action.FunAction"
+		scope="prototype">	
+		<property name="funService" ref="funService"></property>	
+		<property name="plcTypeService" ref="plcTypeService"></property>
+	</bean>
+
+	<tx:advice id="txAdvice" 
+		transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="*" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:pointcut id="myTestPointcut"
+			expression="execution(* com.sharpower.test.FunService.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="myTestPointcut" />
+	</aop:config>
+	
+	<aop:config>
+		<aop:pointcut  id="myPointcut" 
+			expression="execution(* com.sharpower.service.impl.*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="myPointcut" />
+	</aop:config>
+
+</beans>

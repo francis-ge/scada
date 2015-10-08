@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<constant name="struts.devMode" value="true" />
+
+	<package name="default" extends="struts-default">
+	
+		<interceptors>
+		    <interceptor-stack name="myStack">
+		        <interceptor-ref name="paramsPrepareParamsStack">
+		            <param name="prepare.alwaysInvokePrepare">false</param>
+		        </interceptor-ref>
+		    </interceptor-stack>
+		</interceptors>
+ 
+		<default-interceptor-ref name="myStack"/>
+			
+		<action name="login" class="loginAction" method="login">
+			<result>/WEB-INF/web//success.jsp</result>
+		</action>
+		
+		<action name="inputFun" class="funAction" method="inputFun">
+			<result type="dispatcher">/WEB-INF/web/inputFun.jsp</result>
+		</action>
+		
+		<action name="saveFun" class="funAction" method="save">
+			<result name="save-success" type="dispatcher">/WEB-INF/web/inputFun.jsp</result>
+			<result name="input" type="dispatcher">/WEB-INF/web/inputFun.jsp</result>
+		</action>
+		
+	</package>
+
+</struts>

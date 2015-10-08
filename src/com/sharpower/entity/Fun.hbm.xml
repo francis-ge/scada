@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<!-- Generated 2015-9-25 16:06:07 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+
+<class name="com.sharpower.entity.Fun" table="FUN">
+
+	<id name="id" type="int">
+		<column name="ID" />
+	    <generator class="native" />
+    </id>
+
+    <property name="name" type="java.lang.String">
+		<column name="NAME" />
+  	</property>
+
+    <property name="type" type="java.lang.String">
+		<column name="TYPE" />
+  	</property>
+
+    <property name="address" type="java.lang.String">
+		<column name="ADDRESS" />
+  	</property>
+
+    <property name="line" type="java.lang.String">
+		<column name="LINE" />
+  	</property>
+  	
+  	<many-to-one name="windFarm" class="com.sharpower.entity.WindFarm" column="WINDFARM_ID" />
+  	
+</class>
+
+</hibernate-mapping>
