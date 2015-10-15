@@ -53,6 +53,16 @@
 		class="com.sharpower.dao.impl.PlcTypeDaoImpl">
 		<property name="sessionFactory" ref="sessionFactory"></property>	
 	</bean>
+	
+	<bean id="variableDao"
+		class="com.sharpower.dao.impl.VariableDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="variableTypeDao"
+		class="com.sharpower.dao.impl.VariableTypeDaoImpl"> 
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
 
 	<bean id="funService" 
 		class="com.sharpower.service.impl.FunServiceImpl">
@@ -69,11 +79,21 @@
 		<property name="dao" ref="plcTypeDao"></property>
 	</bean>
 	
+	<bean id="variableService"
+		class="com.sharpower.service.impl.VariableServiceImpl">
+		<property name="dao" ref="variableDao"></property>
+	</bean>
+	
+	<bean id="variableTypeService"
+		class="com.sharpower.service.impl.VariableTypeServiceImpl">
+		<property name="dao" ref="variableTypeDao"></property>
+	</bean>
+	
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
 		<property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
 		<property name="dataSource" ref="dataSource"></property>
-		<property name="mappingLocations" value="classpath:com/sharpower/entity/*.hbm.xml"></property>
+		<property name="mappingLocations" value="classpath:com/sharpower/entity/*.hbm.xml"></property>		
 	</bean>
 
 	<bean name="transactionManager"
@@ -91,6 +111,13 @@
 		scope="prototype">	
 		<property name="funService" ref="funService"></property>	
 		<property name="plcTypeService" ref="plcTypeService"></property>
+	</bean>
+	
+	<bean id="variableAction"
+		class="com.sharpower.action.VariableAction"
+		scope="prototype">
+		<property name="variableService" ref="variableService"></property>
+		<property name="variableTypeService" ref="variableTypeService"></property>
 	</bean>
 
 	<tx:advice id="txAdvice" 

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="sb" uri="/struts-bootstrap-tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html >
@@ -9,7 +10,7 @@
 
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Input Fun</title>
+<title>Fun Edit</title>
 
 <!-- Bootstrap -->
 <link href="css/bootstrap.css" rel="stylesheet">
@@ -20,11 +21,15 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+        <style>
+	    body{
+	    	padding-top:50px;
+	    }
+    </style>
 </head>
 <body>
-<s:debug></s:debug>
-<nav class="navbar navbar-inverse">   
-<div class="container-fluid">
+<nav class="navbar navbar-fixed-top navbar-inverse navbar-default">   
+<div class="container">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#inverseNavbar1">
@@ -59,56 +64,35 @@
 </div>
   </div>
   </nav>
-  <s:if test="id!=0&name!=null">Input Success!</s:if>
-  <s:elseif test="id==0&name!=null">Input Fail!</s:elseif>
-  <s:else></s:else>
+  
+ 	<s:actionerror  theme="bootstrap"/>
+	<s:actionmessage theme="bootstrap"/>
+	<s:fielderror theme="bootstrap"/>
+	
 
-<div class="container">
-<form class="form-horizontal" method="post" action="saveFun">
-  <div class="form-group">
-    <label for="inputName" class="col-sm-2 control-label">风机名称</label>
-    <div class="col-sm-5">
-      <input type="text" class="form-control" id="inputName" placeholder="Name" name="name">
-    </div>
-  </div>
-<div class="form-group">
-    <label for="inputType" class="col-sm-2 control-label">主控类型</label>
-    <div class="col-sm-5">
-     <select class="form-control" id="inputType" name="type">
-      <s:iterator value="#request.plcTypes" var="type">
-      	<option>${name}</option>
-      </s:iterator>
-    </select>
-    </div>
-  </div>
-  
-  <div class="form-group">
-    <label for="inputAddress" class="col-sm-2 control-label">风机地址</label>
-    <div class="col-sm-5">
-      <input type="text" class="form-control" id="inputAddress" placeholder="Addres" name="address">
-    </div>
-  </div>
-  
-    <div class="form-group">
-    <label for="inputGroup" class="col-sm-2 control-label">分组</label>
-    <div class="col-sm-5">
-      <input type="text" class="form-control" id="inputGroup" placeholder="Group" name="line">
-    </div>
-  </div>
-  
-    <input name="windFarm.id" type="hidden" value="1">
-    
-    <div class="col-sm-offset-2 col-sm-5" >
-      <button type="submit" class="btn btn-default pull-right col-sm-3" >提交</button>
-    </div>
-   
-    </form>
-    
-    </div>
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
-<script src="js/jquery-1.11.3.js"></script>
+  	<s:form class="form-horizontal" method="post" action="updateFun"  label="修改风机信息"
+  		enctype="multipart/form-data" theme="bootstrap" cssClass="form-horizontal">
+  		<s:textfield label="ID" name="id" disabled="true" cssClass="input-sm" elementCssClass="col-sm-6"></s:textfield>
+  		<s:textfield label="风机名称" name="name" cssClass="input-sm" elementCssClass="col-sm-6"></s:textfield>
+  		<s:select label="主控类型" name="type" list="#request.plcTypes" listKey="name" listValue="name" elementCssClass="col-sm-6"></s:select>
+  		<s:textfield label="风机地址" name="address" cssClass="input-sm" elementCssClass="col-sm-6"></s:textfield>
+  		<s:textfield label="分组" name="line" cssClass="input-sm" elementCssClass="col-sm-6"></s:textfield>
+  		<s:textfield name="id" type="hidden"></s:textfield>
+  		<s:textfield name="windFarm.id" type="hidden" value="1"></s:textfield>
 
-<!-- Include all compiled plugins (below), or include individual files as needed --> 
-<script src="js/bootstrap.js"></script>
+	     <div class="form-group">
+             <div class="col-sm-offset-7 col-sm-2">
+                 <s:submit cssClass="btn btn-primary btn-block" value="修改"  />
+             </div>
+         </div>
+  	</s:form>
+ 
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins)  -->
+<script src="<%= request.getContextPath() %>/js/jquery-1.11.3.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed  -->
+<script src="<%= request.getContextPath() %>/js/bootstrap.js"></script>
+
+
 </body>
 </html>

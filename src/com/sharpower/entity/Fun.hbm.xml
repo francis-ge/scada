@@ -29,7 +29,7 @@
 		<column name="LINE" />
   	</property>
   	
-  	<many-to-one name="windFarm" class="com.sharpower.entity.WindFarm" column="WINDFARM_ID" />
+  	<many-to-one name="windFarm" class="com.sharpower.entity.WindFarm" column="WINDFARM_ID" fetch="join"/>
   	
 </class>
 

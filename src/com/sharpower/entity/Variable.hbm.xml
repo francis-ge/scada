@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-10-13 9:15:33 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.sharpower.entity.Variable" table="VARIABLE">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        
+        <property name="name" type="java.lang.String">
+            <column name="NAME" />
+        </property>
+        
+        <property name="dbName" type="java.lang.String">
+            <column name="DBNAME" />
+        </property>
+        
+        <many-to-one name="type" class="com.sharpower.entity.VariableType" fetch="join" lazy="false">
+            <column name="TYPE" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

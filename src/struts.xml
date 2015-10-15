@@ -21,18 +21,65 @@
 		<default-interceptor-ref name="myStack"/>
 			
 		<action name="login" class="loginAction" method="login">
-			<result>/WEB-INF/web//success.jsp</result>
+			<result>/WEB-INF/web/success.jsp</result>
 		</action>
 		
-		<action name="inputFun" class="funAction" method="inputFun">
-			<result type="dispatcher">/WEB-INF/web/inputFun.jsp</result>
+		<action name="funManage" class="funAction" method="funManage">
+			<result >/WEB-INF/web/funManage.jsp</result>
 		</action>
 		
 		<action name="saveFun" class="funAction" method="save">
-			<result name="save-success" type="dispatcher">/WEB-INF/web/inputFun.jsp</result>
-			<result name="input" type="dispatcher">/WEB-INF/web/inputFun.jsp</result>
+			<interceptor-ref name="tokenSession"></interceptor-ref>
+			<interceptor-ref name="paramsPrepareParamsStack"></interceptor-ref>
+			
+			<result name="invalid.token">/WEB-INF/web/double-submit.jsp</result>
+			<result >/WEB-INF/web/funManage.jsp</result>
+			<result name="input" >/WEB-INF/web/funManage.jsp</result>
+		</action>
+
+		<action name="editFun" class="funAction" method="editFun">
+			<result >/WEB-INF/web/editFun.jsp</result>
+		</action>		
+		
+		<action name="updateFun" class="funAction" method="update">
+			<result >/WEB-INF/web/funManage.jsp</result>
+			<result name="input" >/WEB-INF/web/editFun.jsp</result>
 		</action>
 		
+		<action name="deleteFun" class="funAction" method="delete">
+			<result >/WEB-INF/web/funManage.jsp</result>
+			<result name="error">/WEB-INF/web/funManage.jsp</result>
+		</action>
+		
+		<action name="variableManage" class="variableAction" method="variableManage">
+			<result>/WEB-INF/web/variableManage.jsp</result>
+		</action>
+		
+		<action name="saveVariable" class="variableAction" method="save">
+			<interceptor-ref name="tokenSession"></interceptor-ref>
+			<interceptor-ref name="paramsPrepareParamsStack"></interceptor-ref>
+			
+			<result name="invalid.token">/WEB-INF/web/double-submit.jsp</result>
+			<result >/WEB-INF/web/variableManage.jsp</result>
+			<result name="input" >/WEB-INF/web/variableManage.jsp</result>
+		</action>
+		
+		<action name="editVariable" class="variableAction" method="edit">
+			<result >/WEB-INF/web/editVariable.jsp</result>
+		</action>		
+		
+		<action name="updateVariable" class="variableAction" method="update">
+			<result >/WEB-INF/web/variableManage.jsp</result>
+			<result name="input" >/WEB-INF/web/editVariable.jsp</result>
+		</action>
+		
+		<action name="deleteVariable" class="variableAction" method="delete">
+			<result >/WEB-INF/web/variableManage.jsp</result>
+			<result name="error">/WEB-INF/web/variableManage.jsp</result>
+		</action>
+				
 	</package>
+	
+
 
 </struts>

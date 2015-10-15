@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.sharpower.scada.exception.AdsException;
+import com.sharpower.service.VariableTypeService;
 
 import de.beckhoff.jni.JNIByteBuffer;
 import de.beckhoff.jni.tcads.AdsCallDllFunction;
@@ -13,8 +14,18 @@ import de.beckhoff.jni.tcads.AmsAddr;
 
 public class FunDataReadWriteBeckhoffUtils {
 	private static final int ERROR_CODE_LENGTH = 4;
-	private static final int READ_DATA_LENGTH = 4;
-	private static final int WRITE_TYPE_LENGTH = 16; // Ð´Èë½á¹¹µÄ³¤¶ÈÖµ
+	private static final int READ_DATA_LENGTH  = 4;
+	private static final int WRITE_TYPE_LENGTH = 16;
+	
+	private VariableTypeService variableTypeService;
+
+	public VariableTypeService getVariableTypeService() {
+		return variableTypeService;
+	}
+
+	public void setVariableTypeService(VariableTypeService variableTypeService) {
+		this.variableTypeService = variableTypeService;
+	}
 
 	private static List<String> booleanValNames;
 	private static List<String> byteValNames;
@@ -61,7 +72,7 @@ public class FunDataReadWriteBeckhoffUtils {
 
 	static {
 		booleanValNames = new ArrayList<String>();
-		booleanValNames.add("main.Booltest1");
+		booleanValNames.add("Main.Booltest1");
 		booleanValNames.add("Main.Booltest2");
 		booleanValNames.add("Main.Booltest3");
 		booleanValNames.add("Main.Booltest4");
@@ -335,7 +346,7 @@ public class FunDataReadWriteBeckhoffUtils {
 		if (clazz == Boolean.class) {
 			lj_indexOffset = lj_indexOffset_boolean;
 			lj_lengthRead = lj_lengthRead_boolean;
-			// Îª¶àÏß³Ì¶ÁÈ¡Êý¾ÝÊ±Ïß³Ì°²È«¿¼ÂÇ´Ë´¦ÐèÒªÎª¶¯Ì¬´´½¨±äÁ¿¡£ÎªÃ¿´Î¶ÁÈ¡»ØÀ´µÄ±äÁ¿¿ª±Ù²»Í¬µÄµØÖ·¿Õ¼ä¡£
+			// Îªï¿½ï¿½ï¿½ß³Ì¶ï¿½È¡ï¿½ï¿½ï¿½Ê±ï¿½ß³Ì°ï¿½È«ï¿½ï¿½ï¿½Ç´Ë´ï¿½ï¿½ï¿½ÒªÎªï¿½ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÎªÃ¿ï¿½Î¶ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù²ï¿½Í¬ï¿½Äµï¿½Ö·ï¿½Õ¼ä¡£
 			lj_pDataRead = new JNIByteBuffer((int) lj_lengthRead);
 			lj_lengthWrite = lj_lengthWrite_boolean;
 			lj_pDataWrite = lj_pDataWrite_boolean;

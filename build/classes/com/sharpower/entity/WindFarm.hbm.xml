@@ -14,7 +14,7 @@
 	    </property>
               
  
-        <set name="funs" table="FUN" lazy="true" inverse="true">
+        <set name="funs" table="FUN" lazy="true" inverse="true" fetch="join" order-by="id asc">
             <key column="WINDFARM_ID" />
             <one-to-many class="com.sharpower.entity.Fun" />
         </set>

@@ -23,6 +23,7 @@ public class FunAction extends ActionSupport implements ModelDriven<Fun>, Prepar
 	private static final long serialVersionUID = 1L;
 	private FunService funService;
 	private PlcTypeService plcTypeService;
+	private Integer Id;
 	
 	public FunService getFunService() {
 		return funService;
@@ -35,12 +36,22 @@ public class FunAction extends ActionSupport implements ModelDriven<Fun>, Prepar
 		this.plcTypeService = plcTypeService;
 	}
 	
+	public Integer getId() {
+		return Id;
+	}
+	public void setId(Integer Id) {
+		this.Id = Id;
+	}
 	
-	public String inputFun(){
+	public String funManage(){
 		//ApplicationContext ac = WebApplicationContextUtils.getWebApplicationContext(sc);
 		//System.out.println(ac.getBean("funService"));
 		List<PlcType> plcTypes = plcTypeService.findAllEntities();
 		requestMap.put("plcTypes", plcTypes);
+		
+		List<Fun> funs = funService.findAllEntities();
+		requestMap.put("funs", funs);
+
 		return SUCCESS;
 	}
 	
@@ -48,9 +59,70 @@ public class FunAction extends ActionSupport implements ModelDriven<Fun>, Prepar
 		fun = new Fun();
 	}
 	public String save(){
-		funService.saveEntity(fun);
-		inputFun();
-		return "save-success";
+		funService.saveOrUpdateEntity(fun);	
+		
+		List<PlcType> plcTypes = plcTypeService.findAllEntities();
+		requestMap.put("plcTypes", plcTypes);
+		
+		List<Fun> funs = funService.findAllEntities();
+		requestMap.put("funs", funs);
+		
+		addActionMessage("添加成功！");
+		return SUCCESS;
+	}
+	
+	public void prepareUpdate(){
+		fun = new Fun();
+	}
+	public String update(){
+		funService.saveOrUpdateEntity(fun);	
+		List<PlcType> plcTypes = plcTypeService.findAllEntities();
+		requestMap.put("plcTypes", plcTypes);
+		
+		List<Fun> funs = funService.findAllEntities();
+		requestMap.put("funs", funs);
+		
+		addActionMessage("修改成功！");
+		
+		return SUCCESS;
+	}
+	
+	public void prepareEditFun(){
+		fun = funService.getEntity(Id);
+
+	}
+
+	public String editFun(){
+		List<PlcType> plcTypes = plcTypeService.findAllEntities();
+		requestMap.put("plcTypes", plcTypes);
+		return SUCCESS;
+	}
+	
+	public void prepareDelete(){
+		fun = funService.getEntity(Id);
+	
+	}
+	public String delete(){
+		
+		List<PlcType> plcTypes = plcTypeService.findAllEntities();
+		requestMap.put("plcTypes", plcTypes);
+		
+		if(fun==null){
+			List<Fun> funs = funService.findAllEntities();
+			requestMap.put("funs", funs);
+			
+			addActionMessage("风机信息不存在!");
+			return ERROR;
+		}
+		
+		funService.deleteEntity(fun);
+		
+		List<Fun> funs = funService.findAllEntities();
+		requestMap.put("funs", funs);
+		
+		addActionMessage("删除成功！");
+		
+		return SUCCESS;
 	}
 	
 	private Fun fun;
@@ -62,7 +134,6 @@ public class FunAction extends ActionSupport implements ModelDriven<Fun>, Prepar
 	}
 	@Override
 	public Fun getModel() {
-		//fun = new Fun();
 		return fun;
 	}
 
