@@ -77,6 +77,7 @@
   		<s:textfield name="id" type="hidden"></s:textfield>
   		<s:textfield label="变量名" name="name" cssClass="input-sm" elementCssClass="col-sm-6"></s:textfield>
   		<s:textfield label="数据存储名" name="dbName" disabled="true" cssClass="input-sm" elementCssClass="col-sm-6"></s:textfield>
+  		<s:textfield label="显示名（中文）" name="showNameCN" cssClass="input-sm" elementCssClass="col-sm-6"></s:textfield>
   		<s:select label="类型" name="type.id" list="#request.variableTypes" listKey="id" listValue="name" elementCssClass="col-sm-6" ></s:select>
   		 
   		<s:token></s:token>

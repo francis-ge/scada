@@ -16,16 +16,6 @@ public class FunDataReadWriteBeckhoffUtils {
 	private static final int ERROR_CODE_LENGTH = 4;
 	private static final int READ_DATA_LENGTH  = 4;
 	private static final int WRITE_TYPE_LENGTH = 16;
-	
-	private VariableTypeService variableTypeService;
-
-	public VariableTypeService getVariableTypeService() {
-		return variableTypeService;
-	}
-
-	public void setVariableTypeService(VariableTypeService variableTypeService) {
-		this.variableTypeService = variableTypeService;
-	}
 
 	private static List<String> booleanValNames;
 	private static List<String> byteValNames;

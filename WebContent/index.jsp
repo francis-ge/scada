@@ -11,6 +11,8 @@
 	<a href="funManage">Fun Manage</a>
 	<br>
 	<a href="variableManage">Variable Manage</a>
+	<br>
+	<a href="realTimeInfo">RealTimeInfo</a>
 	
 </body>
 </html>

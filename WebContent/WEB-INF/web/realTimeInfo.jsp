@@ -10,7 +10,7 @@
 
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Variable Manage</title>
+<title>Real Time Info</title>
 
 <!-- Bootstrap -->
 <link href="<%= request.getContextPath() %>/css/bootstrap.css" rel="stylesheet">
@@ -71,45 +71,33 @@
 	<s:fielderror theme="bootstrap"/>
 <s:debug></s:debug>	
 
-    <s:form class="form-inline" method="post" action="saveVariable"  label="添加变量信息"
+  	<s:form id="form1" class="form-inline" method="post" action="realTimeInfo" label="选择风机"
   			enctype="multipart/form-data" theme="bootstrap" cssClass="form-horizontal">
-  		<s:textfield label="ID" name="id" disabled="true" cssClass="input-sm" elementCssClass="col-sm-6"></s:textfield>
-  		<s:textfield label="变量名" name="name" cssClass="input-sm" elementCssClass="col-sm-6"></s:textfield> 		
-  		<s:textfield name="dbName" label="数据存储名" disabled="true" cssClass="input-sm" elementCssClass="col-sm-6"></s:textfield>
-  		<s:textfield name="showNameCN" label="显示名（中文）" cssClass="input-sm" elementCssClass="col-sm-6"></s:textfield>
-  		<s:select label="类型" name="type.id" list="#request.variableTypes" listKey="id" listValue="name" elementCssClass="col-sm-6" ></s:select>
-  		 
-  		<s:token></s:token>
-       	<div class="form-group">
-	        <div class="col-sm-offset-7 col-sm-2">
-	            <s:submit cssClass="btn btn-primary btn-block" value="添加" />
-	        </div>
-        </div>
+ 		<s:select label="风机编号：" name="fun.id" list="#request.funs" listKey="id" listValue="name" elementCssClass="col-sm-6"></s:select>
+  		<s:textfield name="windFarm.id" type="hidden" value="1"></s:textfield>
+  		<s:textfield name="variables" type="hidden" value="{,,}"></s:textfield>
   	</s:form>
+  	
+  	<div id="timer"></div>
 
    <div class="table-responsive">
 		<table class="table table-striped table-hover table-bordered"  >
-		<caption>风机变量列表</caption>
+		<caption>风机实时信息</caption>
 		  <tbody>
 		
 		    <tr>
-		      <th scope="col">ID</th>
-		      <th scope="col">变量名</th>
-		      <th scope="col">数据存储名</th>
-		      <th scope="col">显示名（中文）</th>		      
-		      <th scope="col">类型</th>
-		      <th scope="col">编辑</th>
-		      <th scope="col">删除</th>
+		      <th scope="col">变量</th>
+		      <th scope="col">数值</th>
+		      <th scope="col">变量</th>
+		      <th scope="col">数值</th>
+		      <th scope="col">变量</th>
+		      <th scope="col">数值</th>
+		      <th scope="col">变量</th>
+		      <th scope="col">数值</th>
 		    </tr>
-		     <s:iterator value="#request.variables" var="variable1">
+		     <s:iterator value="#request.funs" var="fun1">
                 <tr>
-                  <td>${variable1.id}</td>
-                  <td>${variable1.name}</td>
-                  <td>${variable1.dbName}</td>
-                  <td>${variable1.showNameCN}</td>
-                  <td>${variable1.type.name}</td>
-                  <td><a href="editVariable?id=${variable1.id}">Edit</a></td>
-                  <td><a href="deleteVariable?id=${variable1.id}">Delete</a></td>
+                 
                 </tr>
 		    </s:iterator>
 		    
@@ -123,5 +111,22 @@
 
 <!-- Include all compiled plugins (below), or include individual files as needed --> 
 <script src="<%= request.getContextPath() %>/js/bootstrap.js"></script>
+
+<script src="<%= request.getContextPath() %>/js/timer.jquery.min.js"></script>
+
+<script type="text/javascript">
+	
+	$(function(){
+		$('#timer').timer(
+			{
+			    duration: '3s',
+			    callback: function() {
+			        $.post("AjaxRealTimeInfo", $("#form1").serializeArray(), function(data){console.log(data);}, "JSON");
+			    }
+			}	
+		);
+	})
+</script>
+
 </body>
 </html>

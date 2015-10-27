@@ -1,6 +1,9 @@
 ﻿package com.sharpower.dao;
 
 import java.util.List;
+import java.util.Map;
+
+import com.sharpower.entity.Variable;
 
 /**
  * BaseDao接口
@@ -14,7 +17,6 @@ public interface BaseDao<T> {
 	public void batchEntityByHQL(String hql,Object...objects);
 	//执行原生的sql语句
 	public void executeSQL(String sql,Object...objects);
-	
 	//读操作
 	public T loadEntity(Integer id);
 	public T getEntity(Integer id);

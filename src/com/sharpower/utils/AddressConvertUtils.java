@@ -10,7 +10,7 @@ public class AddressConvertUtils {
 		int endIndex = addrStr.indexOf(":");
 		amsAddr.setNetIdStringEx(addrStr.substring(0, endIndex));
 		
-		String sPort =addrStr.substring(endIndex+1); 
+		String sPort = addrStr.substring(endIndex+1); 
 		amsAddr.setPort(Integer.valueOf(sPort));
 		
 		return amsAddr;

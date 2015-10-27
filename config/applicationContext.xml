@@ -89,6 +89,10 @@
 		<property name="dao" ref="variableTypeDao"></property>
 	</bean>
 	
+	<bean id="funDataReadWriteBeckhoffService" class="com.sharpower.service.impl.FunDataReadWriteBeckhoffService">
+    	<property name="variableTypeService" ref="variableTypeService"></property>
+    </bean>
+	
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
 		<property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
@@ -119,6 +123,11 @@
 		<property name="variableService" ref="variableService"></property>
 		<property name="variableTypeService" ref="variableTypeService"></property>
 	</bean>
+	
+	<bean id="realTimeInfoAjaxAction" 
+		class="com.sharpower.action.realTimeInfoAjaxAction"
+		scope="prototype">
+	</bean>
 
 	<tx:advice id="txAdvice" 
 		transaction-manager="transactionManager">
@@ -139,5 +148,53 @@
 			expression="execution(* com.sharpower.service.impl.*.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="myPointcut" />
 	</aop:config>
+	
+	<!-- 风机数据读取的任务调度 -->
+	<bean id="funDataBean1" class="com.sharpower.quartzs.FunDataQuartz">
+		<property name="funService" ref="funService"></property>
+	</bean>
+	
+    <bean id="funThread1" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+       <property name="targetObject" ref="funDataBean1"></property>
+       <property name="targetMethod" value="readData"></property>
+	</bean>
 
+	<bean id="simpleTrigger1" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="funThread1"></property>
+        <property name="repeatInterval">
+            <value>1000</value>
+        </property>
+        <property name="startDelay">
+            <value>4</value>
+        </property>
+    </bean> 
+    
+    <bean id="windFarmData" class="com.sharpower.quartzs.WindFarmDataQuartz">
+    	<property name="windFarmService" ref="windFarmService"></property>
+    	<property name="variableService" ref="variableService"></property>
+    	<property name="funDataReadWriteBeckhoffService" ref="funDataReadWriteBeckhoffService"></property>
+    	<property name="funService" ref="funService"></property>
+    </bean>
+    <bean id="windFarmDataThread" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+       <property name="targetObject" ref="windFarmData"></property>
+       <property name="targetMethod" value="readData"></property>
+	</bean>
+	<bean id="windFarmDataTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="windFarmDataThread"></property>
+        <property name="repeatInterval">
+            <value>500000</value>
+        </property>
+        <property name="startDelay">
+            <value>4</value>
+        </property>
+    </bean>    
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    	<property name="triggers">
+    	<list>   	
+    	<!-- 
+    		<ref bean="windFarmDataTrigger"/>
+    	-->
+    	</list>
+    	</property>
+    </bean>
 </beans>

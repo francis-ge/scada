@@ -6,6 +6,7 @@
 <struts>
 
 	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<constant name="struts.i18n.encoding" value="UTF-8"></constant>
 	<constant name="struts.devMode" value="true" />
 
 	<package name="default" extends="struts-default">
@@ -77,9 +78,20 @@
 			<result >/WEB-INF/web/variableManage.jsp</result>
 			<result name="error">/WEB-INF/web/variableManage.jsp</result>
 		</action>
+		
+		<action name="realTimeInfo" class="funAction" method="allFun">
+			<result >/WEB-INF/web/realTimeInfo.jsp</result>
+		</action>	
 				
 	</package>
 	
-
+	<package name="ajaxPackage" extends="json-default">
+		<action name="AjaxRealTimeInfo" class="com.sharpower.action.realTimeInfoAjaxAction" method="realTimeInfo" >
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+			</result>		
+		</action>
+	</package>
 
 </struts>

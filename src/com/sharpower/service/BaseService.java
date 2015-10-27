@@ -1,6 +1,9 @@
 ﻿package com.sharpower.service;
 
 import java.util.List;
+import java.util.Map;
+
+import com.sharpower.entity.Variable;
 
 /**
  * 基本的dao接口
@@ -14,7 +17,7 @@ public interface BaseService<T> {
 	public void batchEntityByHQL(String hql,Object...objects);
 	//执行原生的sql语句
 	public void executeSQL(String sql,Object...objects);
-	
+	public void executeSQL(String sql, Map<Variable, Object> objects);
 	//读操作
 	public T loadEntity(Integer id);
 	public T getEntity(Integer id);

@@ -4,6 +4,7 @@ public class Variable{
 	private int id;
 	private String name;
 	private String dbName;
+	private String showNameCN;
 	private VariableType type;
 	
 	public int getId() {
@@ -26,6 +27,12 @@ public class Variable{
 		this.dbName = dbName;
 	}
 	
+	public String getShowNameCN() {
+		return showNameCN;
+	}
+	public void setShowNameCN(String showName) {
+		this.showNameCN = showName;
+	}
 	public VariableType getType() {
 		return type;
 	}

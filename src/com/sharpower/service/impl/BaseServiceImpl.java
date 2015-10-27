@@ -4,11 +4,13 @@ import com.sharpower.service.BaseService;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.Map;
 
 import com.sharpower.dao.BaseDao;
+import com.sharpower.entity.Variable;
 
 /**
- * ³éÏóµÄbaseService,×¨ÃÅÓÃÓÚ¼Ì³Ð
+ * ï¿½ï¿½ï¿½ï¿½ï¿½baseService,×¨ï¿½ï¿½ï¿½ï¿½ï¿½Ú¼Ì³ï¿½
  */
 public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
@@ -46,8 +48,12 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 		dao.batchEntityByHQL(hql, objects);
 	}
 	
-	//Ö´ÐÐÔ­ÉúµÄsqlÓï¾ä
+	//Ö´ï¿½ï¿½Ô­ï¿½ï¿½ï¿½sqlï¿½ï¿½ï¿½
 	public void executeSQL(String sql,Object...objects){
+		dao.executeSQL(sql, objects);
+	}
+	
+	public void executeSQL(String sql, Map<Variable, Object> objects){
 		dao.executeSQL(sql, objects);
 	}
 
@@ -63,18 +69,18 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 		return dao.findEntityByHQL(hql, objects);
 	}
 	
-	//²éÑ¯ËùÓÐÊµÌå
+	//ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½
 	public List<T> findAllEntities(){
 		String hql = "from " + clazz.getSimpleName() ;
 		return this.findEntityByHQL(hql);
 	}
 	
-	//µ¥Öµ¼ìË÷,È·±£²éÑ¯½á¹ûÓÐÇÒÖ»ÓÐÒ»Ìõ¼ÇÂ¼
+	//ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½,È·ï¿½ï¿½ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Â¼
 	public Object uniqueResult(String hql,Object...objects){
 		return dao.uniqueResult(hql, objects);
 	}
 	
-	//Ö´ÐÐsqlÔ­Éú²éÑ¯
+	//Ö´ï¿½ï¿½sqlÔ­ï¿½ï¿½ï¿½Ñ¯
 	public List executeSQLQuery(Class clazz,String sql,Object...objects){
 		return dao.executeSQLQuery(clazz,sql, objects);
 	}

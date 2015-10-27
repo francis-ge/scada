@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="config"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/com.sun.java.jdk7.win32.x86_64_1.7.0.u45">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
@@ -65,5 +66,11 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/log4j-core-2.2.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-bootstrap-plugin-2.0.4.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/freemarker-2.3.22.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/quartz-2.2.2.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/quartz-jobs-2.2.2.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/slf4j-api-1.7.7.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/slf4j-log4j12-1.7.7.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-json-plugin-2.3.24.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

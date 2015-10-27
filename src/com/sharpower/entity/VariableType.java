@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class VariableType{
 	private int id;
 	private String name;
+	private Class clazz;
 	private int size;
 	private List<Variable> vals=new ArrayList<>();
 	

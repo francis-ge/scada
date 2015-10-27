@@ -1,5 +1,7 @@
 package com.sharpower.entity;
 
+import java.util.Set;
+
 public class Fun {
 	private int id;
 	private String name;
@@ -8,6 +10,16 @@ public class Fun {
 	private String address;
 	private String line;
 	private WindFarm windFarm;
+	private Set<Variable> variables;
+	private Integer threadSta=0;
+	
+	public Integer getThreadSta() {
+		return threadSta;
+	}
+	
+	public void setThreadSta(Integer threadSta) {
+		this.threadSta = threadSta;
+	}
 
 	public int getId() {
 		return id;
@@ -55,6 +67,14 @@ public class Fun {
 
 	public void setWindFarm(WindFarm windFarm) {
 		this.windFarm = windFarm;
+	}
+	
+	public Set<Variable> getVariables() {
+		return variables;
+	}
+
+	public void setVariables(Set<Variable> variables) {
+		this.variables = variables;
 	}
 
 	public Fun(int id, String name, String type, String address, String line) {

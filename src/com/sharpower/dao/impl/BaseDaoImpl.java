@@ -1,9 +1,12 @@
 package com.sharpower.dao.impl;
 
 import com.sharpower.dao.BaseDao;
+import com.sharpower.entity.Variable;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
@@ -12,7 +15,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
 
 /**
- * ³éÏóµÄdaoÊµÏÖ,×¨ÃÅÓÃÓÚ¼Ì³Ð
+ * ï¿½ï¿½ï¿½ï¿½ï¿½daoÊµï¿½ï¿½,×¨ï¿½ï¿½ï¿½ï¿½ï¿½Ú¼Ì³ï¿½
  */
 @SuppressWarnings("unchecked")
 public abstract class BaseDaoImpl<T> implements BaseDao<T> {
@@ -25,7 +28,7 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	public BaseDaoImpl() {
-		// µÃµ½·ºÐÍ»¯³¬Àà
+		// ï¿½Ãµï¿½ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½
 		ParameterizedType type = (ParameterizedType) this.getClass().getGenericSuperclass();
 		clazz = (Class<T>) type.getActualTypeArguments()[0];
 
@@ -48,7 +51,7 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	/**
-	 * °´ÕÕHQLÓï¾ä½øÐÐÅúÁ¿¸üÐÂ
+	 * ï¿½ï¿½ï¿½ï¿½HQLï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	public void batchEntityByHQL(String hql, Object... objects) {
 		Query q = sf.getCurrentSession().createQuery(hql);
@@ -58,7 +61,7 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 		q.executeUpdate();
 	}
 
-	// Ö´ÐÐÔ­ÉúµÄsqlÓï¾ä
+	// Ö´ï¿½ï¿½Ô­ï¿½ï¿½ï¿½sqlï¿½ï¿½ï¿½
 	public void executeSQL(String sql, Object... objects) {
 		SQLQuery q = sf.getCurrentSession().createSQLQuery(sql);
 		for (int i = 0; i < objects.length; i++) {
@@ -66,6 +69,14 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 		}
 		q.executeUpdate();
 	}
+	
+//	public void executeSQL(String sql, Map<Variable, Object> objects) {
+//		SQLQuery q = sf.getCurrentSession().createSQLQuery(sql);
+//		for (Entry<Variable, Object> entry : objects.entrySet()) {
+//			q.setParameter(entry.getKey().getDbName(), entry.getValue());
+//		}
+//		q.executeUpdate();
+//	}
 
 	public T loadEntity(Integer id) {
 		return (T) sf.getCurrentSession().load(clazz, id);
@@ -83,7 +94,7 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 		return q.list();
 	}
 
-	// µ¥Öµ¼ìË÷,È·±£²éÑ¯½á¹ûÓÐÇÒÖ»ÓÐÒ»Ìõ¼ÇÂ¼
+	// ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½,È·ï¿½ï¿½ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Â¼
 	public Object uniqueResult(String hql, Object... objects) {
 		Query q = sf.getCurrentSession().createQuery(hql);
 		for (int i = 0; i < objects.length; i++) {
@@ -92,10 +103,10 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 		return q.uniqueResult();
 	}
 
-	// Ö´ÐÐÔ­ÉúµÄsql²éÑ¯
+	// Ö´ï¿½ï¿½Ô­ï¿½ï¿½ï¿½sqlï¿½ï¿½Ñ¯
 	public List executeSQLQuery(Class clazz, String sql, Object... objects) {
 		SQLQuery q = sf.getCurrentSession().createSQLQuery(sql);
-		// Ìí¼ÓÊµÌåÀà
+		// ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½
 		if (clazz != null) {
 			q.addEntity(clazz);
 		}

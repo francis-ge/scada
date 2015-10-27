@@ -55,6 +55,12 @@ public class FunAction extends ActionSupport implements ModelDriven<Fun>, Prepar
 		return SUCCESS;
 	}
 	
+	public String allFun(){
+		List<Fun> funs = funService.findAllEntities();
+		requestMap.put("funs", funs);
+		return SUCCESS;
+	}
+	
 	public void prepareSave(){
 		fun = new Fun();
 	}
