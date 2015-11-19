@@ -25,8 +25,6 @@ public class FunDataReadWriteBeckhoffService {
 		this.variableTypeService = variableTypeService;
 	}
 	
-	private static boolean initFlag=false;
-	
 	private  List<Variable> booleanValNames;
 	private  List<Variable> byteValNames;
 	private  List<Variable> shortValNames;
@@ -69,6 +67,8 @@ public class FunDataReadWriteBeckhoffService {
 	private  long lj_lengthRead_double;
 	private  long lj_lengthWrite_double;
 	private  JNIByteBuffer lj_pDataWrite_double;
+	
+	private static boolean initFlag=false;
 	
 	private void init(){
 		
@@ -490,36 +490,55 @@ public class FunDataReadWriteBeckhoffService {
 
 	}
 
-	private Map<Variable, Boolean> dataBoolean = new HashMap<Variable, Boolean>();
-	private Map<Variable, Byte> dataByte = new HashMap<Variable, Byte>();
-	private Map<Variable, Short> dataShort = new HashMap<Variable, Short>();
-	private Map<Variable, Integer> dataInteger = new HashMap<Variable, Integer>();
-	private Map<Variable, Float> dataFloat = new HashMap<Variable, Float>();
-	private Map<Variable, Long> dataLong = new HashMap<Variable, Long>();
-	private Map<Variable, Double> dataDouble = new HashMap<Variable, Double>();
-	
 	public  Map<Variable,Object> readDataAll(String sFunAddress) throws AdsException {
 		if(initFlag==false){
 			init();
 		}
 		
-		dataBoolean = readData(sFunAddress, Boolean.class);
-		dataByte = readData(sFunAddress, Byte.class);
-		dataShort = readData(sFunAddress, Short.class);
-		dataInteger = readData(sFunAddress, Integer.class);
-		dataFloat = readData(sFunAddress, Float.class);
-		dataLong = readData(sFunAddress, Long.class);
-		dataDouble = readData(sFunAddress, Double.class);
-		
 		Map<Variable,Object> dataAll = new HashMap<>();
 		
-		dataAll.putAll(dataBoolean);
-		dataAll.putAll(dataByte);
-		dataAll.putAll(dataShort);
-		dataAll.putAll(dataInteger);
-		dataAll.putAll(dataFloat);
-		dataAll.putAll(dataLong);
-		dataAll.putAll(dataDouble);
+		Map<Variable, Boolean> dataBoolean;
+		Map<Variable, Byte> dataByte;
+		Map<Variable, Short> dataShort;
+		Map<Variable, Integer> dataInteger;
+		Map<Variable, Float> dataFloat;
+		Map<Variable, Long> dataLong;
+		Map<Variable, Double> dataDouble;
+		
+		if (booleanValNames.size()>0){
+			dataBoolean = readData(sFunAddress, Boolean.class);
+			dataAll.putAll(dataBoolean);
+		}
+		
+		if(byteValNames.size()>0){
+			dataByte = readData(sFunAddress, Byte.class);
+			dataAll.putAll(dataByte);
+		}
+		
+		if(shortValNames.size()>0){
+			dataShort = readData(sFunAddress, Short.class);
+			dataAll.putAll(dataShort);
+		}
+		
+		if(intValNames.size()>0){
+			dataInteger = readData(sFunAddress, Integer.class);
+			dataAll.putAll(dataInteger);
+		}
+		
+		if(floatValNames.size()>0) {
+			dataFloat = readData(sFunAddress, Float.class);
+			dataAll.putAll(dataFloat);
+		}
+		
+		if (longValNames.size()>0) {
+			dataLong = readData(sFunAddress, Long.class);
+			dataAll.putAll(dataLong);
+		}
+		
+		if (doubleValNames.size()>0) {
+			dataDouble = readData(sFunAddress, Double.class);
+			dataAll.putAll(dataDouble);
+		}
 		
 		return dataAll;
 	}

@@ -15,6 +15,11 @@
 <!-- Bootstrap -->
 <link href="<%= request.getContextPath() %>/css/bootstrap.css" rel="stylesheet">
 
+<!-- easyUI -->
+<link href="<%= request.getContextPath() %>/jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
+<link href="<%= request.getContextPath() %>/jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
+
+
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -26,6 +31,72 @@
 	    	padding-top:50px;
 	    }
     </style>
+    
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+	<script src="<%= request.getContextPath() %>/jquery-easyui-1.4.4/jquery.min.js"></script>
+	
+	<!-- Include all compiled plugins (below), or include individual files as needed --> 
+	<script src="<%= request.getContextPath() %>/js/bootstrap.js"></script>
+	
+	<!-- easyUI -->
+	<script src="<%= request.getContextPath() %>/jquery-easyui-1.4.4/jquery.easyui.min.js"></script>
+	<!-- jquery timer -->
+	<script src="<%= request.getContextPath() %>/jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js"></script>
+
+
+<script src="<%= request.getContextPath() %>/js/timer.jquery.min.js"></script>
+
+<script type="text/javascript">
+	
+	$(function(){
+		$('#timer').timer(
+			{
+			    duration: '1s',
+			    repeat:true,
+			    callback: function() {
+			        		$.post("AjaxRealTimeInfo", $("#form1").serializeArray(), 
+			        			function(data){
+			        				$("td").remove();
+	        						var data1 = data.recodeMap;
+	        						$("#data").append("<tr></tr>")
+						        		      .append("<td>"+"ID"+"</td>"+"<td>"+ data1.id +"</td>")
+						        		      .append("<td>"+"funId"+"</td>"+"<td>"+ data1.funId +"</td>")
+						        		      .append("<td>"+"dateTime"+"</td>"+"<td>"+ data1.dateTime +"</td>")
+						        		      .append("<td>"+"_main__longtest1"+"</td>"+"<td>"+ data1._main__longtest1 +"</td>");
+	        						}
+	        								
+	        						,"JSON");
+			    }
+			}	
+		);
+	})
+	
+</script>
+
+	<script>
+		$(function(){
+			$('#table').propertygrid({
+			   // url:'datagrid_data.json',
+			   	//fitColumns:true,//列自适应宽度
+			   	striped:true,//条纹背景
+			   	method:'post',
+			    columns:[[
+			        {field:'name1',title:'变量名',width:100,align:'right'},
+			        {field:'value1',title:'值',width:100},
+			        {field:'name2',title:'变量名',width:100,align:'right'},
+			        {field:'value2',title:'值',width:100},
+			        {field:'name3',title:'变量名',width:100,align:'right'},
+			        {field:'value3',title:'值',width:100},
+			        {field:'name4',title:'变量名',width:100,align:'right'},
+			        {field:'value4',title:'值',width:100}
+			       
+			    ]]
+			});
+			
+			$("#table").propertygrid("insertRow",{index:1, row:{name1:"aaa",value1:111,name2:"bbb",value2:222,name3:"ccc",value3:333,name4:"ddd",value4:0.004}});
+		})
+	
+	</script>
 </head>
 <body>
 
@@ -71,19 +142,24 @@
 	<s:fielderror theme="bootstrap"/>
 <s:debug></s:debug>	
 
-  	<s:form id="form1" class="form-inline" method="post" action="realTimeInfo" label="选择风机"
-  			enctype="multipart/form-data" theme="bootstrap" cssClass="form-horizontal">
- 		<s:select label="风机编号：" name="fun.id" list="#request.funs" listKey="id" listValue="name" elementCssClass="col-sm-6"></s:select>
+  	<s:form id="form1" class="form-inline" method="post" action="AjaxRealTimeInfo" label="选择风机"
+  			enctype="multipart/form-data" theme="bootstrap" cssClass="form-horizontal" >
+ 		<s:select label="风机编号：" name="fun.id" list="#request.funs" listKey="id" listValue="name" elementCssClass="col-sm-2"></s:select>
+
+ 		<!-- 
   		<s:textfield name="windFarm.id" type="hidden" value="1"></s:textfield>
   		<s:textfield name="variables" type="hidden" value="{,,}"></s:textfield>
+  		 -->
   	</s:form>
   	
   	<div id="timer"></div>
-
+  	
+	<table id="table"></table>
+	
    <div class="table-responsive">
-		<table class="table table-striped table-hover table-bordered"  >
+		<table class="table table-striped table-hover table-bordered" >
 		<caption>风机实时信息</caption>
-		  <tbody>
+		  <tbody id="data">
 		
 		    <tr>
 		      <th scope="col">变量</th>
@@ -95,38 +171,16 @@
 		      <th scope="col">变量</th>
 		      <th scope="col">数值</th>
 		    </tr>
-		     <s:iterator value="#request.funs" var="fun1">
-                <tr>
-                 
-                </tr>
-		    </s:iterator>
+
+            <tr >
+            </tr>
 		    
 		  </tbody>
 		</table>
 	  </div>
     
  
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
-<script src="<%= request.getContextPath() %>/js/jquery-1.11.3.js"></script>
 
-<!-- Include all compiled plugins (below), or include individual files as needed --> 
-<script src="<%= request.getContextPath() %>/js/bootstrap.js"></script>
-
-<script src="<%= request.getContextPath() %>/js/timer.jquery.min.js"></script>
-
-<script type="text/javascript">
-	
-	$(function(){
-		$('#timer').timer(
-			{
-			    duration: '3s',
-			    callback: function() {
-			        $.post("AjaxRealTimeInfo", $("#form1").serializeArray(), function(data){console.log(data);}, "JSON");
-			    }
-			}	
-		);
-	})
-</script>
 
 </body>
 </html>

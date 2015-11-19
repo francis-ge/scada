@@ -1,5 +1,7 @@
 package com.sharpower.action;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +45,7 @@ public class FunAction extends ActionSupport implements ModelDriven<Fun>, Prepar
 		this.Id = Id;
 	}
 	
-	public String funManage(){
+	public String funManage() throws IOException{
 		//ApplicationContext ac = WebApplicationContextUtils.getWebApplicationContext(sc);
 		//System.out.println(ac.getBean("funService"));
 		List<PlcType> plcTypes = plcTypeService.findAllEntities();
@@ -51,7 +53,7 @@ public class FunAction extends ActionSupport implements ModelDriven<Fun>, Prepar
 		
 		List<Fun> funs = funService.findAllEntities();
 		requestMap.put("funs", funs);
-
+		
 		return SUCCESS;
 	}
 	

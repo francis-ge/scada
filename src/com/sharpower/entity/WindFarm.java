@@ -10,7 +10,6 @@ public class WindFarm {
 	private Set<Fun> funs = new HashSet<Fun>();
 	
 	{		
-
 		//Fun fun = new Fun(1, "1#", "beckhoff", "192.168.100.61.1.1:852", "A");
 		//funs.put(fun.getId(), fun);
 	}

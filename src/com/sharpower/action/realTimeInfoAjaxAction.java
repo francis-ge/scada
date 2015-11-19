@@ -1,8 +1,11 @@
 package com.sharpower.action;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.struts2.json.annotations.JSON;
@@ -10,21 +13,28 @@ import org.springframework.util.SystemPropertyUtils;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.sharpower.entity.Fun;
+import com.sharpower.entity.RealtimeInfoDspObj;
 import com.sharpower.entity.Variable;
 import com.sharpower.service.FunService;
+import com.sharpower.service.RecodeService;
+import com.sharpower.service.VariableService;
 import com.sharpower.service.VariableTypeService;
 
 import sun.print.resources.serviceui;
 
-public class realTimeInfoAjaxAction extends ActionSupport{
+public class RealTimeInfoAjaxAction extends ActionSupport{
 	private static final long serialVersionUID = 1L;
 	
 	private FunService funService;
-	private VariableTypeService variableTypeService;
+	private VariableService variableService;
+	private RecodeService recodeService;
 	
 	private Fun fun;
-	List<Variable> variables;
-	private Map<Variable, Object> vals = new HashMap<>();
+	private int funId;
+	
+	private List<RealtimeInfoDspObj> realtimeInfoDspObjs= new ArrayList<>();
+
+	private List<Variable> variables;
 
 	@JSON(serialize=false)
 	public Fun getFun() {
@@ -35,37 +45,81 @@ public class realTimeInfoAjaxAction extends ActionSupport{
 		this.fun = fun;
 	}
 
-	public List<Variable> getVariables() {
-		return variables;
-	}
-
-	public void setVariables(List<Variable> variables) {
-		this.variables = variables;
-	}
-
-	public Map<Variable, Object> getVals() {
-		return vals;
+	@JSON(serialize=false)
+	public RecodeService getRecodeService() {
+		return recodeService;
 	}
 	
-	public void setVals(Map<Variable, Object> vals) {
-		this.vals = vals;
+	public VariableService getVariableService() {
+		return variableService;
+	}
+
+	public void setVariableService(VariableService variableService) {
+		this.variableService = variableService;
+	}
+
+	public void setRecodeService(RecodeService recodeService) {
+		this.recodeService = recodeService;
+	}
+	
+	@JSON(serialize=false)
+	public int getFunId() {
+		return funId;
+	}
+	
+	public void setFunId(int funId) {
+		this.funId = funId;
+	}
+	
+	public List<RealtimeInfoDspObj> getRealtimeInfoDspObjs() {
+		return realtimeInfoDspObjs;
+	}
+
+	public void setRealtimeInfoDspObjs(List<RealtimeInfoDspObj> realtimeInfoDspObjs) {
+		this.realtimeInfoDspObjs = realtimeInfoDspObjs;
 	}
 	
 	public String realTimeInfo(){
-		String sql = "SELECT * FROM mainrecodetemp WHERE FUN_ID=?";
+		variables= variableService.findAllEntities();
 		
-		String sql1 = "SELECT ";
+		String hql = "FROM MainRecode_copy WHERE funId=?";
 		
-		for (Variable variable : variables) {
-			sql1 = sql1 + variable.getDbName() + ",";
+		int id;
+		if (fun==null){
+			id = funId;
+		}else{
+			id= fun.getId();
 		}
+	
+		List<Map<String, Object>> list;
+		list = recodeService.findMapByHql(hql, id);
 		
-		sql1= sql1.substring(0, sql1.length()-1) + " FROM mainrecodetemp WHERE FUN_ID=?";
-		
-		
-		List list = funService.executeSQLQuery(null, sql, fun.getId());
+		if (list.size()>0) {
+			Map<String, Object> recodeMap = list.get(0);
+			
+			for(Entry<String, Object> entry:recodeMap.entrySet()){
+				RealtimeInfoDspObj realtimeInfoDspObj = new RealtimeInfoDspObj();
+				
+				String valName = entry.getKey();;
+				
+				for(int i=0 ;i<variables.size();i++){
+					if(variables.get(i).getDbName().equals(entry.getKey())){
+						valName = variables.get(i).getShowNameCN();
+						break;
+					}
+					
+				}
+	
+				realtimeInfoDspObj.setName(valName);
+				realtimeInfoDspObj.setValue(entry.getValue());
+				
+				realtimeInfoDspObjs.add(realtimeInfoDspObj);
+			}
+		}
 		
 		return SUCCESS;
 	}
+
+
 
 }

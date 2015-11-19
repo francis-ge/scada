@@ -27,6 +27,10 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 	public void setDao(BaseDao<T> dao) {
 		this.dao = dao;
 	}
+	public BaseDao<T> getDao() {
+		return dao;
+	}
+	
 
 	public void saveEntity(T t) {
 		dao.saveEntity(t);

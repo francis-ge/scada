@@ -14,6 +14,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.sharpower.entity.Fun;
 import com.sharpower.entity.Variable;
 import com.sharpower.service.FunService;
+import com.sharpower.service.RecodeService;
 import com.sharpower.service.VariableService;
 import com.sharpower.service.WindFarmService;
 import com.sharpower.service.impl.FunDataReadWriteBeckhoffService;
@@ -25,6 +26,7 @@ public class WindFarmDataQuartz {
 	private List<Variable> variables;
 	private FunDataReadWriteBeckhoffService funDataReadWriteBeckhoffService;
 	private FunService funService;
+	private RecodeService recodeService;
 	
 	public void setWindFarmService(WindFarmService windFarmService) {
 		this.windFarmService = windFarmService;
@@ -41,30 +43,34 @@ public class WindFarmDataQuartz {
 	public void setFunService(FunService funService) {
 		this.funService = funService;
 	}
+	
+	public void setRecodeService(RecodeService recodeService) {
+		this.recodeService = recodeService;
+	}
 
 	public void readData(){
 		if(funs==null){
 			funs = windFarmService.getEntity(1).getFuns();
 			variables = variableService.findAllEntities();
 
-			String sql = "CREATE TABLE IF NOT EXISTS "
-					+ "mainRecodeTemp(FUN_ID int primary key not null, "; 
-			
-			String valType;
-			String valName;
-			
-			for (Variable variable : variables) {
-				valName = variable.getDbName();
-				valType = variable.getType().getName();
-				sql = sql + valName + " " + valType + ",";
-				
-			}
-			
-			sql = sql.substring(0, sql.length()-1);
-			
-			sql = sql + ") ENGINE=MEMORY DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
-			
-			windFarmService.executeSQL(sql);
+//			String sql = "CREATE TABLE IF NOT EXISTS "
+//					+ "mainRecode_copy(ID long primary key, FUN_ID int not null, "; 
+//			
+//			String valType;
+//			String valName;
+//			
+//			for (Variable variable : variables) {
+//				valName = variable.getDbName();
+//				valType = variable.getType().getName();
+//				sql = sql + valName + " " + valType + ",";
+//				
+//			}
+//			
+//			sql = sql.substring(0, sql.length()-1);
+//			
+//			sql = sql + ") ENGINE=MEMORY DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+//			
+//			windFarmService.executeSQL(sql);
 			
 			  
 		}
@@ -75,7 +81,8 @@ public class WindFarmDataQuartz {
 			if(fun.getThreadSta()==0){				
 				FunDataQuartz funDataQuartz = new FunDataQuartz();
 				funDataQuartz.setFunDataReadWriteBeckhoffService(funDataReadWriteBeckhoffService);
-				funDataQuartz.setFunService(funService);			
+				funDataQuartz.setFunService(funService);
+				funDataQuartz.setRecodeService(recodeService);
 				funDataQuartz.setFun(fun);
 				
 				Thread thread = new Thread(funDataQuartz);

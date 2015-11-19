@@ -86,10 +86,21 @@
 	</package>
 	
 	<package name="ajaxPackage" extends="json-default">
-		<action name="AjaxRealTimeInfo" class="com.sharpower.action.realTimeInfoAjaxAction" method="realTimeInfo" >
+		<action name="AjaxRealTimeInfo" class="com.sharpower.action.RealTimeInfoAjaxAction" method="realTimeInfo" >
+		
 			<result type="json">
 				<param name="noCache">true</param>
 				<param name="contentType">text/html</param>
+				<param name="root">realtimeInfoDspObjs</param>
+			</result>		
+		</action>
+		
+		<action name="ajaxAllfun" class="com.sharpower.action.AjaxFunAction" method="allFun" >
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">funs</param>
+			
 			</result>		
 		</action>
 	</package>

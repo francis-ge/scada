@@ -25,4 +25,5 @@ public interface BaseDao<T> {
 	public Object uniqueResult(String hql,Object...objects);
 	//执行原生的sql查询(可以指定是否封装成实体)
 	public List executeSQLQuery(Class clazz,String sql,Object...objects);
+	
 }

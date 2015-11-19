@@ -15,6 +15,10 @@
 <!-- Bootstrap -->
 <link href="<%= request.getContextPath() %>/css/bootstrap.css" rel="stylesheet">
 
+<!-- easyUI -->
+<link href="<%= request.getContextPath() %>/jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
+<link href="<%= request.getContextPath() %>/jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
+
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -26,6 +30,39 @@
 	    	padding-top:50px;
 	    }
     </style>
+    
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+	<script src="<%= request.getContextPath() %>/jquery-easyui-1.4.4/jquery.min.js"></script>
+	
+	<!-- Include all compiled plugins (below), or include individual files as needed --> 
+	<script src="<%= request.getContextPath() %>/js/bootstrap.js"></script>
+	
+	<!-- easyUI -->
+	<script src="<%= request.getContextPath() %>/jquery-easyui-1.4.4/jquery.easyui.min.js"></script>
+	<script src="<%= request.getContextPath() %>/jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js"></script>
+
+	<script>
+	$(function(){
+		$('#table').datagrid({
+		   // url:'datagrid_data.json',
+		   	fitColumns:true,//列自适应宽度
+		   	striped:true,//条纹背景
+		   	method:'post',
+		    columns:[[
+		        {field:'id',title:'ID',width:100},
+		        {field:'funName',title:'风机名称',width:100},
+		        {field:'PlcType',title:'主控类型',width:100,align:'right'},
+		        {field:'address',title:'主控地址',width:100,align:'right'},
+		        {field:'line',title:'分组',width:100,align:'right'},
+		        {field:'edit',title:'编辑',width:100,align:'right'},
+		        {field:'delete',title:'删除',width:100,align:'right'}
+		    ]]
+		});
+		
+		$("#table").datagrid("insertRow",{index:1, row:{id:1,funName:'aaa',PlcType:"sdfs"}});
+	})
+	
+	</script>
 </head>
 <body>
 
@@ -70,25 +107,26 @@
 	<s:actionmessage theme="bootstrap"/>
 	<s:fielderror theme="bootstrap"/>
 <s:debug></s:debug>	
-
     <s:form class="form-inline" method="post" action="saveFun"  label="添加风机信息"
   			enctype="multipart/form-data" theme="bootstrap" cssClass="form-horizontal">
- 		<s:textfield label="ID" name="id" disabled="true" cssClass="input-sm" elementCssClass="col-sm-6"></s:textfield>
-  		<s:textfield label="风机名称" name="name" cssClass="input-sm" elementCssClass="col-sm-6"></s:textfield>
-  		<s:select label="主控类型" name="type" list="#request.plcTypes" listKey="name" listValue="name" elementCssClass="col-sm-6"></s:select>
-  		<s:textfield label="风机地址" name="address" cssClass="input-sm" elementCssClass="col-sm-6"></s:textfield>
-  		<s:textfield label="分组" name="line" cssClass="input-sm" elementCssClass="col-sm-6"></s:textfield>
+ 		<s:textfield label="ID" name="id" disabled="true" cssClass="input-sm" elementCssClass="col-sm-3"></s:textfield>
+  		<s:textfield label="风机名称" name="name" cssClass="input-sm" elementCssClass="col-sm-3"></s:textfield>
+  		<s:select label="主控类型" name="type" list="#request.plcTypes" listKey="name" listValue="name" elementCssClass="col-sm-3"></s:select>
+  		<s:textfield label="风机地址" name="address" cssClass="input-sm" elementCssClass="col-sm-3"></s:textfield>
+  		<s:textfield label="分组" name="line" cssClass="input-sm" elementCssClass="col-sm-3"></s:textfield>
   		 
   		<s:textfield name="windFarm.id" type="hidden" value="1"></s:textfield>
   		<s:token></s:token>
        	<div class="form-group">
-	        <div class="col-sm-offset-7 col-sm-2">
+	        <div class="col-sm-offset-5 col-sm-1">
 	            <s:submit cssClass="btn btn-primary btn-block" value="添加" />
 	        </div>
         </div>
   	</s:form>
 
-   <div class="table-responsive">
+	<table id="table"></table>
+	
+   	<div class="table-responsive">
 		<table class="table table-striped table-hover table-bordered"  >
 		<caption>风机信息列表</caption>
 		  <tbody>
@@ -118,11 +156,5 @@
 		</table>
 	  </div>
     
- 
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
-<script src="<%= request.getContextPath() %>/js/jquery-1.11.3.js"></script>
-
-<!-- Include all compiled plugins (below), or include individual files as needed --> 
-<script src="<%= request.getContextPath() %>/js/bootstrap.js"></script>
 </body>
 </html>

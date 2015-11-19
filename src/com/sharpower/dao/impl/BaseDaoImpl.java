@@ -26,6 +26,10 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 	public void setSessionFactory(SessionFactory sf) {
 		this.sf = sf;
 	}
+	
+	public SessionFactory getSessionFactory(){
+		return sf;
+	}
 
 	public BaseDaoImpl() {
 		// �õ����ͻ�����
@@ -36,7 +40,7 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 
 	public void saveEntity(T t) {
 		sf.getCurrentSession().save(t);
-	}
+	}	
 
 	public void saveOrUpdateEntity(T t) {
 		sf.getCurrentSession().saveOrUpdate(t);

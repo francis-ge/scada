@@ -56,27 +56,33 @@ public class VariableAction extends ActionSupport implements ModelDriven<Variabl
 
 		return SUCCESS;
 	}
-	
+	/**
+	 * 将PLC变量名转换为数据库存储名
+	 * @param name plc变量名
+	 * @return
+	 */
 	private String convertNameToDBname(String name){
-		List<Variable> variables = variableService.findAllEntities();
-		
-		char dbNameConvertFlag=(char)64;
+		String hql = "From Variable v WHERE v.name=?";
+		List<Variable> variables = variableService.findEntityByHQL(hql, name);
 		
 		String dbName = name.replace(".", "__");
 		
-		for(Variable val: variables){
-			if(val.getName().equals(name)){
-				dbNameConvertFlag=(char)((int)dbNameConvertFlag+1);
-			}			
+		char dbNameConvertFlag;
+		
+		//解决数据库名称重名的问题,重复变量名添加大写字母前缀加“_”，变量名中的“.”转变为“__”.
+		if(variables.size()>0){
+			char head = variables.get(variables.size()-1).getDbName().charAt(0);
+			if(head=='_'){
+				dbNameConvertFlag = 'A';
+			}else {				
+				dbNameConvertFlag = (char)((int)head + 1);
+			}
+			return dbNameConvertFlag + "_" + dbName;
+
+		}else {
+			return "_" + dbName;
 		}
 		
-		if((int)dbNameConvertFlag==64){
-			return  dbName;
-		}
-		
-		dbName = dbNameConvertFlag + "_" + dbName;
-			
-		return dbName;
 	}
 	
 	public void prepareSave(){

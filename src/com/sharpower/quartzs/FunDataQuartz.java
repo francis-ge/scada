@@ -1,11 +1,16 @@
 package com.sharpower.quartzs;
 
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.sharpower.entity.Fun;
 import com.sharpower.entity.Variable;
 import com.sharpower.scada.exception.AdsException;
 import com.sharpower.service.FunService;
+import com.sharpower.service.RecodeService;
 import com.sharpower.service.impl.FunDataReadWriteBeckhoffService;
 
 public class FunDataQuartz implements Runnable {
@@ -13,6 +18,7 @@ public class FunDataQuartz implements Runnable {
 	FunDataReadWriteBeckhoffService funDataReadWriteBeckhoffService;
 	Fun fun;
 	FunService funService;
+	RecodeService recodeService;
 	
 	public FunDataQuartz() {
 	}
@@ -29,28 +35,29 @@ public class FunDataQuartz implements Runnable {
 		this.fun = fun;
 	}
 	
+	public void setRecodeService(RecodeService recodeService) {
+		this.recodeService = recodeService;
+	}
+	
 	public void readData() {
 		
-		try {
-			String sql1 = "DELETE FROM mainRecodeTemp WHERE FUN_ID=? ";
-			funService.executeSQL(sql1, fun.getId());
+		String sql1 = "DELETE FROM mainRecode_copy WHERE FUN_ID=? ";
+		funService.executeSQL(sql1, fun.getId());
 		
+		try {
+
 			Map<Variable, Object> data = funDataReadWriteBeckhoffService.readDataAll(fun.getAddress());
+			Map<String, Object> saveData = new HashMap<>();
 			
-			String sqlInsert= "INSERT INTO mainRecodeTemp (";
-			String sqlInsert1 = " VALUES(";
+			saveData.put("funId", 1);
+			saveData.put("dateTime", new Date());
 			
-			for(Variable var: data.keySet() ){
-				sqlInsert  = sqlInsert  + var.getDbName() + ",";
-				sqlInsert1 = sqlInsert1 + data.get(var) + ",";
+			for ( Entry<Variable, Object> entry: data.entrySet()) {
+				saveData.put(entry.getKey().getDbName(), entry.getValue());
 			}
 			
-			sqlInsert  = sqlInsert.substring(0, sqlInsert.length()-1) + ")";
-			sqlInsert1 = sqlInsert1.substring(0, sqlInsert1.length()-1) + ")";
-			sqlInsert  = sqlInsert + sqlInsert1;
-			
-			funService.executeSQL(sqlInsert);
-			
+			recodeService.save(saveData);
+						
 		} catch (AdsException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

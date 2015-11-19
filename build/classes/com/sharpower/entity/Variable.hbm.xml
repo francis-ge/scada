@@ -9,11 +9,11 @@
             <generator class="native" />
         </id>
         
-        <property name="name" type="java.lang.String">
+        <property name="name" type="java.lang.String" not-null="true">
             <column name="NAME" />
         </property>
         
-        <property name="dbName" type="java.lang.String">
+        <property name="dbName" type="java.lang.String" unique="true">
             <column name="DBNAME" />
         </property>
         

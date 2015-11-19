@@ -2,6 +2,8 @@ package com.sharpower.entity;
 
 import java.util.Set;
 
+import org.apache.struts2.json.annotations.JSON;
+
 public class Fun {
 	private int id;
 	private String name;
@@ -10,7 +12,6 @@ public class Fun {
 	private String address;
 	private String line;
 	private WindFarm windFarm;
-	private Set<Variable> variables;
 	private Integer threadSta=0;
 	
 	public Integer getThreadSta() {
@@ -61,6 +62,7 @@ public class Fun {
 		this.line = line;
 	}
 
+	@JSON(serialize=false)
 	public WindFarm getWindFarm() {
 		return windFarm;
 	}
@@ -69,14 +71,6 @@ public class Fun {
 		this.windFarm = windFarm;
 	}
 	
-	public Set<Variable> getVariables() {
-		return variables;
-	}
-
-	public void setVariables(Set<Variable> variables) {
-		this.variables = variables;
-	}
-
 	public Fun(int id, String name, String type, String address, String line) {
 		super();
 		this.id = id;
