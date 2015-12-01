@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+ 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title></title>
+    
+	<!-- easyUI -->
+	<link href="../jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
+	<link href="../jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
+	
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+	<script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
+	
+	<!-- easyUI -->
+	<script src="../jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
+	<script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
+	
+	<style type="text/css">
+		* {margin: 0; padding: 0;}
+	</style>
+
+	<script type="text/javascript">
+		$(function(){
+			$('#datagrid').datagrid({
+				toolbar:'#toolBar',
+				loadMsg:''
+			});
+			
+			$('#funSelect').combobox('select', 1);
+			
+			setInterval(function(){
+					    	var funId = $('#funSelect').combobox('getValue');
+									
+					    	$('#datagrid').datagrid('load',{
+					    					funId:funId
+				    						} )
+				    }, 1000 );
+			
+		})
+		
+	</script>
+
+  </head>
+  
+  <body>
+
+		<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/AjaxRealTimeInfo" idField="id" singleSelect="true" fit="true" >
+			<thead>   
+		        <tr>   
+		            <th data-options="field:'name',width:200,align:'right'">名称</th>
+		            <th data-options="field:'value',width:150">数值</th>  
+		        </tr>   
+		    </thead>   
+		</table>
+		
+		<div id="toolBar" style="height:25px,overflow:hidden" >
+				选择风机:
+				<select id="funSelect" class="easyui-combobox" style="width:200px;" url="SHARPOWER_SCADA/ajaxAllfun"  valueField="id" textField="name">
+				</select>
+		</div>	
+  </body>
+  
+</html>

@@ -1,6 +1,9 @@
 package com.sharpower.entity;
 
 import java.util.List;
+
+import org.apache.struts2.json.annotations.JSON;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -10,6 +13,7 @@ public class VariableType{
 	private String name;
 	private Class clazz;
 	private int size;
+	
 	private List<Variable> vals=new ArrayList<>();
 	
 	public int getId() {
@@ -30,6 +34,7 @@ public class VariableType{
 	public void setSize(int size) {
 		this.size = size;
 	}
+	@JSON(serialize=false)
 	public List<Variable> getVals() {
 		return vals;
 	}

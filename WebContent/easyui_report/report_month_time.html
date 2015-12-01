@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    
+    <title></title>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	<!-- easyUI -->
+	<link href="../jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
+	<link href="../jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
+	
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+	<script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
+	
+	<!-- easyUI -->
+	<script src="../jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
+	<script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
+	
+	<style type="text/css">
+		* {margin: 0; padding: 0;}
+	</style>
+
+	<script type="text/javascript">
+		$(function(){
+			$('#datagrid').datagrid({
+				toolbar:'#toolBar'
+			});
+			
+	        $('#date').datebox({
+	            onShowPanel: function () {//显示日趋选择对象后再触发弹出月份层的事件，初始化时没有生成月份层
+	                span.trigger('click'); //触发click事件弹出月份层
+	                if (!tds) setTimeout(function () {//延时触发获取月份对象，因为上面的事件触发和对象生成有时间间隔
+	                    tds = p.find('div.calendar-menu-month-inner td');
+	                    tds.click(function (e) {
+	                        e.stopPropagation(); //禁止冒泡执行easyui给月份绑定的事件
+	                        var year = /\d{4}/.exec(span.html())[0];//得到年份
+	                        var month = parseInt($(this).attr('abbr'), 10); //月份
+	                        $('#date').datebox('hidePanel')//隐藏日期对象
+	                        .datebox('setValue', year + '-' + month); //设置日期的值
+	                    });
+	                }, 0)
+	            },
+	            parser: function (s) {//配置parser，返回选择的日期
+	                if (!s) return new Date();
+	                var arr = s.split('-');
+	                return new Date(parseInt(arr[0], 10), parseInt(arr[1], 10) - 1, 1);
+	            },
+	            formatter: function (d) { return d.getFullYear() + '-' + d.getMonth()+1; }//配置formatter，只返回年月
+	        });
+	        var p = $('#date').datebox('panel'); //日期选择对象
+	        var tds = false; //日期选择对象中月份
+	        var span = p.find('span.calendar-text'); //显示月份层的触发控件
+			
+		})
+		
+	</script>
+
+  </head>
+  
+  <body>
+
+		<table id ="datagrid" class="easyui-datagrid" url="" idField="id" singleSelect="true" fit="true" striped="true" fitColumns="true">
+			<thead>   
+		        <tr>   
+		            <th data-options="field:'data',width:150,align:'center'">日期</th>
+		            <th data-options="field:'name',width:150,align:'center'">风机名称</th>  
+		            <th data-options="field:'a',width:120">环境温度(℃)</th>  
+		            <th data-options="field:'b',width:120">发电小时数(h)</th>  
+		            <th data-options="field:'c',width:120">维护小时数(h)</th>  
+		            <th data-options="field:'d',width:120">故障小时数(h)</th>  
+		            <th data-options="field:'e',width:120">风机正常小时数(h)</th>  
+		            <th data-options="field:'f',width:120">总运行小时数(h)</th>  
+		        </tr>   
+		    </thead>   
+		</table>
+		
+		<div id="toolBar" style="height:25px,overflow:hidden" >
+			
+				<form id="from1" method="post">   
+					选择月份:<input id="date" required="required"></input>
+					<a class="easyui-linkbutton" title="" href="javascript:void(0)">查询</a> 
+				</form>
+				
+		</div>	
+  </body>
+
+</html>

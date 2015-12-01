@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <base href="<%=basePath%>">
+    
+    <title></title>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<!-- easyUI -->
+	<link href="../jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
+	<link href="../jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
+	
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+	<script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
+	
+	<!-- easyUI -->
+	<script src="../jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
+	<script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
+	
+	<style type="text/css">
+		* {margin: 0; padding: 0;}
+	</style>
+
+	<script type="text/javascript">
+		$(function(){
+			$('#datagrid').datagrid({
+				toolbar:'#toolBar'
+			});
+			
+		})
+		
+	</script>
+
+  </head>
+  
+  <body>
+
+		<table id ="datagrid" class="easyui-datagrid" url="" idField="id" singleSelect="true" fit="true" striped="true" fitColumns="true">
+			<thead>   
+		        <tr>   
+		            <th data-options="field:'data',width:150,align:'center'">日期</th>
+		            <th data-options="field:'name',width:150,align:'center'">风机名称</th>  
+		            <th data-options="field:'a',width:120">发电量(kWh)</th>  
+		            <th data-options="field:'b',width:120">平均风速(m/s)</th>  
+		            <th data-options="field:'c',width:120">平均功率(kW)</th>  
+		            <th data-options="field:'d',width:120">平均无功功率(KVar)</th>  
+		            <th data-options="field:'e',width:120">最大风速(m/s)</th>  
+		            <th data-options="field:'f',width:120">最大功率(kW)</th>  
+		            <th data-options="field:'g',width:120">可利用率</th>  
+		        </tr>   
+		    </thead>   
+		</table>
+		
+		<div id="toolBar" style="height:25px,overflow:hidden" >
+				<form id="from1" method="post">   
+					选择日期:<input id="date" type="text" class="easyui-datebox" required="required"></input>
+					<a class="easyui-linkbutton" title="" href="javascript:void(0)">查询</a> 
+				</form>
+				
+		</div>	
+  </body>
+	<div id="timer"></div>
+</html>

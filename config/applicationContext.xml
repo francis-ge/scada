@@ -141,6 +141,18 @@
 		<property name="funService" ref="funService"></property>
 	</bean>
 	
+	<bean id="ajaxVariableTypeAction"
+		class="com.sharpower.action.AjaxVariableTypeAction"
+		scope="prototype">
+		<property name="variableTypeService" ref="variableTypeService"></property>
+	</bean>
+	
+	<bean id="ajaxVariableAction" 
+		class="com.sharpower.action.AjaxVariableAction"
+		scope="prototype">
+		<property name="variableService" ref="variableService"></property>
+	</bean>
+	
 	<bean id="realTimeInfoAjaxAction" 
 		class="com.sharpower.action.RealTimeInfoAjaxAction"
 		scope="prototype">
@@ -203,10 +215,10 @@
 	<bean id="windFarmDataTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
         <property name="jobDetail" ref="windFarmDataThread"></property>
         <property name="repeatInterval">
-            <value>1000</value>
+            <value>1000000</value>
         </property>
         <property name="startDelay">
-            <value>4</value>
+            <value>10000000</value>
         </property>
     </bean>    
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">

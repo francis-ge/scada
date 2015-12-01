@@ -86,7 +86,7 @@
 	</package>
 	
 	<package name="ajaxPackage" extends="json-default">
-		<action name="AjaxRealTimeInfo" class="com.sharpower.action.RealTimeInfoAjaxAction" method="realTimeInfo" >
+		<action name="AjaxRealTimeInfo" class="realTimeInfoAjaxAction" method="realTimeInfo" >
 		
 			<result type="json">
 				<param name="noCache">true</param>
@@ -95,14 +95,79 @@
 			</result>		
 		</action>
 		
-		<action name="ajaxAllfun" class="com.sharpower.action.AjaxFunAction" method="allFun" >
+		<action name="ajaxAllfun" class="ajaxFunAction" method="allFun" >
 			<result type="json">
 				<param name="noCache">true</param>
 				<param name="contentType">text/html</param>
 				<param name="root">funs</param>
-			
 			</result>		
 		</action>
+		
+		<action name="ajaxAddfun" class="ajaxFunAction" method="saveOrUpdateFun" >
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+			</result>		
+		</action>
+		
+		<action name="ajaxDeleteFun" class="ajaxFunAction" method="deleteFun" >
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+			</result>		
+		</action>
+		
+		<action name="ajaxEditFun" class="ajaxFunAction" method="saveOrUpdateFun" >
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+			</result>		
+		</action>
+		
+		<action name="ajaxAllVariableType" class="ajaxVariableTypeAction" method="allVariableType">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">variableTypes</param>
+			</result>
+		</action>
+		
+		<action name="ajaxAllVariable" class="ajaxVariableAction" method="allVariable">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">variables</param>
+			</result>
+		</action>
+		
+		<action name="ajaxAddVariable" class="ajaxVariableAction" method="saveOrUpdateVariable">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+			</result>		
+		</action>
+		
+		<action name="ajaxDeleteVariable" class="ajaxVariableAction" method="deleteVariable" >
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+			</result>		
+		</action>
+		
+		<action name="ajaxEditVariable" class="ajaxVariableAction" method="saveOrUpdateVariable" >
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+			</result>		
+		</action>
+		
+		<action name="ajaxSearchVariable" class="ajaxVariableAction" method="findVariable" >
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+			</result>		
+		</action>
+		
 	</package>
 
 </struts>
