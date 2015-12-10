@@ -4,19 +4,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Properties;
-
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -28,17 +19,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import com.sharpower.entity.Variable;
-import com.sharpower.entity.VariableType;
 
 public class AppDBInit2 {
-
-    /**
-     * Default constructor. 
-     */
-    public AppDBInit2() {
-    	
-        // TODO Auto-generated constructor stub
-    }
 
 	/**对主数据表的Hibernate文件进行初始化。
      * 
@@ -59,7 +41,7 @@ public class AppDBInit2 {
 		
 		sessionFactory.close();
 		
-		//4.打开主数据表hibernate配置文件。并写入。
+		//打开主数据表hibernate配置文件。并写入。
 		try {
 			generateMainRecodeHbmXml(variables, "com/sharpower/entity/MainRecode.hbm.xml", "MainRecode");
 			generateMainRecodeHbmXml(variables, "com/sharpower/entity/MainRecode_copy.hbm.xml", "MainRecode_copy");
@@ -91,10 +73,16 @@ public class AppDBInit2 {
 		Element idElement = classElement.addElement("id");
 		idElement.addAttribute("name", "id");
 		idElement.addAttribute("type", "java.lang.Long");
-		idElement.addAttribute("column", "ID");
-		
+		idElement.addAttribute("column", "ID");		
 		Element generateElement = idElement.addElement("generator");
 		generateElement.addAttribute("class", "native");
+		
+		Element funIdElement = classElement.addElement("many-to-one");
+		funIdElement.addAttribute("name", "fun");
+		funIdElement.addAttribute("class", "com.sharpower.entity.Fun");
+		funIdElement.addAttribute("column", "FUN_ID");
+		funIdElement.addAttribute("not-null", "true");
+		funIdElement.addAttribute("fetch", "join");
 
 		Element dateElement = classElement.addElement("property");
 		dateElement.addAttribute("name", "dateTime");
@@ -112,13 +100,6 @@ public class AppDBInit2 {
 			propertyElement.addAttribute("type", variableType);			
 		}
 		
-		Element propertyElement = classElement.addElement("many-to-one");
-		propertyElement.addAttribute("name", "fun");
-		propertyElement.addAttribute("class", "com.sharpower.entity.Fun");
-		propertyElement.addAttribute("column", "FUN_ID");
-		propertyElement.addAttribute("not-null", "true");
-		propertyElement.addAttribute("fetch", "join");
-				
 		OutputStream out = new FileOutputStream(new File(getClass().getClassLoader().getResource(xmlPath).getPath()));			
 		XMLWriter writer = new XMLWriter(out);
 		
@@ -128,7 +109,7 @@ public class AppDBInit2 {
 		fileCopy(getClass().getClassLoader().getResource(xmlPath).getPath(),  "D://myEclipseWorkspace//eclipseWorkspace//SHARPOWER_SCADA//src//"+xmlPath);
 	}
 	
-	public static void fileCopy(String readfile,String writeFile) {  
+	private static void fileCopy(String readfile,String writeFile) {  
 	    try {  
 	        FileInputStream input = new FileInputStream(readfile);  
 	        FileOutputStream output = new FileOutputStream(writeFile);  
@@ -143,11 +124,5 @@ public class AppDBInit2 {
 	        e.printStackTrace();  
 	    }  
 	}  
-	/**
-     * @see ServletContextListener#contextDestroyed(ServletContextEvent)
-     */
-    public void contextDestroyed(ServletContextEvent arg0)  { 
-         // TODO Auto-generated method stub
-    }
 	
 }

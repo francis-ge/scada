@@ -13,10 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
-
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -24,17 +20,8 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
 public class AppDBInit {
-
-    /**
-     * Default constructor. 
-     */
-    public AppDBInit() {
-    	
-        // TODO Auto-generated constructor stub
-    }
-
 	/**对主数据表的Hibernate文件进行初始化。
-     * @see ServletContextListener#contextInitialized(ServletContextEvent)
+     * 
      */
     public void contextInitialized()  { 
     	//1.获取jdbc数据库连接信息。
@@ -55,7 +42,8 @@ public class AppDBInit {
 			Connection connection = DriverManager.getConnection(jdbcUrl,user,password);
 			
 			//3.进行Plc变量名的查询。
-			String sql = "select variable.name,variable.dbname, variabletype.name from variable "
+			String sql = "select variable.name,variable.dbname, "
+					+ "variabletype.type from variable "
 					+ "left outer join variabletype on variable.type=variabletype.id;";
 			
 			ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
@@ -104,10 +92,16 @@ public class AppDBInit {
 		idElement.addAttribute("name", "id");
 		idElement.addAttribute("type", "java.lang.Long");
 		idElement.addAttribute("column", "ID");
-		
 		Element generateElement = idElement.addElement("generator");
 		generateElement.addAttribute("class", "native");
 
+		Element funIdElement = classElement.addElement("many-to-one");
+		funIdElement.addAttribute("name", "fun");
+		funIdElement.addAttribute("class", "com.sharpower.entity.Fun");
+		funIdElement.addAttribute("column", "FUN_ID");
+		funIdElement.addAttribute("not-null", "true");
+		funIdElement.addAttribute("fetch", "join");
+		
 		Element dateElement = classElement.addElement("property");
 		dateElement.addAttribute("name", "dateTime");
 		dateElement.addAttribute("column", "DATE_TIME");
@@ -121,17 +115,10 @@ public class AppDBInit {
 			Element propertyElement = classElement.addElement("property");
 			propertyElement.addAttribute("name", dbName);
 			propertyElement.addAttribute("column", dbName.toUpperCase());
-			propertyElement.addAttribute("type", variableType);			
+			propertyElement.addAttribute("type","java.lang."+variableType);			
 		}
 		
 		resultSet.beforeFirst();
-		
-		Element propertyElement = classElement.addElement("many-to-one");
-		propertyElement.addAttribute("name", "fun");
-		propertyElement.addAttribute("class", "com.sharpower.entity.Fun");
-		propertyElement.addAttribute("column", "FUN_ID");
-		propertyElement.addAttribute("not-null", "true");
-		propertyElement.addAttribute("fetch", "join");
 				
 		OutputStream out = new FileOutputStream(new File(getClass().getClassLoader().getResource(xmlPath).getPath()));			
 		XMLWriter writer = new XMLWriter(out);
@@ -157,11 +144,5 @@ public class AppDBInit {
 	        e.printStackTrace();  
 	    }  
 	}  
-	/**
-     * @see ServletContextListener#contextDestroyed(ServletContextEvent)
-     */
-    public void contextDestroyed(ServletContextEvent arg0)  { 
-         // TODO Auto-generated method stub
-    }
-	
+
 }

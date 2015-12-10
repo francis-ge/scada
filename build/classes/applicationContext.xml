@@ -6,10 +6,9 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
-<!--  
+<!-- --> 
 	<bean id="appDBInit" class="com.sharpower.listener.AppDBInit2" init-method="contextInitialized">
 	</bean>
--->
 
 	<context:property-placeholder location="classpath:db.properties" />
 
@@ -229,7 +228,6 @@
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
     	<property name="triggers">
     	<list>   	
-    	
     		<ref bean="windFarmDataTrigger"/>
     	
     	</list>
