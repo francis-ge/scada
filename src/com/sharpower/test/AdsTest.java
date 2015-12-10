@@ -1,10 +1,19 @@
 package com.sharpower.test;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 import org.junit.Test;
 
+import com.sharpower.beckhoff.FunDataReadWriteBeckhoff;
+import com.sharpower.entity.Variable;
+import com.sharpower.entity.VariableType;
 import com.sharpower.scada.exception.AdsException;
-import com.sharpower.utils.FunDataReadWriteBeckhoffUtils;
+import com.sharpower.service.VariableTypeService;
+import com.sharpower.service.impl.VariableTypeServiceImpl;
 
 import de.beckhoff.jni.JNIByteBuffer;
 import de.beckhoff.jni.tcads.AdsCallDllFunction;
@@ -36,25 +45,31 @@ public class AdsTest {
 		System.out.println(port);
 	}
 	
+	
 	@Test
-	public void testreadMap(){
+	public void testReadmap1(){
+		SessionFactory sessionFactory = null;
 		
+		Configuration configuration = new Configuration().configure("hibernate.cfg2.xml"); 
+		
+		sessionFactory = configuration.buildSessionFactory();
+		
+		Session session = sessionFactory.openSession();
+		
+		VariableType variableType = session.load(VariableType.class, 4);
+		
+		FunDataReadWriteBeckhoff funDataReadWriteBeckhoff = new FunDataReadWriteBeckhoff(variableType);
+
 		try {
-			Map<String, Long> LongS = FunDataReadWriteBeckhoffUtils.readData("", Long.class);
+			Map<Variable, Object> data = funDataReadWriteBeckhoff.readData("192.168.100.61.1.1:852");
+			for (Entry<Variable, Object> entry: data.entrySet()) {
+				System.out.println(entry.getKey().getName() + "=" + entry.getValue()+";");
+			}
 		} catch (AdsException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		long time = System.currentTimeMillis();
-		Map<String, Float> Longd = null;
-		try {
-			Longd = FunDataReadWriteBeckhoffUtils.readData("", Float.class);
-		} catch (AdsException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-		}
-		System.out.println(System.currentTimeMillis()-time);
-		System.out.println(Longd);
+		
+		session.close();
 	}
 }

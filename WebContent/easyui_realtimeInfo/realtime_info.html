@@ -45,11 +45,19 @@
   
   <body>
 
-		<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/AjaxRealTimeInfo" idField="id" singleSelect="true" fit="true" >
+		<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxRealTimeInfo" idField="id" singleSelect="true" fit="true" >
 			<thead>   
 		        <tr>   
-		            <th data-options="field:'name',width:200,align:'right'">名称</th>
-		            <th data-options="field:'value',width:150">数值</th>  
+		            <th data-options="field:'dateTime', width:150">时间</th>
+		            <th data-options="field:'_main__booltest1',  width:150">布尔值1</th>
+		            <th data-options="field:'_main__booltest2',  width:150">布尔值2</th>
+		            <th data-options="field:'_main__doubletest1',width:150">双精度浮点数1</th>
+		            <th data-options="field:'_main__longtest1',   width:150">整型1</th>
+		            <th data-options="field:'_main__longtest2',   width:150">整型2</th>
+		            <th data-options="field:'_main__longtest999',width:150">整型999</th>
+		            <th data-options="field:'_main__singletest1', width:150">浮点型1</th>
+		            <th data-options="field:'_main__singletest2', width:150">浮点型2</th>
+		            <th data-options="field:'_main__singletest3', width:150">浮点型3</th>
 		        </tr>   
 		    </thead>   
 		</table>

@@ -1,20 +1,18 @@
 package com.sharpower.quartzs;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.sharpower.beckhoff.FunDataReadWriteBeckhoffService;
 import com.sharpower.entity.Fun;
 import com.sharpower.entity.Variable;
 import com.sharpower.scada.exception.AdsException;
 import com.sharpower.service.FunService;
 import com.sharpower.service.RecodeService;
-import com.sharpower.service.impl.FunDataReadWriteBeckhoffService;
 
 public class FunDataQuartz implements Runnable {
-	
 	FunDataReadWriteBeckhoffService funDataReadWriteBeckhoffService;
 	Fun fun;
 	FunService funService;
@@ -45,11 +43,10 @@ public class FunDataQuartz implements Runnable {
 		funService.executeSQL(sql1, fun.getId());
 		
 		try {
-
 			Map<Variable, Object> data = funDataReadWriteBeckhoffService.readDataAll(fun.getAddress());
 			Map<String, Object> saveData = new HashMap<>();
 			
-			saveData.put("funId", 1);
+			saveData.put("fun", fun);
 			saveData.put("dateTime", new Date());
 			
 			for ( Entry<Variable, Object> entry: data.entrySet()) {

@@ -5,7 +5,7 @@ import java.util.Set;
 import org.apache.struts2.json.annotations.JSON;
 
 public class Fun {
-	private int id;
+	private Integer id;
 	private String name;
 	// PLC类型beckhoff
 	private String type;
@@ -22,11 +22,11 @@ public class Fun {
 		this.threadSta = threadSta;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

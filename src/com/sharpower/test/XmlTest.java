@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -17,14 +20,17 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.junit.Test;
 
+
 public class XmlTest {
 	@Test
 	public void testCreateXml() throws DocumentException, IOException {
 		
 		SAXReader reader = new SAXReader();
-		
+		File file = new File("");
+		//file.createNewFile();
+		System.out.println(file.getCanonicalPath());
 //		Document document = reader.read(getClass().getClassLoader().getResourceAsStream("com/sharpower/entity/mainRecode.hbm.xml"));
-		Document document = reader.read(new File("ot.hbm.xml"));
+//		Document document = reader.read(new File("ot.hbm.xml"));
 //		Element element = document.getRootElement();
 //		System.out.println(element.attribute("default-access").getValue());
 //		element.remove(element.attribute("default-cascade"));
@@ -50,4 +56,6 @@ public class XmlTest {
 //     System.out.println(element.getName());
      
 	}
+	
+
 }

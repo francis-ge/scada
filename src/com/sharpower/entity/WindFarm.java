@@ -4,15 +4,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class WindFarm {
-	private int id;
+	private Integer id;
 	private String name;
 	
 	private Set<Fun> funs = new HashSet<Fun>();
-	
-	{		
-		//Fun fun = new Fun(1, "1#", "beckhoff", "192.168.100.61.1.1:852", "A");
-		//funs.put(fun.getId(), fun);
-	}
 	
 	public String getName() {
 		return name;
@@ -22,11 +17,11 @@ public class WindFarm {
 		this.name = name;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

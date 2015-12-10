@@ -4,15 +4,24 @@
 <!-- Generated 2015-10-13 9:15:33 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.sharpower.entity.VariableType" table="VARIABLETYPE">
-        <id name="id" type="int">
+        <id name="id" type="java.lang.Integer">
             <column name="ID" />
             <generator class="native" />
         </id>
-        <property name="name" type="java.lang.String">
-            <column name="NAME" />
+        <property name="type" type="java.lang.String">
+            <column name="TYPE" />
         </property>
-        <property name="size" type="int">
-            <column name="SIZE" />
+        
+        <property name="plcType" type="java.lang.String">
+            <column name="PLC_TYPE" />
+        </property>
+        
+        <property name="plcSize" type="java.lang.Integer">
+            <column name="PLC_SIZE" />
+        </property> 
+        
+        <property name="dbSize" type="java.lang.Integer">
+            <column name="DB_SIZE" />
         </property>
         
         <bag name="vals" table="VARIABLE" lazy="true" fetch="join" inverse="false" order-by="id asc">

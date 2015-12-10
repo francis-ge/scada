@@ -135,7 +135,12 @@ public class FunDataReadWriteBeckhoffService {
 
 		lj_pDataWrite.setByteArray(bytes, false);
 	}
-
+	/**
+	 * 
+	 * @param names
+	 * @param lj_indexOffset
+	 * @return
+	 */
 	private long getLengWrite(List<Variable> names, long lj_indexOffset) {
 		long lj_lengthWrite = 0;
 
@@ -321,13 +326,25 @@ public class FunDataReadWriteBeckhoffService {
 		lj_pDataWrite_double = lj_pDataWrite;
 
 	}
-
+	
+	/**
+	 * 从ADS返回的数据块中解析数据
+	 * @param clazz 数据块中的数据类型
+	 * @param lj_pDataRead ADS返回的数据块
+	 * @return 返回变量和值得键值对
+	 */
 	@SuppressWarnings("unchecked")
-	private <E> void getData(Class<E> clazz, JNIByteBuffer lj_pDataRead, Map<Variable, E> data) {
+	private <E> Map<Variable, E> getData(Class<E> clazz, JNIByteBuffer lj_pDataRead ) {
+		//读取变量的数量
 		long lj_indexOffset;
+		//变量名List
 		List<Variable> valnames;
+		//数据类型的字节数
 		int size = 0;
-
+		//返回值
+		Map<Variable, E> data = new HashMap<>();
+		
+		//确定读取变量的数量、变量名的List、数据类型的字节数
 		if (clazz == Boolean.class) {
 			lj_indexOffset = lj_indexOffset_boolean;
 			valnames = booleanValNames;
@@ -357,30 +374,38 @@ public class FunDataReadWriteBeckhoffService {
 			valnames = doubleValNames;
 			size = 8;
 		} else {
-			return;
+			return data;
 		}
-
+		
+		//ADS数据块转换为字节数组
 		byte[] bytes = lj_pDataRead.getByteArray();
-
+		
+		//变量读取的错误码
 		int errCode = 0;
+		//读取错误的变量数量
 		int errCount = 0;
+		//变量值
 		E result = null;
-
+		
+		//读取字节数组的临时变量
 		int destPos = 0;
-
+		
+		//读取错误码的字节数组
 		byte[] bytes1 = new byte[ERROR_CODE_LENGTH];
+		//读取变量值的字节数组
 		byte[] bytes2 = new byte[size];
 
 		for (int i = 0; i < lj_indexOffset; i++) {
+			//获取错误码字节数组
 			System.arraycopy(bytes, destPos, bytes1, 0, ERROR_CODE_LENGTH);
 			destPos = destPos + ERROR_CODE_LENGTH + READ_DATA_LENGTH;
-
-			errCode = ByteUtil.getInt(bytes1);
-
+			
+			//转换字节数组为整型值
+			errCode = ByteUtil.getInteger(bytes1);
+			//如果错误码为0则读取变量值
 			if (errCode == 0) {
-
 				System.arraycopy(bytes, (int) (8 * lj_indexOffset + size * i - size * errCount), bytes2, 0, size);
-
+				
 				if (clazz == Boolean.class) {
 					result = (E) (Boolean) (ByteUtil.getBoolean(bytes2));
 
@@ -388,7 +413,7 @@ public class FunDataReadWriteBeckhoffService {
 					result = (E) (Byte) (ByteUtil.getByte(bytes2));
 
 				} else if (clazz == Integer.class) {
-					result = (E) (Integer) (ByteUtil.getInt(bytes2));
+					result = (E) (Integer) (ByteUtil.getInteger(bytes2));
 
 				} else if (clazz == Float.class) {
 					result = (E) (Float) (ByteUtil.getFloat(bytes2));
@@ -401,13 +426,14 @@ public class FunDataReadWriteBeckhoffService {
 				}
 
 			} else {
-				errCount++;
+				++errCount;
 				result = null;
 			}
 
 			data.put(valnames.get(i), result);
 
 		}
+		return data;
 	}
 	
 	private <E> Map<Variable, E> readData(String sFunAddress, Class<E> clazz) throws AdsException {
@@ -480,7 +506,7 @@ public class FunDataReadWriteBeckhoffService {
 		AdsCallDllFunction.adsPortClose();
 
 		if (err == 0) {
-			getData(clazz, lj_pDataRead, data);
+			data = getData(clazz, lj_pDataRead);
 
 			return data;
 

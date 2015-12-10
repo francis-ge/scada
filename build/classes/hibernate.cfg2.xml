@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+    	<!-- 配置为propertys文件 -->
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password"></property>
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localHost:3306/sharpower_scada</property>
+			
+		<!-- 最大连接数  -->
+		<property name="hibernate.c3p0.max_size">999</property>
+		
+		<!-- 最小连接数 -->
+		<property name="hibernate.c3p0.min_size">30</property>
+		
+		<!-- 连接超时时间 	-->
+		<property name="hibernate.c3p0.timeout">1800</property>
+	
+		<!-- 检查超时的时间间隔  	-->
+		<property name="hibernate.c3p0.idle_test_period">1500</property>
+		
+		<!-- 当连接耗尽时申请连接的个数 -->
+		<property name="hibernate.c3p0.acquire_increment">10</property>
+		
+		<!-- 最大的PreparedStatement的数量 	-->
+		<property name="hibernate.c3p0.max_statements">100</property>
+	
+		
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
+		<property name="show_sql">true</property>
+		<property name="hbm2ddl.auto">update</property>
+		<property name="use_sql_comments">true</property>
+		<!-- 设置 Hibernate 的事务隔离级别 -->
+    	<property name="connection.isolation">2</property>
+    	
+    	<!-- 删除对象后, 使其 OID 置为 null -->
+    	<property name="use_identifier_rollback">true</property>
+    	
+		<!-- 
+		<property name="current_session_context_class">thread</property>
+	 	 -->
+	 	 <!--  -->
+		<mapping resource="com/sharpower/entity/Fun.hbm.xml"/>
+		<mapping resource="com/sharpower/entity/WindFarm.hbm.xml"/>
+		<mapping resource="com/sharpower/entity/PlcType.hbm.xml"/>
+		<mapping resource="com/sharpower/entity/Variable.hbm.xml"/>
+		<mapping resource="com/sharpower/entity/VariableType.hbm.xml"/>
+		
+    </session-factory>
+</hibernate-configuration>

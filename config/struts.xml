@@ -86,12 +86,20 @@
 	</package>
 	
 	<package name="ajaxPackage" extends="json-default">
-		<action name="AjaxRealTimeInfo" class="realTimeInfoAjaxAction" method="realTimeInfo" >
-		
+	
+		<action name="ajaxMainInfo" class="ajaxRealTimeInfoAction" method="mainInfo" >
 			<result type="json">
 				<param name="noCache">true</param>
 				<param name="contentType">text/html</param>
-				<param name="root">realtimeInfoDspObjs</param>
+				<param name="root">realtimeInfo</param>
+			</result>		
+		</action>
+		
+		<action name="ajaxRealTimeInfo" class="ajaxRealTimeInfoAction" method="realTimeInfo" >
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">realtimeInfo</param>
 			</result>		
 		</action>
 		
@@ -167,6 +175,8 @@
 				<param name="contentType">text/html</param>
 			</result>		
 		</action>
+		
+
 		
 	</package>
 

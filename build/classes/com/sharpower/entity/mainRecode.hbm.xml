@@ -1,9 +1,2 @@
-<?xml version="1.0"?>
-<!DOCTYPE hibernate-mapping PUBLIC 
-	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-
-<hibernate-mapping >
-
-    
-</hibernate-mapping>
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-mapping><class entity-name="MainRecode"><id name="id" type="java.lang.Long" column="ID"><generator class="native"/></id><property name="dateTime" column="DATE_TIME" type="timestamp"/><property name="_MAIN__BOOLTEST1" column="_MAIN__BOOLTEST1" type="java.lang.Boolean"/><property name="_MAIN__BOOLTEST2" column="_MAIN__BOOLTEST2" type="java.lang.Boolean"/><property name="_MAIN__LONGTEST1" column="_MAIN__LONGTEST1" type="java.lang.Integer"/><property name="_MAIN__LONGTEST2" column="_MAIN__LONGTEST2" type="java.lang.Integer"/><property name="A_MAIN__LONGTEST2" column="A_MAIN__LONGTEST2" type="java.lang.Integer"/><property name="_MAIN__LONGTEST9999" column="_MAIN__LONGTEST9999" type="java.lang.Integer"/><property name="_MAIN__SINGLETEST1" column="_MAIN__SINGLETEST1" type="java.lang.Float"/><property name="_MAIN__SINGLETEST2" column="_MAIN__SINGLETEST2" type="java.lang.Float"/><property name="_MAIN__SINGLETEST3" column="_MAIN__SINGLETEST3" type="java.lang.Float"/><property name="_MAIN__DOUBLETEST1" column="_MAIN__DOUBLETEST1" type="java.lang.Double"/><many-to-one name="fun" class="com.sharpower.entity.Fun" column="FUN_ID" not-null="true" fetch="join"/></class></hibernate-mapping>

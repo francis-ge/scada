@@ -6,6 +6,10 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+<!--  
+	<bean id="appDBInit" class="com.sharpower.listener.AppDBInit2" init-method="contextInitialized">
+	</bean>
+-->
 
 	<context:property-placeholder location="classpath:db.properties" />
 
@@ -93,9 +97,9 @@
 		class="com.sharpower.service.impl.VariableTypeServiceImpl">
 		<property name="dao" ref="variableTypeDao"></property>
 	</bean>
-	
-	<bean id="funDataReadWriteBeckhoffService" 
-		class="com.sharpower.service.impl.FunDataReadWriteBeckhoffService">
+   
+    <bean id="funDataReadWriteBeckhoffService" 
+		class="com.sharpower.beckhoff.FunDataReadWriteBeckhoffService">
     	<property name="variableTypeService" ref="variableTypeService"></property>
     </bean>
     
@@ -153,10 +157,10 @@
 		<property name="variableService" ref="variableService"></property>
 	</bean>
 	
-	<bean id="realTimeInfoAjaxAction" 
-		class="com.sharpower.action.RealTimeInfoAjaxAction"
+	<bean id="ajaxRealTimeInfoAction" 
+		class="com.sharpower.action.AjaxRealTimeInfoAction"
 		scope="prototype">
-		<property name="recodeService" ref="recodeService"></property>
+		<property name="recodeService" 	ref="recodeService"></property>
 		<property name="variableService" ref="variableService"></property>
 	</bean>
 
@@ -208,6 +212,7 @@
     	<property name="funService" ref="funService"></property>
     	<property name="recodeService" ref="recodeService"></property>
     </bean>
+    
     <bean id="windFarmDataThread" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
        <property name="targetObject" ref="windFarmData"></property>
        <property name="targetMethod" value="readData"></property>
@@ -215,17 +220,18 @@
 	<bean id="windFarmDataTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
         <property name="jobDetail" ref="windFarmDataThread"></property>
         <property name="repeatInterval">
-            <value>1000000</value>
+            <value>1000</value>
         </property>
         <property name="startDelay">
-            <value>10000000</value>
+            <value>1000</value>
         </property>
     </bean>    
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
     	<property name="triggers">
     	<list>   	
+    	
     		<ref bean="windFarmDataTrigger"/>
-
+    	
     	</list>
     	</property>
     </bean>

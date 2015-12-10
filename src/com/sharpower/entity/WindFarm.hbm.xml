@@ -4,7 +4,7 @@
 <!-- Generated 2015-9-25 16:29:35 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.sharpower.entity.WindFarm" table="WINDFARM">
-        <id name="id" type="int">
+        <id name="id" type="java.lang.Integer">
             <column name="WINDFARM_ID" />
             <generator class="native" />
         </id>

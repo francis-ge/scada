@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+ 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title></title>
+    
+	<!-- easyUI -->
+	<link href="../jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
+	<link href="../jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
+	
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+	<script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
+	
+	<!-- easyUI -->
+	<script src="../jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
+	<script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
+	
+	<style type="text/css">
+		* {margin: 0; padding: 0;}
+	</style>
+	<script type="text/javascript">
+		$(function(){
+			$('#datagrid').datagrid({
+		
+			});
+			
+			setInterval(function(){
+		    	$('#datagrid').datagrid('load')}, 
+		    	1000 
+			);
+		})
+	</script>
+</head>
+<body>
+	<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxMainInfo" 
+		idField="id" singleSelect="true" fit="true" fitColumns="true" striped="true" loadMsg="">
+		<thead>   
+	        <tr>   
+	            <th data-options="field:'fun',width:150,formatter:function(value,row,index){return value.name;}">风机名称</th>
+	            <th data-options="field:'dateTime', 	width:150">时间</th>
+	            <th data-options="field:'mode',  		width:150">运行模式</th>
+	            <th data-options="field:'windSpeed',	width:150">风速</th>
+	            <th data-options="field:'power',		width:150">功率</th>
+	            <th data-options="field:'error',  		width:150">故障</th>
+	            <th data-options="field:'warning',  	width:150">警告</th>
+	            <th data-options="field:'windDirection',width:150">风向</th>
+	            <th data-options="field:'dayOutput',	width:150">日发电量</th>
+	            <th data-options="field:'output',		width:150">总发电量</th>
+	            <th data-options="field:'_MAIN__BOOLTEST1',		width:150">_main__booltest1</th>
+	            <th data-options="field:'_MAIN__DOUBLETEST1',		width:150">_main__doubletest1</th>
+	            <th data-options="field:'_MAIN__LONGTEST1',		width:150">_main__longtest1</th>
+	            <th data-options="field:'_MAIN__SINGLETEST1',		width:150">_main__singletest1</th>
+	        </tr>   
+	    </thead>   
+	</table>
+</body>
+</html>

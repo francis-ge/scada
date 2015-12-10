@@ -16,10 +16,10 @@
 		<!-- 最小连接数 
 		<property name="hibernate.c3p0.min_size">30</property>
 		-->
-		<!-- 连接超时时间
+		<!-- 连接超时时间 
 		<property name="hibernate.c3p0.timeout">1800</property>
-		 -->
-		<!-- 检查超时的时间间隔  
+		-->
+		<!-- 检查超时的时间间隔  	
 		<property name="hibernate.c3p0.idle_test_period">1500</property>
 		-->
 		<!-- 当连接耗尽时申请连接的个数 

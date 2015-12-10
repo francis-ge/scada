@@ -1,6 +1,6 @@
 //package com.sharpower.listener;
-//
 //import java.io.File;
+//import java.io.FileInputStream;
 //import java.io.FileNotFoundException;
 //import java.io.FileOutputStream;
 //import java.io.IOException;
@@ -8,11 +8,9 @@
 //import java.io.OutputStream;
 //import java.io.UnsupportedEncodingException;
 //import java.sql.Connection;
-//import java.sql.Driver;
 //import java.sql.DriverManager;
 //import java.sql.ResultSet;
 //import java.sql.SQLException;
-//import java.util.Enumeration;
 //import java.util.Properties;
 //
 //import javax.servlet.ServletContextEvent;
@@ -37,6 +35,7 @@
 //     * Default constructor. 
 //     */
 //    public AppDBInitListener() {
+//    	
 //        // TODO Auto-generated constructor stub
 //    }
 //
@@ -55,6 +54,7 @@
 //			String password = properties.getProperty("password");
 //			String jdbcUrl = properties.getProperty("jdbcUrl");
 //			String driverClass = properties.getProperty("driverClass");
+//			
 //			//2.连接数据库。
 //			Class.forName(driverClass);
 //			
@@ -67,8 +67,8 @@
 //			ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
 //	
 //			//4.打开主数据表hibernate配置文件。并写入。
-//			generateMainRecodeHbmXml(resultSet, "com/sharpower/entity/mainRecode.hbm.xml", "MainRecode");  
-//			generateMainRecodeHbmXml(resultSet, "com/sharpower/entity/mainRecode.hbm_copy.xml", "MainRecode_copy");  
+//			generateMainRecodeHbmXml(resultSet, "com/sharpower/entity/MainRecode.hbm.xml", "MainRecode");  
+//			generateMainRecodeHbmXml(resultSet, "com/sharpower/entity/MainRecode_copy.hbm.xml", "MainRecode_copy");
 //			
 //			inputStream.close();
 //			resultSet.close();
@@ -91,7 +91,7 @@
 //	private void generateMainRecodeHbmXml(ResultSet resultSet, String xmlPath, String entityName)
 //			throws DocumentException, SQLException, FileNotFoundException, UnsupportedEncodingException, IOException {
 //		SAXReader reader = new SAXReader();
-//		
+//	
 //		Document document = reader.read(getClass().getClassLoader().getResourceAsStream(xmlPath));
 //
 //		Element rootElement = document.getRootElement();
@@ -130,19 +130,38 @@
 //			String dbName = resultSet.getString(2);
 //			String variableType = resultSet.getString(3);
 //			
-//			Element propertyElement =classElement.addElement("property");
+//			Element propertyElement = classElement.addElement("property");
 //			propertyElement.addAttribute("name", dbName);
 //			propertyElement.addAttribute("column", dbName.toUpperCase());
 //			propertyElement.addAttribute("type", variableType);			
-//			System.out.println(dbName);
 //		}
+//		
+//		resultSet.beforeFirst();
 //				
 //		OutputStream out = new FileOutputStream(new File(getClass().getClassLoader().getResource(xmlPath).getPath()));			
 //		XMLWriter writer = new XMLWriter(out);
-//
-//		writer.write(document);  
+//		
+//		writer.write(document);
 //		writer.close();
+//		
+//		fileCopy(getClass().getClassLoader().getResource(xmlPath).getPath(),  "D://myEclipseWorkspace//eclipseWorkspace//SHARPOWER_SCADA//src//"+xmlPath);
 //	}
+//	
+//	public static void fileCopy(String readfile,String writeFile) {  
+//	    try {  
+//	        FileInputStream input = new FileInputStream(readfile);  
+//	        FileOutputStream output = new FileOutputStream(writeFile);  
+//	        int read = input.read();          
+//	        while ( read != -1 ) {  
+//	            output.write(read);   
+//	            read = input.read();  
+//	        }             
+//	        input.close();  
+//	        output.close();  
+//	    } catch (IOException e) {  
+//	        e.printStackTrace();  
+//	    }  
+//	}  
 //	/**
 //     * @see ServletContextListener#contextDestroyed(ServletContextEvent)
 //     */

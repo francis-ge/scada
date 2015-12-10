@@ -8,8 +8,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 /**
- * ·´ÉäµÄ Utils º¯Êý¼¯ºÏ
- * Ìá¹©·ÃÎÊË½ÓÐ±äÁ¿, »ñÈ¡·ºÐÍÀàÐÍ Class, ÌáÈ¡¼¯ºÏÖÐÔªËØÊôÐÔµÈ Utils º¯Êý
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ Utils ï¿½ï¿½ï¿½ï¿½ï¿½
+ * ï¿½á¹©ï¿½ï¿½ï¿½ï¿½Ë½ï¿½Ð±ï¿½ï¿½ï¿½, ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Class, ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôªï¿½ï¿½ï¿½ï¿½ï¿½Ôµï¿½ Utils ï¿½ï¿½ï¿½ï¿½
  * @author Administrator
  *
  */
@@ -17,8 +17,8 @@ public class ReflectionUtils {
 
 	
 	/**
-	 * Í¨¹ý·´Éä, »ñµÃ¶¨Òå Class Ê±ÉùÃ÷µÄ¸¸ÀàµÄ·ºÐÍ²ÎÊýµÄÀàÐÍ
-	 * Èç: public EmployeeDao extends BaseDao<Employee, String>
+	 * Í¨ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½ Class Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½Ä·ï¿½ï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * ï¿½ï¿½: public EmployeeDao extends BaseDao<Employee, String>
 	 * @param clazz
 	 * @param index
 	 * @return
@@ -44,8 +44,8 @@ public class ReflectionUtils {
 	}
 	
 	/**
-	 * Í¨¹ý·´Éä, »ñµÃ Class ¶¨ÒåÖÐÉùÃ÷µÄ¸¸ÀàµÄ·ºÐÍ²ÎÊýÀàÐÍ
-	 * Èç: public EmployeeDao extends BaseDao<Employee, String>
+	 * Í¨ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ Class ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½Ä·ï¿½ï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * ï¿½ï¿½: public EmployeeDao extends BaseDao<Employee, String>
 	 * @param <T>
 	 * @param clazz
 	 * @return
@@ -56,7 +56,7 @@ public class ReflectionUtils {
 	}
 	
 	/**
-	 * Í¨¹ý·´Éä£¬»ñÈ¡Ö¸¶¨·½·¨µÄ·µ»ØÖµµÄ·ºÐÍÀàÐÍ
+	 * Í¨ï¿½ï¿½ï¿½ä£¬ï¿½ï¿½È¡Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½Öµï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * @return
 	 */
 	public static Class getReturnGenericType(Object object, String methodName, Class<?>[] parameterTypes) {
@@ -65,7 +65,7 @@ public class ReflectionUtils {
 		Type type = method.getGenericReturnType();
 		
 		if ( type instanceof ParameterizedType ){
-			Type[] types = ((ParameterizedType) type).getActualTypeArguments();// ·ºÐÍÀàÐÍÁÐ±í
+			Type[] types = ((ParameterizedType) type).getActualTypeArguments();// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
 			type = types[0];
 			return (Class) type;
 			}
@@ -74,7 +74,7 @@ public class ReflectionUtils {
 	}
 	
 	/**
-	 * Ñ­»·ÏòÉÏ×ªÐÍ, »ñÈ¡¶ÔÏóµÄ DeclaredMethod
+	 * Ñ­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½, ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ DeclaredMethod
 	 * @param object
 	 * @param methodName
 	 * @param parameterTypes
@@ -87,7 +87,7 @@ public class ReflectionUtils {
 				//superClass.getMethod(methodName, parameterTypes);
 				return superClass.getDeclaredMethod(methodName, parameterTypes);
 			} catch (NoSuchMethodException e) {
-				//Method ²»ÔÚµ±Ç°Àà¶¨Òå, ¼ÌÐøÏòÉÏ×ªÐÍ
+				//Method ï¿½ï¿½ï¿½Úµï¿½Ç°ï¿½à¶¨ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½
 			}
 			//..
 		}
@@ -96,7 +96,7 @@ public class ReflectionUtils {
 	}
 	
 	/**
-	 * Ê¹ filed ±äÎª¿É·ÃÎÊ
+	 * Ê¹ filed ï¿½ï¿½Îªï¿½É·ï¿½ï¿½ï¿½
 	 * @param field
 	 */
 	public static void makeAccessible(Field field){
@@ -106,7 +106,7 @@ public class ReflectionUtils {
 	}
 	
 	/**
-	 * Ñ­»·ÏòÉÏ×ªÐÍ, »ñÈ¡¶ÔÏóµÄ DeclaredField
+	 * Ñ­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½, ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ DeclaredField
 	 * @param object
 	 * @param filedName
 	 * @return
@@ -117,14 +117,14 @@ public class ReflectionUtils {
 			try {
 				return superClass.getDeclaredField(filedName);
 			} catch (NoSuchFieldException e) {
-				//Field ²»ÔÚµ±Ç°Àà¶¨Òå, ¼ÌÐøÏòÉÏ×ªÐÍ
+				//Field ï¿½ï¿½ï¿½Úµï¿½Ç°ï¿½à¶¨ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½
 			}
 		}
 		return null;
 	}
 	
 	/**
-	 * Ö±½Óµ÷ÓÃ¶ÔÏó·½·¨, ¶øºöÂÔÐÞÊÎ·û(private, protected)
+	 * Ö±ï¿½Óµï¿½ï¿½Ã¶ï¿½ï¿½ó·½·ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î·ï¿½(private, protected)
 	 * @param object
 	 * @param methodName
 	 * @param parameterTypes
@@ -147,14 +147,14 @@ public class ReflectionUtils {
 		try {
 			return method.invoke(object, parameters);
 		} catch(IllegalAccessException e) {
-			System.out.println("²»¿ÉÄÜÅ×³öµÄÒì³£");
+			e.printStackTrace();
 		} 
 		
 		return null;
 	}
 	
 	/**
-	 * Ö±½ÓÉèÖÃ¶ÔÏóÊôÐÔÖµ, ºöÂÔ private/protected ÐÞÊÎ·û, Ò²²»¾­¹ý setter
+	 * Ö±ï¿½ï¿½ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ, ï¿½ï¿½ï¿½ï¿½ private/protected ï¿½ï¿½ï¿½Î·ï¿½, Ò²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ setter
 	 * @param object
 	 * @param fieldName
 	 * @param value
@@ -170,12 +170,12 @@ public class ReflectionUtils {
 		try {
 			field.set(object, value);
 		} catch (IllegalAccessException e) {
-			System.out.println("²»¿ÉÄÜÅ×³öµÄÒì³£");
+			e.printStackTrace();
 		}
 	}
 	
 	/**
-	 * Ö±½Ó¶ÁÈ¡¶ÔÏóµÄÊôÐÔÖµ, ºöÂÔ private/protected ÐÞÊÎ·û, Ò²²»¾­¹ý getter
+	 * Ö±ï¿½Ó¶ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ, ï¿½ï¿½ï¿½ï¿½ private/protected ï¿½ï¿½ï¿½Î·ï¿½, Ò²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ getter
 	 * @param object
 	 * @param fieldName
 	 * @return
@@ -193,7 +193,7 @@ public class ReflectionUtils {
 		try {
 			result = field.get(object);
 		} catch (IllegalAccessException e) {
-			System.out.println("²»¿ÉÄÜÅ×³öµÄÒì³£");
+			e.printStackTrace();
 		}
 		
 		return result;

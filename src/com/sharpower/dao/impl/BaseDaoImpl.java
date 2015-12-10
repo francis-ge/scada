@@ -73,14 +73,6 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 		}
 		q.executeUpdate();
 	}
-	
-//	public void executeSQL(String sql, Map<Variable, Object> objects) {
-//		SQLQuery q = sf.getCurrentSession().createSQLQuery(sql);
-//		for (Entry<Variable, Object> entry : objects.entrySet()) {
-//			q.setParameter(entry.getKey().getDbName(), entry.getValue());
-//		}
-//		q.executeUpdate();
-//	}
 
 	public T loadEntity(Integer id) {
 		return (T) sf.getCurrentSession().load(clazz, id);
