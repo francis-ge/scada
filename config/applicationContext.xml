@@ -6,10 +6,10 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
-<!-- 
-	<bean id="appDBInit" class="com.sharpower.listener.AppDBInit2" init-method="contextInitialized">
+<!-- -->
+	<bean id="appDBInit" class="com.sharpower.listener.AppDBInit" init-method="contextInitialized">
 	</bean>
--->
+
 
 	<context:property-placeholder location="classpath:db.properties" />
 
@@ -162,6 +162,7 @@
 		scope="prototype">
 		<property name="recodeService" 	ref="recodeService"></property>
 		<property name="variableService" ref="variableService"></property>
+		<property name="windFarmDataQuartz" ref="windFarmData"></property>
 	</bean>
 
 	<tx:advice id="txAdvice" 

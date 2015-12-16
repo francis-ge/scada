@@ -44,7 +44,6 @@ public class AppDBInit2 {
 		//打开主数据表hibernate配置文件。并写入。
 		try {
 			generateMainRecodeHbmXml(variables, "com/sharpower/entity/MainRecode.hbm.xml", "MainRecode");
-			generateMainRecodeHbmXml(variables, "com/sharpower/entity/MainRecode_copy.hbm.xml", "MainRecode_copy");
 		} catch (DocumentException | SQLException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -75,13 +74,8 @@ public class AppDBInit2 {
 		idElement.addAttribute("column", "ID");		
 		Element generateElement = idElement.addElement("generator");
 		
-		if (entityName.equals("MainRecode_copy")) {
-			idElement.addAttribute("type", "java.lang.Integer");
-			generateElement.addAttribute("class", "assigned");
-		}else {
-			idElement.addAttribute("type", "java.lang.Long");
-			generateElement.addAttribute("class", "native");
-		}
+		idElement.addAttribute("type", "java.lang.Long");
+		generateElement.addAttribute("class", "native");
 		
 		Element funIdElement = classElement.addElement("many-to-one");
 		funIdElement.addAttribute("name", "fun");

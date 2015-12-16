@@ -1,8 +1,13 @@
 package com.sharpower.quartzs;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import com.sharpower.beckhoff.FunDataReadWriteBeckhoffService;
@@ -15,6 +20,8 @@ public class WindFarmDataQuartz {
 	private Set<Fun> funs;
 	private FunDataReadWriteBeckhoffService funDataReadWriteBeckhoffService;
 	private RecodeService recodeService;
+	
+	private Map<Integer,Map<String, Object>> dataMap = new HashMap<>();
 	
 	private Map<String, Object> params;
 	
@@ -38,6 +45,14 @@ public class WindFarmDataQuartz {
 		this.params = params;
 	}
 
+	public Map<Integer, Map<String, Object>> getDataMap() {
+		return dataMap;
+	}
+
+	public void setDataMap(Map<Integer, Map<String, Object>> dataMap) {
+		this.dataMap = dataMap;
+	}
+
 	public void readData(){
 		if(funs==null){
 			funs = windFarmService.getEntity(1).getFuns();
@@ -51,6 +66,7 @@ public class WindFarmDataQuartz {
 				funDataQuartz.setRecodeService(recodeService);
 				funDataQuartz.setFun(fun);
 				funDataQuartz.setParams(params);
+				funDataQuartz.setDataMap(dataMap);
 				
 				Thread thread = new Thread(funDataQuartz);
 				thread.start();
@@ -60,16 +76,17 @@ public class WindFarmDataQuartz {
 	}
 	
 	public void saveData(){
-		String hql = "FROM MainRecode_copy";
-		List<Map<String, Object>> data = recodeService.findMapByHql(hql);
-		
 		Date now = new Date();
 		
-		for (Map<String, Object> map : data) {
-			map.put("id", null);
-			map.put("dateTime", now);
+		for (Entry<Integer,Map<String, Object>> entry : dataMap.entrySet()) {
+			Map<String, Object> dataTemp = new HashMap<>();
+
+			dataTemp.putAll(entry.getValue());
 			
-			recodeService.save("MainRecode", map);
+			dataTemp.put("id", null);
+			dataTemp.put("dateTime", now);
+			
+			recodeService.save(dataTemp);
 		}
 		
 	}

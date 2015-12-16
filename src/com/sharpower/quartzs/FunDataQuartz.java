@@ -1,7 +1,9 @@
 package com.sharpower.quartzs;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -17,6 +19,7 @@ public class FunDataQuartz implements Runnable {
 	private Fun fun;
 	private RecodeService recodeService;
 	private Map<String, Object> params;
+	private Map<Integer,Map<String, Object>> dataMap = new HashMap<>();
 	
 	public FunDataQuartz() {
 	}
@@ -35,6 +38,10 @@ public class FunDataQuartz implements Runnable {
 	
 	public void setParams(Map<String, Object> params) {
 		this.params = params;
+	}
+	
+	public void setDataMap(Map<Integer, Map<String, Object>> dataMap) {
+		this.dataMap = dataMap;
 	}
 	
 	public void readData() {	
@@ -61,7 +68,7 @@ public class FunDataQuartz implements Runnable {
 				saveData.put("___visu_grid_power", power);
 			}
 			
-			recodeService.saveOrUpdate("MainRecode_copy", saveData);
+			dataMap.put(fun.getId(), saveData);
 						
 		} catch (AdsException e) {
 			saveData.put("id", fun.getId());
@@ -71,14 +78,15 @@ public class FunDataQuartz implements Runnable {
 			saveData.put("___main_loop_mode_number", Short.valueOf("10"));
 			
 			//保持时间为连接断开时的时间
-			Map<String, Object> oldData = recodeService.get("MainRecode_copy", fun.getId());
+			Map<String, Object> oldData = dataMap.get(fun.getId());
+			
 			if (oldData!=null) {
 				saveData.put("dateTime", oldData.get("dateTime"));
 			}else{
 				saveData.put("dateTime", new Date());
 			}
 			
-			recodeService.saveOrUpdate("MainRecode_copy", saveData);
+			dataMap.put(fun.getId(), saveData);
 			
 			e.printStackTrace();
 		}

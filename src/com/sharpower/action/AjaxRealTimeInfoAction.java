@@ -16,6 +16,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.sharpower.entity.Fun;
 import com.sharpower.entity.RealtimeInfoDspObj;
 import com.sharpower.entity.Variable;
+import com.sharpower.quartzs.WindFarmDataQuartz;
 import com.sharpower.service.FunService;
 import com.sharpower.service.RecodeService;
 import com.sharpower.service.VariableService;
@@ -29,6 +30,8 @@ public class AjaxRealTimeInfoAction extends ActionSupport{
 	private FunService funService;
 	private VariableService variableService;
 	private RecodeService recodeService;
+	
+	private WindFarmDataQuartz windFarmDataQuartz;
 	
 	private Fun fun;
 	private int funId;
@@ -63,6 +66,10 @@ public class AjaxRealTimeInfoAction extends ActionSupport{
 		this.recodeService = recodeService;
 	}
 	
+	public void setWindFarmDataQuartz(WindFarmDataQuartz windFarmDataQuartz) {
+		this.windFarmDataQuartz = windFarmDataQuartz;
+	}
+	
 	@JSON(serialize=false)
 	public int getFunId() {
 		return funId;
@@ -76,25 +83,15 @@ public class AjaxRealTimeInfoAction extends ActionSupport{
 		return realtimeInfo;
 	}
 	
-	public String mainInfo(){
-		variables= variableService.findAllEntities();
-		
-		//String hql = "select mrc FROM MainRecode_copy mrc LEFT JOIN FETCH mrc.fun fun";
-		String hql = "select new map(mrc.id as id, mrc.fun.name as funName,mrc.___main_loop_mode_number as mode, "
-				+ "mrc.dateTime as dateTime,mrc.___wind_speed as windSpeed,mrc._MAIN__BOOLTEST1 as boolTest1, mrc._MAIN__SINGLETEST1 as singleTest1,"
-				+ " mrc._MAIN__DOUBLETEST1 as doubleTest1, mrc._MAIN__LONGTEST1 as longTest1) FROM MainRecode_copy mrc";
-		
-		realtimeInfo = recodeService.findMapByHql(hql);
+	public String mainInfo(){		
+
+		realtimeInfo.addAll(windFarmDataQuartz.getDataMap().values());
 		
 		return SUCCESS;
 	}
+	
 	public String realTimeInfo(){
-		variables= variableService.findAllEntities();
-		
-		String hql = "select new map(mrc.id as id, mrc.fun.name as funName, mrc.fun.id as funId, mrc.___main_loop_mode_number as mode, "
-				+ "mrc.dateTime as dateTime,mrc.___wind_speed as windSpeed,mrc._MAIN__BOOLTEST1 as boolTest1, mrc._MAIN__SINGLETEST1 as singleTest1,"
-				+ " mrc._MAIN__DOUBLETEST1 as doubleTest1, mrc._MAIN__LONGTEST1 as longTest1) FROM MainRecode_copy mrc WHERE mrc.fun.id=?";
-		
+
 		int id;
 		if (fun==null){
 			id = funId;
@@ -102,7 +99,7 @@ public class AjaxRealTimeInfoAction extends ActionSupport{
 			id= fun.getId();
 		}
 		
-		realtimeInfo = recodeService.findMapByHql(hql, id);
+		realtimeInfo.add(windFarmDataQuartz.getDataMap().get(id));
 		
 		return SUCCESS;
 	}

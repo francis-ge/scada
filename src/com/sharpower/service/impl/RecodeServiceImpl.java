@@ -18,8 +18,8 @@ public class RecodeServiceImpl implements RecodeService{
 	}
 	
 	@Override
-	public void save(String mapName, Map<String, Object> map) {
-		recodeDao.saveByMap(mapName, map);
+	public void save(Map<String, Object> map) {
+		recodeDao.saveByMap(map);
 	}
 
 	@Override
@@ -29,14 +29,14 @@ public class RecodeServiceImpl implements RecodeService{
 	}
 
 	@Override
-	public void saveOrUpdate(String mapName, Map<String, Object> map) {
-		recodeDao.saveOrUpdate(mapName, map);
+	public void saveOrUpdate(Map<String, Object> map) {
+		recodeDao.saveOrUpdate(map);
 	}
 
 	@Override
-	public Map<String, Object> get(String mapName, Integer id) {
+	public Map<String, Object> get(Integer id) {
 		
-		return recodeDao.get(mapName, id);
+		return recodeDao.get(id);
 	}
 
 }

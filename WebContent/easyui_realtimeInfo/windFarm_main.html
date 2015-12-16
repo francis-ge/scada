@@ -23,14 +23,14 @@
 		$(function(){
 			$('#datagrid').datagrid({
 				columns:[[    
-				          { field:'funName',
+				          { field:'fun',
 				        	title:'风机名称',
 				        	width:150,
-				        	//formatter:function(value,row,index){
-				        	//	return value.name;
-				        	//	}
+				        	formatter:function(value,row,index){
+				        		return value.name;
+				        		}
 				          },    
-				          {	field:'mode',
+				          {	field:'___main_loop_mode_number',
 				        	title:'风机模式',
 				        	width:150,
 				        	formatter:function(value,row,index){
@@ -51,11 +51,13 @@
 					        			return '维护';
 					        		case 10:
 					        			return '通信断开';
+					        		default:
+					        			return '未知状态';
 				        			}
 				        		},
 			        		styler: function(value,row,index){
 			        			switch (value){
-			        			case 0:
+			        			default:
 			        				return 'background-color:#FFFFFF;';
 			        			case 1:
 			        				return 'background-color:#FF0000;';
@@ -76,18 +78,18 @@
 
 				        	},    
 				          {field:'dateTime',title:'时间',width:150},    
-				          {field:'windSpeed',title:'风速',width:150},    
-				          {field:'boolTest1',title:'booltest1',width:150},    
-				          {field:'singleTest1',title:'singleTest1',width:150},    
-				          {field:'doubleTest1',title:'doubleTest1',width:150},    
-				          {field:'longTest1',title:'longTest1',width:150},       
+				          {field:'___wind_speed',title:'风速',width:150},    
+				          {field:'_MAIN__BOOLTEST1',title:'booltest1',width:150},    
+				          {field:'_MAIN__SINGLETEST1',title:'singleTest1',width:150},    
+				          {field:'_MAIN__DOUBLETEST1',title:'doubleTest1',width:150},    
+				          {field:'_MAIN__LONGTEST1',title:'longTest1',width:150},       
 				          {field:'power',title:'功率',width:150},    
 				          {field:'error',title:'故障',width:150},    
 				          {field:'warning',title:'警告',width:150},    
 				          {field:'windDirection',title:'风向',width:150},    
 				          {field:'dayOutput',title:'日发电量',width:150},    
 				          {field:'output',title:'总发电量',width:150},    
-				      ]]   
+				      ]]
 		
 			});
 			

@@ -16,16 +16,16 @@ public class RecodeDaoImpl{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Map<String, Object> get(String mapName, Integer id){
-		 return (Map<String, Object>) sessionFactory.getCurrentSession().get(mapName, id);
+	public Map<String, Object> get(Integer id){
+		 return (Map<String, Object>) sessionFactory.getCurrentSession().get("MainRecode",id);
 	}
 	
-	public void saveByMap(String mapName, Map<String, Object> map){
-		sessionFactory.getCurrentSession().save(mapName, map);
+	public void saveByMap(Map<String, Object> map){
+		sessionFactory.getCurrentSession().save("MainRecode",map);
 	}
 	
-	public void saveOrUpdate(String mapName, Map<String, Object> map){
-		sessionFactory.getCurrentSession().saveOrUpdate(mapName, map);;
+	public void saveOrUpdate(Map<String, Object> map){
+		sessionFactory.getCurrentSession().saveOrUpdate("MainRecode",map);;
 	}
 	
 	@SuppressWarnings("unchecked")
