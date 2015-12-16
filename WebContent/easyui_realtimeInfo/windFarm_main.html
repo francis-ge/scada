@@ -22,6 +22,72 @@
 	<script type="text/javascript">
 		$(function(){
 			$('#datagrid').datagrid({
+				columns:[[    
+				          { field:'funName',
+				        	title:'风机名称',
+				        	width:150,
+				        	//formatter:function(value,row,index){
+				        	//	return value.name;
+				        	//	}
+				          },    
+				          {	field:'mode',
+				        	title:'风机模式',
+				        	width:150,
+				        	formatter:function(value,row,index){
+					        		switch(value){
+					        		case 0:
+					        			return '初始化';
+					        		case 1:
+					        			return '停机';
+					        		case 2:
+					        			return '待机';
+					        		case 3:
+					        			return '启动';
+					        		case 4:
+					        			return '运行';
+					        		case 5:
+					        			return '并网';
+					        		case 9:
+					        			return '维护';
+					        		case 10:
+					        			return '通信断开';
+				        			}
+				        		},
+			        		styler: function(value,row,index){
+			        			switch (value){
+			        			case 0:
+			        				return 'background-color:#FFFFFF;';
+			        			case 1:
+			        				return 'background-color:#FF0000;';
+			        			case 2:
+			        				return 'background-color:#FF0000;';
+			        			case 3:
+			        				return 'background-color:#FF0000;';
+			        			case 4:
+			        				return 'background-color:#66FF00;';
+			        			case 5:
+			        				return 'background-color:#66FF00;';
+			        			case 9:
+			        				return 'background-color:#9900FF;';
+			        			case 10:
+			    					return 'background-color:#0066FF;';
+			    				}
+			    			}
+
+				        	},    
+				          {field:'dateTime',title:'时间',width:150},    
+				          {field:'windSpeed',title:'风速',width:150},    
+				          {field:'boolTest1',title:'booltest1',width:150},    
+				          {field:'singleTest1',title:'singleTest1',width:150},    
+				          {field:'doubleTest1',title:'doubleTest1',width:150},    
+				          {field:'longTest1',title:'longTest1',width:150},       
+				          {field:'power',title:'功率',width:150},    
+				          {field:'error',title:'故障',width:150},    
+				          {field:'warning',title:'警告',width:150},    
+				          {field:'windDirection',title:'风向',width:150},    
+				          {field:'dayOutput',title:'日发电量',width:150},    
+				          {field:'output',title:'总发电量',width:150},    
+				      ]]   
 		
 			});
 			
@@ -35,24 +101,6 @@
 <body>
 	<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxMainInfo" 
 		idField="id" singleSelect="true" fit="true" fitColumns="true" striped="true" loadMsg="">
-		<thead>   
-	        <tr>   
-	            <th data-options="field:'fun',width:150,formatter:function(value,row,index){return value.name;}">风机名称</th>
-	            <th data-options="field:'dateTime', 	width:150">时间</th>
-	            <th data-options="field:'mode',  		width:150">运行模式</th>
-	            <th data-options="field:'windSpeed',	width:150">风速</th>
-	            <th data-options="field:'power',		width:150">功率</th>
-	            <th data-options="field:'error',  		width:150">故障</th>
-	            <th data-options="field:'warning',  	width:150">警告</th>
-	            <th data-options="field:'windDirection',width:150">风向</th>
-	            <th data-options="field:'dayOutput',	width:150">日发电量</th>
-	            <th data-options="field:'output',		width:150">总发电量</th>
-	            <th data-options="field:'_MAIN__BOOLTEST1',		width:150">_main__booltest1</th>
-	            <th data-options="field:'_MAIN__DOUBLETEST1',		width:150">_main__doubletest1</th>
-	            <th data-options="field:'_MAIN__LONGTEST1',		width:150">_main__longtest1</th>
-	            <th data-options="field:'_MAIN__SINGLETEST1',		width:150">_main__singletest1</th>
-	        </tr>   
-	    </thead>   
 	</table>
 </body>
 </html>

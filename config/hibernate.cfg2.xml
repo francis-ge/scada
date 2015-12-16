@@ -48,6 +48,7 @@
 		<mapping resource="com/sharpower/entity/PlcType.hbm.xml"/>
 		<mapping resource="com/sharpower/entity/Variable.hbm.xml"/>
 		<mapping resource="com/sharpower/entity/VariableType.hbm.xml"/>
+		<mapping resource="com/sharpower/entity/MainRecode_copy.hbm.xml"/>
 		
     </session-factory>
 </hibernate-configuration>

@@ -59,9 +59,10 @@
 				width : 100,
 				align : 'center',
 				formatter: function(value,row,index){
-										if(value.name){return value.name}
+										return 'PLC类型：'+value.plcType+'，存储类型：'+value.type;
 									}
-			} ] ],
+			}
+			] ],
 			toolbar : [ {
 				text : '添加',
 				iconCls : 'icon-add',
@@ -198,6 +199,7 @@
 <body>
 	<table id="table">
 	</table>
+	
 	<div id="dialog" title="1" modal="true" draggable="false"
 		class="easyui-dialog" closed="true" style="width: 280px;">
 		<form id="form" action="" method="post">
@@ -220,12 +222,12 @@
 						missingMessage="显示名必填!" value="" /></td>
 				</tr>
 				<tr>
-					<td>类型:</td>
+					<td>PLC类型:</td>
 					<td><select id="variableType" name="variable.type.id"
 						class="easyui-combobox" required="true"
 						missingMessage="变量类型必填!" style="width:180px;" 
 						url="SHARPOWER_SCADA/ajaxAllVariableType" valueField="id" 
-						textField="name" value="" ></select>
+						textField="plcType" value="" ></select>
 					</td>
 				</tr>
 				<tr align="center">
@@ -241,7 +243,7 @@
 	<div id="searchDialog" class="easyui-dialog" title="查询窗口" modal="true" 
 		draggable="false" closed="true" >
 		<form id="searchForm" action="" method="post">
-			关键字：<input type="text" class="easyui-validatebox" name='searchKey' required="true"
+			变量名关键字：<input type="text" class="easyui-validatebox" name='searchKey' required="true"
 						missingMessage="关键字必填!" style="width:400px;height:30px;"/>
 				<a id="searchSubmit" class="easyui-linkbutton">查询</a>
 		</form>

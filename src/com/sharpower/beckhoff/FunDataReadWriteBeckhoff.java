@@ -129,7 +129,6 @@ public class FunDataReadWriteBeckhoff {
 	 * @throws AdsException PLC异常
 	 */
 	public Map<Variable, Object> readData(String sFunAddress) throws AdsException {
-		
 		Map<Variable, Object> data = new HashMap<>();
 		
 		if (lj_indexOffset==0) {
@@ -151,7 +150,6 @@ public class FunDataReadWriteBeckhoff {
 			data = getData(lj_pDataRead);
 
 			return data;
-
 		} else {
 			throw new AdsException("ADS Error,ErrorCode:" + err);
 		}

@@ -18,14 +18,25 @@ public class RecodeServiceImpl implements RecodeService{
 	}
 	
 	@Override
-	public void save(Map<String, Object> map) {
-		recodeDao.saveByMap(map);
+	public void save(String mapName, Map<String, Object> map) {
+		recodeDao.saveByMap(mapName, map);
 	}
 
 	@Override
 	public List<Map<String, Object>> findMapByHql(String hql, Object ...objects) {
 		
 		return recodeDao.findEntityMapByHql(hql, objects);
+	}
+
+	@Override
+	public void saveOrUpdate(String mapName, Map<String, Object> map) {
+		recodeDao.saveOrUpdate(mapName, map);
+	}
+
+	@Override
+	public Map<String, Object> get(String mapName, Integer id) {
+		
+		return recodeDao.get(mapName, id);
 	}
 
 }

@@ -72,10 +72,16 @@ public class AppDBInit2 {
 		
 		Element idElement = classElement.addElement("id");
 		idElement.addAttribute("name", "id");
-		idElement.addAttribute("type", "java.lang.Long");
 		idElement.addAttribute("column", "ID");		
 		Element generateElement = idElement.addElement("generator");
-		generateElement.addAttribute("class", "native");
+		
+		if (entityName.equals("MainRecode_copy")) {
+			idElement.addAttribute("type", "java.lang.Integer");
+			generateElement.addAttribute("class", "assigned");
+		}else {
+			idElement.addAttribute("type", "java.lang.Long");
+			generateElement.addAttribute("class", "native");
+		}
 		
 		Element funIdElement = classElement.addElement("many-to-one");
 		funIdElement.addAttribute("name", "fun");

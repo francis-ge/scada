@@ -79,8 +79,11 @@ public class AjaxRealTimeInfoAction extends ActionSupport{
 	public String mainInfo(){
 		variables= variableService.findAllEntities();
 		
-		String hql = "select mrc FROM MainRecode_copy mrc LEFT JOIN FETCH mrc.fun fun";
-
+		//String hql = "select mrc FROM MainRecode_copy mrc LEFT JOIN FETCH mrc.fun fun";
+		String hql = "select new map(mrc.id as id, mrc.fun.name as funName,mrc.___main_loop_mode_number as mode, "
+				+ "mrc.dateTime as dateTime,mrc.___wind_speed as windSpeed,mrc._MAIN__BOOLTEST1 as boolTest1, mrc._MAIN__SINGLETEST1 as singleTest1,"
+				+ " mrc._MAIN__DOUBLETEST1 as doubleTest1, mrc._MAIN__LONGTEST1 as longTest1) FROM MainRecode_copy mrc";
+		
 		realtimeInfo = recodeService.findMapByHql(hql);
 		
 		return SUCCESS;
@@ -88,7 +91,9 @@ public class AjaxRealTimeInfoAction extends ActionSupport{
 	public String realTimeInfo(){
 		variables= variableService.findAllEntities();
 		
-		String hql = "FROM MainRecode_copy WHERE funId=?";
+		String hql = "select new map(mrc.id as id, mrc.fun.name as funName, mrc.fun.id as funId, mrc.___main_loop_mode_number as mode, "
+				+ "mrc.dateTime as dateTime,mrc.___wind_speed as windSpeed,mrc._MAIN__BOOLTEST1 as boolTest1, mrc._MAIN__SINGLETEST1 as singleTest1,"
+				+ " mrc._MAIN__DOUBLETEST1 as doubleTest1, mrc._MAIN__LONGTEST1 as longTest1) FROM MainRecode_copy mrc WHERE mrc.fun.id=?";
 		
 		int id;
 		if (fun==null){
@@ -97,52 +102,7 @@ public class AjaxRealTimeInfoAction extends ActionSupport{
 			id= fun.getId();
 		}
 		
-//		List<Map<String, Object>> realtimeInfo1;
 		realtimeInfo = recodeService.findMapByHql(hql, id);
-		
-//		Map<String, Object> realtimeInfoMap=new HashMap<>();
-//		
-//		if (realtimeInfo1.size()>0) {
-//			Map<String, Object> recodeMap = realtimeInfo1.get(0);
-//			
-//			for(Entry<String, Object> entry:recodeMap.entrySet()){
-//				
-//			String valName = entry.getKey();
-//				
-//			for(int i=0 ;i<variables.size();i++){
-//				if(variables.get(i).getDbName().equals(entry.getKey())){
-//					valName = variables.get(i).getName();
-//					break;
-//				}
-//			}
-//			realtimeInfoMap.put(valName, entry.getValue());
-//		}
-//	}
-//
-//		realtimeInfo.add(realtimeInfoMap);
-		
-//		if (list.size()>0) {
-//			Map<String, Object> recodeMap = list.get(0);
-//			
-//			for(Entry<String, Object> entry:recodeMap.entrySet()){
-//				RealtimeInfoDspObj realtimeInfoDspObj = new RealtimeInfoDspObj();
-//				
-//				String valName = entry.getKey();;
-//				
-//				for(int i=0 ;i<variables.size();i++){
-//					if(variables.get(i).getDbName().equals(entry.getKey())){
-//						valName = variables.get(i).getShowNameCN();
-//						break;
-//					}
-//					
-//				}
-//	
-//				realtimeInfoDspObj.setName(valName);
-//				realtimeInfoDspObj.setValue(entry.getValue());
-//				
-//				realtimeInfoDspObjs.add(realtimeInfoDspObj);
-//			}
-//		}
 		
 		return SUCCESS;
 	}

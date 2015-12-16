@@ -12,15 +12,6 @@ public class Fun {
 	private String address;
 	private String line;
 	private WindFarm windFarm;
-	private Integer threadSta=0;
-	
-	public Integer getThreadSta() {
-		return threadSta;
-	}
-	
-	public void setThreadSta(Integer threadSta) {
-		this.threadSta = threadSta;
-	}
 
 	public Integer getId() {
 		return id;

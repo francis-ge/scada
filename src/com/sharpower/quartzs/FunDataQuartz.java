@@ -13,16 +13,12 @@ import com.sharpower.service.FunService;
 import com.sharpower.service.RecodeService;
 
 public class FunDataQuartz implements Runnable {
-	FunDataReadWriteBeckhoffService funDataReadWriteBeckhoffService;
-	Fun fun;
-	FunService funService;
-	RecodeService recodeService;
+	private FunDataReadWriteBeckhoffService funDataReadWriteBeckhoffService;
+	private Fun fun;
+	private RecodeService recodeService;
+	private Map<String, Object> params;
 	
 	public FunDataQuartz() {
-	}
-	
-	public void setFunService(FunService funService) {
-		this.funService = funService;
 	}
 	
 	public void setFunDataReadWriteBeckhoffService(FunDataReadWriteBeckhoffService funDataReadWriteBeckhoffService) {
@@ -37,15 +33,17 @@ public class FunDataQuartz implements Runnable {
 		this.recodeService = recodeService;
 	}
 	
-	public void readData() {
-		
-		String sql1 = "DELETE FROM mainRecode_copy WHERE FUN_ID=? ";
-		funService.executeSQL(sql1, fun.getId());
+	public void setParams(Map<String, Object> params) {
+		this.params = params;
+	}
+	
+	public void readData() {	
+		Map<String, Object> saveData = new HashMap<>();
 		
 		try {
 			Map<Variable, Object> data = funDataReadWriteBeckhoffService.readDataAll(fun.getAddress());
-			Map<String, Object> saveData = new HashMap<>();
 			
+			saveData.put("id", fun.getId());
 			saveData.put("fun", fun);
 			saveData.put("dateTime", new Date());
 			
@@ -53,15 +51,40 @@ public class FunDataQuartz implements Runnable {
 				saveData.put(entry.getKey().getDbName(), entry.getValue());
 			}
 			
-			recodeService.save(saveData);
+			if(saveData.get("___wind_speed")!=null ){
+				float windSpeed = (float)saveData.get("___wind_speed") + (float)params.get("windSpeedParam");
+				saveData.put("___wind_speed", windSpeed);
+			}
+		
+			if (saveData.get("___visu_grid_power")!=null) {
+				float power = (float)saveData.get("___visu_grid_power") * (float)params.get("powerParam");	
+				saveData.put("___visu_grid_power", power);
+			}
+			
+			recodeService.saveOrUpdate("MainRecode_copy", saveData);
 						
 		} catch (AdsException e) {
-			// TODO Auto-generated catch block
+			saveData.put("id", fun.getId());
+			saveData.put("fun", fun);
+			
+			//发生ADS异常时，设置风机模式为10(通信断开)
+			saveData.put("___main_loop_mode_number", Short.valueOf("10"));
+			
+			//保持时间为连接断开时的时间
+			Map<String, Object> oldData = recodeService.get("MainRecode_copy", fun.getId());
+			if (oldData!=null) {
+				saveData.put("dateTime", oldData.get("dateTime"));
+			}else{
+				saveData.put("dateTime", new Date());
+			}
+			
+			recodeService.saveOrUpdate("MainRecode_copy", saveData);
+			
 			e.printStackTrace();
 		}
 			
 		System.out.println("定时任务:"+fun.getName());
-		fun.setThreadSta(0);
+
 	}
 
 	@Override

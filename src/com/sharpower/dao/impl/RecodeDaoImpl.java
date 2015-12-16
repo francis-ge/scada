@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.event.spi.SaveOrUpdateEvent;
 
 
 public class RecodeDaoImpl{
@@ -14,9 +15,19 @@ public class RecodeDaoImpl{
 		this.sessionFactory = sessionFactory;
 	}
 	
-	public void saveByMap(Map<String, Object> map){
-		sessionFactory.getCurrentSession().save("MainRecode_copy", map);
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> get(String mapName, Integer id){
+		 return (Map<String, Object>) sessionFactory.getCurrentSession().get(mapName, id);
 	}
+	
+	public void saveByMap(String mapName, Map<String, Object> map){
+		sessionFactory.getCurrentSession().save(mapName, map);
+	}
+	
+	public void saveOrUpdate(String mapName, Map<String, Object> map){
+		sessionFactory.getCurrentSession().saveOrUpdate(mapName, map);;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> findEntityMapByHql(String hql, Object ... objs){		
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
