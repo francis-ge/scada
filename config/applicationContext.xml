@@ -6,10 +6,10 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
-<!-- -->
+<!--
 	<bean id="appDBInit" class="com.sharpower.listener.AppDBInit" init-method="contextInitialized">
 	</bean>
-
+ -->
 
 	<context:property-placeholder location="classpath:db.properties" />
 
@@ -25,22 +25,6 @@
 		<property name="idleConnectionTestPeriod" value="${idle_test_period}"></property>
 		<property name="acquireIncrement" value="${acquire_increment}"></property>
 		<property name="maxStatements" value="${max_statements}"></property>
-	</bean>
-
-	<bean id="funDaoTest" 
-		class="com.sharpower.test.FunDao">
-		<property name="sessionFactory" ref="sessionFactory"></property>
-	</bean>
-
-	<bean id="windFarmDaoTest" 
-		class="com.sharpower.test.WindFarnDao">
-		<property name="sessionFactory" ref="sessionFactory"></property>
-	</bean>
-
-	<bean id="funServiceTest" 
-		class="com.sharpower.test.FunService">
-		<property name="funDao" ref="funDaoTest"></property>
-		<property name="windFarnDao" ref="windFarmDaoTest"></property>
 	</bean>
 
 	<bean id="funDao" 
@@ -70,6 +54,21 @@
 	
 	<bean id="recodeDao"
 		class="com.sharpower.dao.impl.RecodeDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="funTroubleVariableDao" 
+		class="com.sharpower.dao.impl.FunTroubleVariableDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="funTroubleVariableTypeDao"
+		class="com.sharpower.dao.impl.FunTroubleVariableTypeDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="funTroubleRecodeDao"
+		class="com.sharpower.dao.impl.FunTroubleRecodeDaoImpl">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
 
@@ -107,7 +106,27 @@
     	class="com.sharpower.service.impl.RecodeServiceImpl">
     	<property name="recodeDao" ref="recodeDao"></property>
     </bean>
-	
+
+    <bean id="funTroubleVariableService" 
+    	class="com.sharpower.service.impl.FunTroubleVariableServiceImpl">
+    	<property name="dao" ref="funTroubleVariableDao"></property>
+    </bean>
+    
+    <bean id="funTroubleVariableTypeService"
+    	class="com.sharpower.service.impl.FunTroubleVariableTypeServiceImpl" >
+    	<property name="dao" ref="funTroubleVariableTypeDao"></property>
+    </bean>
+    
+    <bean id="funTroubleRecodeService"
+    	class="com.sharpower.service.impl.FunTroubleRecodeServiceImpl" >
+    	<property name="dao" ref="funTroubleRecodeDao"></property>
+    </bean>
+    
+    <bean id="funTroubleBeckhoffService"
+    	class="com.sharpower.beckhoff.FunTroubleBeckhoffService" >
+    	<constructor-arg ref="funTroubleVariableService"></constructor-arg>
+    </bean>
+    	
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
 		<property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
@@ -118,25 +137,6 @@
 	<bean name="transactionManager"
 		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory"></property>
-	</bean>
-
-	<bean id="loginAction" 
-		class="com.sharpower.action.LoginAction"
-		scope="prototype">
-	</bean>
-	
-	<bean id="funAction" 
-		class="com.sharpower.action.FunAction"
-		scope="prototype">	
-		<property name="funService" ref="funService"></property>	
-		<property name="plcTypeService" ref="plcTypeService"></property>
-	</bean>
-	
-	<bean id="variableAction"
-		class="com.sharpower.action.VariableAction"
-		scope="prototype">
-		<property name="variableService" ref="variableService"></property>
-		<property name="variableTypeService" ref="variableTypeService"></property>
 	</bean>
 	
 	<bean id="ajaxFunAction"
@@ -164,7 +164,19 @@
 		<property name="variableService" ref="variableService"></property>
 		<property name="windFarmDataQuartz" ref="windFarmData"></property>
 	</bean>
-
+	
+	<bean id="ajaxFunTroubleVariableAction" 
+		class="com.sharpower.action.AjaxFunTroubleVariableAction"
+		scope="prototype">
+		<property name="funTroubleVariableService" ref="funTroubleVariableService"></property>
+	</bean>
+	
+	<bean id="ajaxFunTroubleVariableTypeAction" 
+		class="com.sharpower.action.AjaxFunTroubleVariableTypeAction"
+		scope="prototype">
+		<property name="funTroubleVariableTypeService" ref="funTroubleVariableTypeService"></property>
+	</bean>
+	
 	<tx:advice id="txAdvice" 
 		transaction-manager="transactionManager">
 		<tx:attributes>
@@ -186,33 +198,16 @@
 	</aop:config>
 	
 	<!-- 风机数据读取的任务调度 -->
-	
-	<bean id="funDataBean1" class="com.sharpower.quartzs.FunDataQuartz">
-	</bean>
-	
-    <bean id="funThread1" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-       <property name="targetObject" ref="funDataBean1"></property>
-       <property name="targetMethod" value="readData"></property>
-	</bean>
-
-	<bean id="simpleTrigger1" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
-        <property name="jobDetail" ref="funThread1"></property>
-        <property name="repeatInterval">
-            <value>10000</value>
-        </property>
-        <property name="startDelay">
-            <value>4</value>
-        </property>
-    </bean> 
-
     <bean id="windFarmData" class="com.sharpower.quartzs.WindFarmDataQuartz">
     	<property name="windFarmService" ref="windFarmService"></property>
     	<property name="funDataReadWriteBeckhoffService" ref="funDataReadWriteBeckhoffService"></property>
     	<property name="recodeService" ref="recodeService"></property>
+    	<property name="funTroubleBeckhoffService" ref="funTroubleBeckhoffService"></property>
+    	<property name="funTroubleRecodeService" ref="funTroubleRecodeService"></property>
     	<property name="params" >
     		<map>
     			<entry key="windSpeedParam" value="0" value-type="float" />
-    			<entry key="powerParam" value="0.8" value-type="float" />
+    			<entry key="powerParam" value="1" value-type="float" />
     		</map>
     	</property>
     </bean>
@@ -222,9 +217,16 @@
        <property name="targetMethod" value="readData"></property>
 	</bean>
 	
+	<!-- 风机数据存储的任务调度 -->
 	<bean id="windFarmDataSave" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="windFarmData"></property>
 		<property name="targetMethod" value="saveData"></property>
+	</bean>
+	
+	<!-- 风机故障记录的任务调度 -->
+	<bean id="windFarmTroubleSave" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="windFarmData"></property>
+		<property name="targetMethod" value="checkTrouble"></property>
 	</bean>
 	
 	<bean id="windFarmDataReadTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
@@ -246,13 +248,24 @@
             <value>5000</value>
         </property>
     </bean>  
-    
+
+    <bean id="windFarmTroubleSaveTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="windFarmTroubleSave"></property>
+        <property name="repeatInterval">
+            <value>3000</value>
+        </property>
+        <property name="startDelay">
+            <value>5000</value>
+        </property>
+    </bean>      
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
     	<property name="triggers">
     	<list>   	
+    	<!-- 
     		<ref bean="windFarmDataReadTrigger"/>
     		<ref bean="windFarmDataSaveTrigger"/>
-    	
+    	 -->
+    	 	<ref bean="windFarmTroubleSaveTrigger"/>
     	</list>
     	</property>
     </bean>

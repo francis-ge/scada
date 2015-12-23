@@ -8,82 +8,6 @@
 	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
 	<constant name="struts.i18n.encoding" value="UTF-8"></constant>
 	<constant name="struts.devMode" value="true" />
-
-	<package name="default" extends="struts-default">
-	
-		<interceptors>
-		    <interceptor-stack name="myStack">
-		        <interceptor-ref name="paramsPrepareParamsStack">
-		            <param name="prepare.alwaysInvokePrepare">false</param>
-		        </interceptor-ref>
-		    </interceptor-stack>
-		</interceptors>
- 
-		<default-interceptor-ref name="myStack"/>
-			
-		<action name="login" class="loginAction" method="login">
-			<result>/WEB-INF/web/success.jsp</result>
-		</action>
-		
-		<action name="funManage" class="funAction" method="funManage">
-			<result >/WEB-INF/web/funManage.jsp</result>
-		</action>
-		
-		<action name="saveFun" class="funAction" method="save">
-			<interceptor-ref name="tokenSession"></interceptor-ref>
-			<interceptor-ref name="paramsPrepareParamsStack"></interceptor-ref>
-			
-			<result name="invalid.token">/WEB-INF/web/double-submit.jsp</result>
-			<result >/WEB-INF/web/funManage.jsp</result>
-			<result name="input" >/WEB-INF/web/funManage.jsp</result>
-		</action>
-
-		<action name="editFun" class="funAction" method="editFun">
-			<result >/WEB-INF/web/editFun.jsp</result>
-		</action>		
-		
-		<action name="updateFun" class="funAction" method="update">
-			<result >/WEB-INF/web/funManage.jsp</result>
-			<result name="input" >/WEB-INF/web/editFun.jsp</result>
-		</action>
-		
-		<action name="deleteFun" class="funAction" method="delete">
-			<result >/WEB-INF/web/funManage.jsp</result>
-			<result name="error">/WEB-INF/web/funManage.jsp</result>
-		</action>
-		
-		<action name="variableManage" class="variableAction" method="variableManage">
-			<result>/WEB-INF/web/variableManage.jsp</result>
-		</action>
-		
-		<action name="saveVariable" class="variableAction" method="save">
-			<interceptor-ref name="tokenSession"></interceptor-ref>
-			<interceptor-ref name="paramsPrepareParamsStack"></interceptor-ref>
-			
-			<result name="invalid.token">/WEB-INF/web/double-submit.jsp</result>
-			<result >/WEB-INF/web/variableManage.jsp</result>
-			<result name="input" >/WEB-INF/web/variableManage.jsp</result>
-		</action>
-		
-		<action name="editVariable" class="variableAction" method="edit">
-			<result >/WEB-INF/web/editVariable.jsp</result>
-		</action>		
-		
-		<action name="updateVariable" class="variableAction" method="update">
-			<result >/WEB-INF/web/variableManage.jsp</result>
-			<result name="input" >/WEB-INF/web/editVariable.jsp</result>
-		</action>
-		
-		<action name="deleteVariable" class="variableAction" method="delete">
-			<result >/WEB-INF/web/variableManage.jsp</result>
-			<result name="error">/WEB-INF/web/variableManage.jsp</result>
-		</action>
-		
-		<action name="realTimeInfo" class="funAction" method="allFun">
-			<result >/WEB-INF/web/realTimeInfo.jsp</result>
-		</action>	
-				
-	</package>
 	
 	<package name="ajaxPackage" extends="json-default">
 	
@@ -176,7 +100,41 @@
 			</result>		
 		</action>
 		
-
+		<action name="allFunTroubleVariable" class="ajaxFunTroubleVariableAction" method="allFunTroubleVariable">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">funTroubleVariables</param>
+			</result>
+		</action>
+		
+		<action name="ajaxAddFunTroubleVariable" class="ajaxFunTroubleVariableAction" method="saveOrUpdate">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+			</result>		
+		</action>
+		<action name="ajaxEditFunTroubleVariable" class="ajaxFunTroubleVariableAction" method="saveOrUpdate">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+			</result>		
+		</action>
+		
+		<action name="ajaxDeleteFunTroubleVariable" class="ajaxFunTroubleVariableAction" method="delete" >
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+			</result>		
+		</action>
+		
+		<action name="ajaxAllFunTroubleType" class="ajaxFunTroubleVariableTypeAction" method="all">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">troubleTypes</param>
+			</result>
+		</action>
 		
 	</package>
 

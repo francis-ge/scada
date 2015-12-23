@@ -1,11 +1,12 @@
 package com.sharpower.entity;
 
-public class FunErrorWorning {
+public class FunTroubleVariable {
 	private Integer id;
-	private String code;
 	private String name;
+	private String dbName;
 	private String description;
-	private int type;//0:Error, 1:Worning
+	private String code;
+	private TroubleType type;//0:Error, 1:Worning
 	
 	public Integer getId() {
 		return id;
@@ -25,16 +26,22 @@ public class FunErrorWorning {
 	public void setName(String name) {
 		this.name = name;
 	}
+	public String getDbName() {
+		return dbName;
+	}
+	public void setDbName(String dbName) {
+		this.dbName = dbName;
+	}
 	public String getDescription() {
 		return description;
 	}
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public int getType() {
+	public TroubleType getType() {
 		return type;
 	}
-	public void setType(int type) {
+	public void setType(TroubleType type) {
 		this.type = type;
 	}
 	

@@ -1,9 +1,7 @@
 package com.sharpower.quartzs;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -11,13 +9,10 @@ import com.sharpower.beckhoff.FunDataReadWriteBeckhoffService;
 import com.sharpower.entity.Fun;
 import com.sharpower.entity.Variable;
 import com.sharpower.scada.exception.AdsException;
-import com.sharpower.service.FunService;
-import com.sharpower.service.RecodeService;
 
 public class FunDataQuartz implements Runnable {
 	private FunDataReadWriteBeckhoffService funDataReadWriteBeckhoffService;
 	private Fun fun;
-	private RecodeService recodeService;
 	private Map<String, Object> params;
 	private Map<Integer,Map<String, Object>> dataMap = new HashMap<>();
 	
@@ -31,11 +26,7 @@ public class FunDataQuartz implements Runnable {
 	public void setFun(Fun fun) {
 		this.fun = fun;
 	}
-	
-	public void setRecodeService(RecodeService recodeService) {
-		this.recodeService = recodeService;
-	}
-	
+		
 	public void setParams(Map<String, Object> params) {
 		this.params = params;
 	}
@@ -91,12 +82,11 @@ public class FunDataQuartz implements Runnable {
 			e.printStackTrace();
 		}
 			
-		System.out.println("定时任务:"+fun.getName());
-
 	}
-
+	
 	@Override
 	public void run() {
 		this.readData();	
+		System.out.println("定时任务:"+fun.getName());
 	}
 }

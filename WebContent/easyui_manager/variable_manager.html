@@ -72,6 +72,7 @@
 						 '添加变量'
 					);
 					$('#form').form('reset');
+					$('#form').form('load',{'variable.id':null});
 					$('#dialog').dialog('open');
 				}
 			}, '-', {
@@ -123,7 +124,7 @@
 					}
 					else{
 						$('#dialog').dialog('setTitle', '编辑变量信息');
-						$('#form').form('reset');
+						$('#form').form('clear');
 						$('#dialog').dialog('open');
 						$('#form').form('load', {'variable.id':rows[0].id,
 												'variable.name':rows[0].name,

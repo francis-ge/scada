@@ -1,7 +1,5 @@
 package com.sharpower.entity;
 
-import java.util.Set;
-
 import org.apache.struts2.json.annotations.JSON;
 
 public class Fun {

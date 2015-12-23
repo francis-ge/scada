@@ -2,10 +2,10 @@ package com.sharpower.action;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.struts2.interceptor.RequestAware;
 import org.apache.struts2.json.annotations.JSON;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.sharpower.entity.Fun;
@@ -65,7 +65,7 @@ public class AjaxFunAction extends ActionSupport {
 	public String allFun(){
 		try {
 			funs = funService.findAllEntities();
-			
+			resulte = "共查到" + funs.size() + "条记录。";
 		} catch (Exception e) {
 			resulte = "获取失败！"+e.getMessage();
 		}
@@ -86,7 +86,6 @@ public class AjaxFunAction extends ActionSupport {
 	}
 	
 	public String deleteFun(){
-		
 		String idString[] = ids.split(",");
 		try {
 			for (String idStr : idString) {
@@ -95,9 +94,15 @@ public class AjaxFunAction extends ActionSupport {
 				funService.deleteEntity(fun);
 			}
 			resulte = "删除成功！";
-		} catch (Exception e) {
-			resulte = "删除失败！" + e.getMessage();
+		}catch (DataIntegrityViolationException e) {
+			
+			e.printStackTrace();
+			resulte = "存在相关数据记录，无法删除！" + e.getMessage();
+		}finally {
+			resulte = "删除失败！";
 		}
+		
+
 		return SUCCESS;
 	}
 

@@ -1,33 +1,22 @@
 package com.sharpower.action;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
-import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.struts2.json.annotations.JSON;
-import org.springframework.util.SystemPropertyUtils;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.sharpower.entity.Fun;
-import com.sharpower.entity.RealtimeInfoDspObj;
 import com.sharpower.entity.Variable;
 import com.sharpower.quartzs.WindFarmDataQuartz;
-import com.sharpower.service.FunService;
 import com.sharpower.service.RecodeService;
 import com.sharpower.service.VariableService;
-import com.sharpower.service.VariableTypeService;
 
-import sun.print.resources.serviceui;
 
 public class AjaxRealTimeInfoAction extends ActionSupport{
 	private static final long serialVersionUID = 1L;
 	
-	private FunService funService;
 	private VariableService variableService;
 	private RecodeService recodeService;
 	
@@ -37,8 +26,6 @@ public class AjaxRealTimeInfoAction extends ActionSupport{
 	private int funId;
 	
 	private List<Map<String, Object>> realtimeInfo=new ArrayList<>();
-
-	private List<Variable> variables;
 
 	@JSON(serialize=false)
 	public Fun getFun() {

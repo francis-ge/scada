@@ -1,17 +1,15 @@
 package com.sharpower.quartzs;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
 import com.sharpower.beckhoff.FunDataReadWriteBeckhoffService;
+import com.sharpower.beckhoff.FunTroubleBeckhoffService;
 import com.sharpower.entity.Fun;
+import com.sharpower.service.FunTroubleRecodeService;
 import com.sharpower.service.RecodeService;
 import com.sharpower.service.WindFarmService;
 
@@ -63,7 +61,6 @@ public class WindFarmDataQuartz {
 			//检查上轮线程状态，如已完成则创建新线程，未完成则不创建				
 				FunDataQuartz funDataQuartz = new FunDataQuartz();
 				funDataQuartz.setFunDataReadWriteBeckhoffService(funDataReadWriteBeckhoffService);
-				funDataQuartz.setRecodeService(recodeService);
 				funDataQuartz.setFun(fun);
 				funDataQuartz.setParams(params);
 				funDataQuartz.setDataMap(dataMap);
@@ -91,11 +88,35 @@ public class WindFarmDataQuartz {
 		
 	}
 
-	public void errorWorningCheck(){
-		
+	private FunTroubleBeckhoffService funTroubleBeckhoffService;
+	private FunTroubleRecodeService funTroubleRecodeService;
+	
+	public void setFunTroubleBeckhoffService(FunTroubleBeckhoffService funTroubleBeckhoffService) {
+		this.funTroubleBeckhoffService = funTroubleBeckhoffService;
 	}
-
-
+	public void setFunTroubleRecodeService(FunTroubleRecodeService funTroubleRecodeService) {
+		this.funTroubleRecodeService = funTroubleRecodeService;
+	}
+	
+	public void checkTrouble(){
+		if(funs==null){
+			funs = windFarmService.getEntity(1).getFuns();
+		}
+			
+		//创建风机故障检测线程
+		for (Fun fun : funs) {
+			//检查上轮线程状态，如已完成则创建新线程，未完成则不创建
+			FunTroubleQuartz funTroubleQuartz = new FunTroubleQuartz();
+			funTroubleQuartz.setFun(fun);
+			funTroubleQuartz.setFunTroubleBeckhoffService(funTroubleBeckhoffService);
+			funTroubleQuartz.setFunTroubleRecodeService(funTroubleRecodeService);
+			
+			Thread thread = new Thread(funTroubleQuartz);
+			thread.start();
+				
+			}
+	}
+	
 
 }
 	

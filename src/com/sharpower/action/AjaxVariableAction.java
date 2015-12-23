@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.struts2.json.annotations.JSON;
 
 import com.opensymphony.xwork2.ActionSupport;
+import com.sharpower.entity.FunTroubleVariable;
 import com.sharpower.entity.Variable;
 import com.sharpower.service.VariableService;
 import com.sun.org.apache.bcel.internal.generic.ReturnaddressType;
@@ -118,6 +119,20 @@ public class AjaxVariableAction extends ActionSupport {
 	
 	public String saveOrUpdateVariable(){
 		try {
+			if (variable.getId()==null ) {
+				variable.setDbName(this.convertNameToDBname(variable.getName()));
+			}else {
+				String updateName = variable.getName();
+				Variable variable1 = variableService.getEntity(variable.getId());
+				String oldName = variable1.getName();
+				
+				if (updateName.equals(oldName)==false) {
+					variable.setDbName(this.convertNameToDBname(variable.getName()));
+				}else{
+					variable.setDbName(variable1.getDbName());
+				}
+			}
+			
 			variable.setDbName(this.convertNameToDBname(variable.getName()));
 			variableService.saveOrUpdateEntity(variable);
 			resulte = "保存成功！";
