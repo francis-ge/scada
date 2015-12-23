@@ -1,6 +1,5 @@
 package com.sharpower.test;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +11,7 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 
 import com.sharpower.entity.Fun;
+import com.sharpower.entity.FunTroubleRecode;
 import com.sharpower.utils.ApplicationContextSingle;
 
 
@@ -33,6 +33,28 @@ public class HibernateTest {
 		List<Map<String, Object>> list = session.createQuery(hql).list();
 		session.getTransaction().commit();
 		System.out.println(list);
+		
+		session.close();
+		sessionFactory.close();
+	
+	}
+	
+	@Test
+	public void testChildQuery(){
+		SessionFactory sessionFactory = null;
+		
+		Configuration configuration = new Configuration().configure("hibernate.cfg2.xml"); 
+		
+		sessionFactory = configuration.buildSessionFactory();
+		
+		Session session = sessionFactory.openSession();
+		//select mrc FROM MainRecode_copy mrc LEFT JOIN FETCH mrc.fun fun
+		String hql = "FROM FunTroubleRecode ftr WHERE ftr.id=(SELECT MAX(id) FROM FunTroubleRecode WHERE funTroubleVariable.id=?)";
+		session.getTransaction().begin();
+		FunTroubleRecode funTroubleRecode= (FunTroubleRecode) session.createQuery(hql)
+				.setParameter(0, 10).uniqueResult();
+		session.getTransaction().commit();
+		System.out.println(funTroubleRecode);
 		
 		session.close();
 		sessionFactory.close();

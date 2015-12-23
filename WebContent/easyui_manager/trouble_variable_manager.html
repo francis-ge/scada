@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+
+<!-- easyUI -->
+<link href="../jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
+<link href="../jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
+
+<!-- easyUI -->
+<script src="../jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
+<script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
+<style type="text/css">
+* {
+	margin: 0;
+	padding: 0;
+}
+</style>
+<script type="text/javascript">
+	var flag='';
+	$(function() {
+		$('#table').datagrid({
+			url : 'SHARPOWER_SCADA/allFunTroubleVariable',
+			fitColumns : true,//列自适应宽度
+			striped : true,//条纹背景
+			idField : 'id',
+			method : 'post',
+			columns : [ [ {
+				field : 'id',
+				title : 'ID',
+				width : 100,
+				align : 'right',
+				checkbox: true
+			}, {
+				field : 'name',
+				title : '变量名',
+				width : 100,
+				align : 'center'
+			}, {
+				field : 'dbName',
+				title : '存储名',
+				width : 100,
+				align : 'center'
+			}, {
+				field : 'code',
+				title : '代码',
+				width : 100,
+				align : 'center'
+			},{
+				field : 'type',
+				title : '类型',
+				width : 100,
+				align : 'center',
+				formatter: function(value,row,index){
+										return value.name;
+									}
+			}
+			] ],
+			toolbar : [ {
+				text : '添加',
+				iconCls : 'icon-add',
+				handler : function() {
+					flag='addFunTroubleVariable';
+					$('#dialog').dialog('setTitle', 
+						 '添加变量'
+					);
+					$('#form').form('reset');
+					$('#form').form('load',{'funTroubleVariable.id':null});
+					$('#dialog').dialog('open');
+				}
+			}, '-', {
+				text : '删除',
+				iconCls : 'icon-remove',
+				handler : function() {
+					var rows= $('#table').datagrid('getSelections');
+					if(rows.length>0){
+						$.messager.confirm('确认对话框', 
+										   '确实要删除这'+rows.length+'项吗？',
+										   function(re){
+														if(re){
+														var ids='';
+														for(var i=0; i<rows.length; i++ ){
+															ids = ids + ',' + rows[i].id;
+														}
+														ids = ids.substring(1, ids.length);
+														$.post("SHARPOWER_SCADA/ajaxDeleteFunTroubleVariable", 
+																{ids:ids}, 
+																function(info){
+																	info = eval("("+info+")");
+																	$.messager.show({title:'我的消息',msg:info.resulte,showType:'slide'});
+																	$('#table').datagrid('reload');
+																	$('#table').datagrid('clearChecked');
+																}
+														);
+																
+														}
+											}				
+						);
+					
+					}else{
+						$.messager.alert({title : '我的消息',msg : '请至少选择一项。'});
+					}
+				}
+			}, '-', {
+				text : '编辑',
+				iconCls : 'icon-edit',
+				handler : function() {
+					flag = 'editFunTroubleVariable';
+					var rows = $('#table').datagrid('getSelections');
+					
+					if(rows.length==0){
+						$.messager.alert({title : '我的消息', msg : '请选择一项。'});
+					}else if(rows.length>1){
+						$.messager.alert({title : '我的消息', msg : '只能编辑一行。'});
+						$('#table').datagrid('reload');
+						$('#table').datagrid('clearChecked');
+					}
+					else{
+						$('#dialog').dialog('setTitle', '编辑变量信息');
+						$('#form').form('clear');
+						$('#dialog').dialog('open');
+						$('#form').form('load', {'funTroubleVariable.id':rows[0].id,
+												'funTroubleVariable.name':rows[0].name,
+												'funTroubleVariable.dbName':rows[0].dbName,
+												'funTroubleVariable.code':rows[0].code,
+												'funTroubleVariable.description':rows[0].description,
+												'funTroubleVariable.type.id':rows[0].type.id});
+						}
+					}
+				},'-',{
+					text : '查询',
+					iconCls : 'icon-search',
+					handler : function() {
+						$('#searchDialog').dialog('open');
+					}
+					
+				}
+			 ]
+	
+		});
+		
+		$('#submitBtn').click(function(){
+			$.messager.progress();	// 显示进度条
+			$('#form').form('submit', {
+				url:flag=='addFunTroubleVariable'?'SHARPOWER_SCADA/ajaxAddFunTroubleVariable':'SHARPOWER_SCADA/ajaxEditFunTroubleVariable',
+				onSubmit: function(){
+					var isValid = $(this).form('validate');
+					if (!isValid){
+						$.messager.progress('close');	// 如果表单是无效的则隐藏进度条
+					}
+					return isValid;	// 返回false终止表单提交
+				},
+				success: function(info){
+					$.messager.progress('close');	// 如果提交成功则隐藏进度条
+					info = eval("("+info+")");
+				
+					$.messager.show({title:'我的消息',msg:info.resulte,showType:'slide'});
+					$('#table').datagrid('reload');
+				}
+			});
+			
+		});
+		
+	$('#searchSubmit').click(function(){
+		
+		$('#table').datagrid('load',serializeForm($('#searchForm')));
+		
+	});
+		
+	//js方法：序列化表单 			
+	function serializeForm(form){
+		var obj = {};
+		$.each(form.serializeArray(),function(index){
+			if(obj[this['name']]){
+				obj[this['name']] = obj[this['name']] + ','+this['value'];
+			} else {
+				obj[this['name']] =this['value'];
+			}
+		});
+		return obj;
+	}
+	
+	/**
+	 * 关闭窗口方法
+	 */
+	$('#closeBtn').click(function(){
+		$('#dialog').dialog('close');
+	});
+	
+	});
+</script>
+
+</head>
+<body>
+	<table id="table">
+	</table>
+	
+	<div id="dialog" title="1" modal="true" draggable="false"
+		class="easyui-dialog" closed="true" style="width: 280px;">
+		<form id="form" action="" method="post">
+			<input type="hidden" name="funTroubleVariable.id" value="" />
+			<table>
+				<tr>
+					<td>变量名称:</td>
+					<td><input type="text" name="funTroubleVariable.name" class="easyui-validatebox"
+						required="true" missingMessage="变量名称必填!" value="" /></td>
+				</tr>
+				<tr>
+					<td>数据存储名：</td>
+					<td><input type="text" disabled="true" name="funTroubleVariable.dbName" class="easyui-validatebox"
+						required="true" missingMessage="存储名名称必填!" value="" /></td>
+				</tr>
+				<tr>
+					<td>代码：</td>
+					<td><input type="text" name="funTroubleVariable.code" class="easyui-validatebox"
+						required="true" missingMessage="代码必填!" value="" /></td>
+				</tr>
+				<tr>
+					<td>描述：</td>
+					<td><input type="text" name="funTroubleVariable.description" class="easyui-validatebox"
+						required="true" missingMessage="描述必填!" value="" /></td>
+				</tr>
+				
+				<tr>
+					<td>类型:</td>
+					<td><select id="variableType" name="funTroubleVariable.type.id"
+						class="easyui-combobox" required="true"
+						missingMessage="类型必填!" style="width:180px;" 
+						url="SHARPOWER_SCADA/ajaxAllFunTroubleType" valueField="id" 
+						textField="name" value="" ></select>
+					</td>
+				</tr>
+				<tr align="center">
+					<td colspan="2">
+						<a id="submitBtn" class="easyui-linkbutton">确定</a>
+						<a id="closeBtn" class="easyui-linkbutton">关闭</a>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	
+	<div id="searchDialog" class="easyui-dialog" title="查询窗口" modal="true" 
+		draggable="false" closed="true" >
+		<form id="searchForm" action="" method="post">
+			变量名关键字：<input type="text" class="easyui-validatebox" name='searchKey' required="true"
+						missingMessage="关键字必填!" style="width:400px;height:30px;"/>
+				<a id="searchSubmit" class="easyui-linkbutton">查询</a>
+		</form>
+	</div>
+
+</body>
+
+
+</html>

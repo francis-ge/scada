@@ -87,6 +87,7 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 		for (int i = 0; i < objects.length; i++) {
 			q.setParameter(i, objects[i]);
 		}
+		
 		return q.list();
 	}
 

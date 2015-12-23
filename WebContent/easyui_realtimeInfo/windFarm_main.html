@@ -57,14 +57,12 @@
 				        		},
 			        		styler: function(value,row,index){
 			        			switch (value){
-			        			default:
-			        				return 'background-color:#FFFFFF;';
 			        			case 1:
 			        				return 'background-color:#FF0000;';
 			        			case 2:
-			        				return 'background-color:#FF0000;';
+			        				return 'background-color:#FFCC00;';
 			        			case 3:
-			        				return 'background-color:#FF0000;';
+			        				return 'background-color:#66FF00;';
 			        			case 4:
 			        				return 'background-color:#66FF00;';
 			        			case 5:
@@ -73,6 +71,8 @@
 			        				return 'background-color:#9900FF;';
 			        			case 10:
 			    					return 'background-color:#0066FF;';
+			        			default:
+			        				return 'background-color:#FFFFFF;';
 			    				}
 			    			}
 
@@ -101,7 +101,7 @@
 	</script>
 </head>
 <body>
-	<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxMainInfo" 
+	<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxMainInfo"
 		idField="id" singleSelect="true" fit="true" fitColumns="true" striped="true" loadMsg="">
 	</table>
 </body>

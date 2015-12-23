@@ -49,6 +49,8 @@
 		<mapping resource="com/sharpower/entity/Variable.hbm.xml"/>
 		<mapping resource="com/sharpower/entity/VariableType.hbm.xml"/>
 		<mapping resource="com/sharpower/entity/MainRecode.hbm.xml"/>
-		
+		<mapping resource="com/sharpower/entity/FunTroubleRecode.hbm.xml"/>
+		<mapping resource="com/sharpower/entity/FunTroubleVariable.hbm.xml"/>
+		<mapping resource="com/sharpower/entity/TroubleType.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>
