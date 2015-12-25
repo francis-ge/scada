@@ -15,11 +15,11 @@
             <column name="END_TIME" />
         </property>
         
-        <many-to-one name="fun" class="com.sharpower.entity.Fun" fetch="join">
+        <many-to-one name="fun" class="com.sharpower.entity.Fun" fetch="join" lazy="false">
             <column name="FUN_ID" />
         </many-to-one>
         
-        <many-to-one name="funTroubleVariable" class="com.sharpower.entity.FunTroubleVariable" fetch="join">
+        <many-to-one name="funTroubleVariable" class="com.sharpower.entity.FunTroubleVariable" fetch="join" lazy="false">
             <column name="FUN_Trouble_ID" />
         </many-to-one>
     </class>

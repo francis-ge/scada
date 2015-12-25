@@ -23,4 +23,6 @@ public interface BaseDao<T> {
 	//执行原生的sql查询(可以指定是否封装成实体)
 	public List executeSQLQuery(Class clazz,String sql,Object...objects);
 	
+	public List executeHQLQuery(String hql, Object... objects);
+	
 }

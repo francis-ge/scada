@@ -17,7 +17,6 @@ public interface BaseService<T> {
 	public void batchEntityByHQL(String hql,Object...objects);
 	//执行原生的sql语句
 	public void executeSQL(String sql,Object...objects);
-	public void executeSQL(String sql, Map<Variable, Object> objects);
 	//读操作
 	public T loadEntity(Integer id);
 	public T getEntity(Integer id);
@@ -27,4 +26,5 @@ public interface BaseService<T> {
 	//查询所有实体
 	public List<T> findAllEntities();
 	public List executeSQLQuery(Class clazz,String sql,Object...objects);
+	public List executeHQLQuery(String hql,Object...objects);
 }

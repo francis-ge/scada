@@ -56,10 +56,6 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 	public void executeSQL(String sql,Object...objects){
 		dao.executeSQL(sql, objects);
 	}
-	
-	public void executeSQL(String sql, Map<Variable, Object> objects){
-		dao.executeSQL(sql, objects);
-	}
 
 	public T loadEntity(Integer id) {
 		return dao.loadEntity(id);
@@ -87,5 +83,9 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 	//ִ��sqlԭ���ѯ
 	public List executeSQLQuery(Class clazz,String sql,Object...objects){
 		return dao.executeSQLQuery(clazz,sql, objects);
+	}
+	
+	public List executeHQLQuery(String Hql,Object...objects){
+		return dao.executeHQLQuery(Hql, objects);
 	}
 }

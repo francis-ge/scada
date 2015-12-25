@@ -148,7 +148,6 @@
 				success: function(info){
 					$.messager.progress('close');	// 如果提交成功则隐藏进度条
 					info = eval("("+info+")");
-					console.info(info.resulte);
 					$.messager.show({title:'我的消息',msg:info.resulte,showType:'slide'});
 					$('#table').datagrid('reload');
 				}

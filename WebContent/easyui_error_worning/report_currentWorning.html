@@ -4,7 +4,7 @@
     
     <title></title>
     
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	
 	<!-- easyUI -->
 	<link href="../jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
@@ -24,8 +24,86 @@
 	<script type="text/javascript">
 		$(function(){
 			$('#datagrid').datagrid({
-				toolbar:'#toolBar'
+				toolbar:'#toolBar',
+				url:'',
+				idField:'id',
+				fit:true,striped:true,
+				fitColumns:true,
+				singleSelect:true,
+				columns : [ [ {
+					field : 'id',
+					title : 'ID',
+					width : 50,
+					align : 'center',
+					hidden: true
+				}, {
+					field : 'fun.name',
+					title : '风机名称',
+					width : 150,
+					align : 'center'
+				},{
+					field : 'funTroubleVariable.code',
+					title : '代码',
+					width : 100,
+					align : 'center'
+				},{
+					field : 'startTime',
+					title : '发生时间',
+					width : 120,
+					align : 'center'
+				},{
+					field : 'endTime',
+					title : '结束时间',
+					width : 120,
+					align : 'center'
+				},{
+					field : 'funTroubleVariable.description',
+					title : '描述',
+					width : 200,
+					align : 'center'
+				}
+				]]
 			});
+			
+			$('#funSelect').combobox({
+				onChange:function(){
+					$('#datagrid').datagrid('loadData',{ total:0, rows:[] });
+				}
+			})
+			
+			$('#searchSubmit').click(
+				function(){
+					$('#datagrid').datagrid('loadData',{ total:0, rows:[] });
+					$.messager.progress();	// 显示进度条
+					$('#from1').form('submit', {
+						url:'SHARPOWER_SCADA/ajaxGetCurrentWorning',
+						onSubmit: function(){
+							var isValid = $(this).form('validate');
+							if (!isValid){
+								$.messager.progress('close');	// 如果表单是无效的则隐藏进度条
+							}
+							return isValid;	// 返回false终止表单提交
+						},
+						success: function(info){
+							$.messager.progress('close');	// 如果提交成功则隐藏进度条
+							info = eval("("+info+")");
+							
+							for(var o in info){
+								$('#datagrid').datagrid('appendRow',
+									{'id' : info[o].id,
+									'fun.name':info[o].fun.name,
+									'funTroubleVariable.code':info[o].funTroubleVariable.code,
+									'startTime':info[o].startTime,
+									'endTime':info[o].endTime,
+									'funTroubleVariable.description':info[o].funTroubleVariable.description
+									}
+								);
+								
+							}
+						}
+					});
+				}
+			)
 			
 		})
 		
@@ -35,27 +113,18 @@
   
   <body>
 
-		<table id ="datagrid" class="easyui-datagrid" url="" idField="id" singleSelect="true" fit="true" striped="true" fitColumns="true">
-			<thead>   
-		        <tr>   
-		        	<th data-options="field:'number',width:50,align:'center'">序号</th>
-		            <th data-options="field:'name',width:150,align:'center'">风机名称</th>  
-		            <th data-options="field:'code',width:80">代码</th>  
-		            <th data-options="field:'happenTime',width:120">发生时间</th>  
-		            <th data-options="field:'finishTime',width:120">结束时间</th>  
-		            <th data-options="field:'describe',width:200">描述</th>    
-		        </tr>   
-		    </thead>   
+		<table id ="datagrid" >  
 		</table>
 		
 		<div id="toolBar" style="height:25px,overflow:hidden" >
 				<form id="from1" method="post">   
-					选择风机：<select id="funSelect" class="easyui-combobox" style="width:200px;" url="SHARPOWER_SCADA/ajaxAllfun"  valueField="id" textField="name">
+					选择风机：<select id="funSelect" name="funId" class="easyui-combobox" style="width:200px;" 
+							url="SHARPOWER_SCADA/ajaxAllfun"  required="true" missingMessage="风机必选!" 
+							valueField="id" textField="name">
 							</select>
-					<a class="easyui-linkbutton" title="" href="javascript:void(0)">查询</a> 
+							<a id="searchSubmit" class="easyui-linkbutton">查询</a>
 				</form>
-				
 		</div>	
   </body>
-	<div id="timer"></div>
+
 </html>

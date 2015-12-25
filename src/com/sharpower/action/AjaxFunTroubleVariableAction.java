@@ -71,7 +71,7 @@ public class AjaxFunTroubleVariableAction extends ActionSupport{
 	 */
 	private String convertNameToDBname(String name){
 		String hql = "From FunTroubleVariable v WHERE v.name=?";
-		List<FunTroubleVariable> funTroubleVariables  = funTroubleVariableService.findEntityByHQL(hql, name);
+		List<FunTroubleVariable> funTroubleVariables = funTroubleVariableService.findEntityByHQL(hql, name);
 		
 		if (name.equals("")) {
 			return "";

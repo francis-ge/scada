@@ -177,6 +177,12 @@
 		<property name="funTroubleVariableTypeService" ref="funTroubleVariableTypeService"></property>
 	</bean>
 	
+	<bean id="ajaxFunTroublRecodeAction" 
+		class="com.sharpower.action.AjaxFunTroublRecodeAction"
+		scope="prototype">
+		<property name="funTroubleRecodeService" ref="funTroubleRecodeService"></property>
+	</bean>
+	
 	<tx:advice id="txAdvice" 
 		transaction-manager="transactionManager">
 		<tx:attributes>
@@ -264,8 +270,9 @@
     	<!-- 
     		<ref bean="windFarmDataReadTrigger"/>
     		<ref bean="windFarmDataSaveTrigger"/>
-    	 -->
+    	
     	 	<ref bean="windFarmTroubleSaveTrigger"/>
+    	  -->
     	</list>
     	</property>
     </bean>

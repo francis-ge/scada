@@ -136,6 +136,29 @@
 			</result>
 		</action>
 		
+		<action name="ajaxGetCurrentError" class="ajaxFunTroublRecodeAction" method="getCurrentError">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">funTroubleRecodes</param>
+			</result>
+		</action>
+
+		<action name="ajaxGetCurrentWorning" class="ajaxFunTroublRecodeAction" method="getCurrentWorning">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">funTroubleRecodes</param>
+			</result>
+		</action>
+		
+		<action name="ajaxGetTroubleStatisticsForOne" class="ajaxFunTroublRecodeAction" method="getTroubleStatisticsForOne">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">statisticsList</param>
+			</result>
+		</action>			
 	</package>
 
 </struts>
