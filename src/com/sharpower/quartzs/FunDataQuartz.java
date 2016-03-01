@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.apache.log4j.Logger;
 
 import com.sharpower.beckhoff.FunDataReadWriteBeckhoffService;
 import com.sharpower.entity.Fun;
@@ -16,13 +19,17 @@ public class FunDataQuartz implements Runnable {
 	private Map<String, Object> params;
 	private Map<Integer,Map<String, Object>> dataMap = new HashMap<>();
 	
+	private Map<Integer, Boolean> readDataTheadStaMap = new HashMap<>();
+	
 	public FunDataQuartz() {
 	}
 	
 	public void setFunDataReadWriteBeckhoffService(FunDataReadWriteBeckhoffService funDataReadWriteBeckhoffService) {
 		this.funDataReadWriteBeckhoffService = funDataReadWriteBeckhoffService;
 	}
-	
+	public void setReadDataTheadStaMap(Map<Integer, Boolean> readDataTheadStaMap) {
+		this.readDataTheadStaMap = readDataTheadStaMap;
+	}
 	public void setFun(Fun fun) {
 		this.fun = fun;
 	}
@@ -62,6 +69,7 @@ public class FunDataQuartz implements Runnable {
 			dataMap.put(fun.getId(), saveData);
 						
 		} catch (AdsException e) {
+			
 			saveData.put("id", fun.getId());
 			saveData.put("fun", fun);
 			
@@ -80,6 +88,8 @@ public class FunDataQuartz implements Runnable {
 			dataMap.put(fun.getId(), saveData);
 			
 			e.printStackTrace();
+		}finally {
+			readDataTheadStaMap.put(fun.getId(), false);
 		}
 			
 	}
@@ -87,6 +97,5 @@ public class FunDataQuartz implements Runnable {
 	@Override
 	public void run() {
 		this.readData();	
-		System.out.println("定时任务:"+fun.getName());
 	}
 }

@@ -36,11 +36,9 @@
 				function(){
 					$('#datagrid').datagrid('loadData',{ total:0, rows:[] });
 					
-					//$('#datagrid').datagrid({url : 'SHARPOWER_SCADA/ajaxGetErrorStatisticsForOne'});
-					
-					var isValid = $(this).form('validate');
+					var isValid = $('#from1').form('validate');
 					if (!isValid){
-						return;	// 返回false终止表单提交
+						return false;	// 返回false终止表单提交
 					}
 
 					$('#datagrid').datagrid('load', serializeForm($('#from1')));
@@ -70,7 +68,8 @@
   
   <body>
 
-		<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxGetTroubleStatisticsForOne" idField="id" singleSelect="true" fit="true" striped="true" fitColumns="true">
+		<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxGetTroubleStatisticsForOne" 
+			idField="id" singleSelect="true" fit="true" striped="true" fitColumns="true" rownumbers="true">
 			<thead>   
 		        <tr>   
 		            <th data-options="field:'name',width:150,align:'center'">风机名称</th>  

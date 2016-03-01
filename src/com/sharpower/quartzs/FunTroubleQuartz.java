@@ -14,12 +14,10 @@ import com.sharpower.scada.exception.AdsException;
 import com.sharpower.service.FunTroubleRecodeService;
 
 public class FunTroubleQuartz implements Runnable{
-
 	private FunTroubleBeckhoffService funTroubleBeckhoffService;
 	private FunTroubleRecodeService funTroubleRecodeService;
 	private Fun fun;
-	
-	
+		
 	public void setFunTroubleBeckhoffService(FunTroubleBeckhoffService funTroubleBeckhoffService) {
 		this.funTroubleBeckhoffService = funTroubleBeckhoffService;
 	}
@@ -52,7 +50,7 @@ public class FunTroubleQuartz implements Runnable{
 						}
 					}else {
 						if (funTroubleRecode.getEndTime()==null) {
-							//执行更新障碍结束时间操作
+							//执行更新故障结束时间操作
 							funTroubleRecode.setEndTime(new Date());
 							funTroubleRecodeService.updateEntity(funTroubleRecode);
 						}

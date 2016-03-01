@@ -17,6 +17,7 @@
 	charset="utf-8"></script>
 <script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js"
 	charset="utf-8"></script>
+
 <style type="text/css">
 * {
 	margin: 0;
@@ -30,6 +31,7 @@
 			url : 'SHARPOWER_SCADA/ajaxAllfun',
 			fitColumns : true,//列自适应宽度
 			striped : true,//条纹背景
+			rownumbers: true,//显示行号
 			idField : 'id',
 			method : 'post',
 			columns : [ [ {
@@ -129,6 +131,52 @@
 												'fun.line':rows[0].line});
 						}
 					}
+				}, '-', {
+					text : '保存',
+					iconCls : 'icon-save',
+					handler : function() {
+						$.messager.confirm('确认对话框', '确定要保存该报表吗？（如果数据较多请耐心等待。）', function(r){
+							if (r){
+								//获取表头信息
+								var header = $('#table').datagrid('options').columns[0];
+								var fields = "";
+								var titles = "";
+								for(var i = 0;i<header.length;i++){
+									var field = header[i].field;
+									var title = header[i].title;
+									var hiddenFlag = header[i].hidden;
+									if(!hiddenFlag){
+										var dh = i == (header.length -1) ? "" :",";
+										fields = fields + field + dh;
+										titles = titles + title + dh;
+									}
+								}
+								//向后台发送请求  
+								var form = $("<form>");//定义一个form表单
+								form.attr('style','display:none');
+								form.attr('target','');
+								form.attr('method','post');
+								form.attr('action','ajaxExcelFile');
+								//添加input
+								var input1 = $("<input>");
+								input1.attr('type','hidden');
+								input1.attr('name','fields');
+								input1.attr('value',fields);
+								
+								var input2 = $("<input>");
+								input2.attr('type','hidden');
+								input2.attr('name','titles');
+								input2.attr('value',titles);
+								
+								//将表单放到body中
+								$('body').append(form);
+								form.append(input1);
+								form.append(input2);
+								form.submit();//提交表单
+							}
+						});
+
+					}
 				}
 			 ]
 
@@ -176,7 +224,7 @@
 			<table>
 				<tr>
 					<td>风机名称:</td>
-					<td><input type="text" name="fun.name" class="easyui-validatebox"
+					<td><input type="text" name="fun.name" class="easyui-textbox"
 						required="true" validType="midLength[1,10]"
 						missingMessage="风机名称必填!" invalidMessage="风机名称必须在1到10个字符之间!"
 						value="" /></td>
@@ -189,13 +237,13 @@
 				<tr>
 					<td>主控地址:</td>
 					<td><input type="text" name="fun.address"
-						class="easyui-validatebox" required="true"
+						class="easyui-textbox" required="true"
 						missingMessage="主控地址必填!" value="" /></td>
 				</tr>
 				<tr>
 					<td>所属分组:</td>
 					<td><input type="text" name="fun.line"
-						class="easyui-validatebox" required="true"
+						class="easyui-textbox" required="true"
 						missingMessage="所属分组必填!" value="" /></td>
 				</tr>
 				<input type="hidden" name="fun.windFarm.id" value="1" />

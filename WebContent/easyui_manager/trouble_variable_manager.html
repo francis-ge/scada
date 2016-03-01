@@ -27,6 +27,7 @@
 			url : 'SHARPOWER_SCADA/allFunTroubleVariable',
 			fitColumns : true,//列自适应宽度
 			striped : true,//条纹背景
+			rownumbers: true,
 			idField : 'id',
 			method : 'post',
 			columns : [ [ {
@@ -206,22 +207,22 @@
 			<table>
 				<tr>
 					<td>变量名称:</td>
-					<td><input type="text" name="funTroubleVariable.name" class="easyui-validatebox"
+					<td><input type="text" name="funTroubleVariable.name" class="easyui-textbox"
 						required="true" missingMessage="变量名称必填!" value="" /></td>
 				</tr>
 				<tr>
 					<td>数据存储名：</td>
-					<td><input type="text" disabled="true" name="funTroubleVariable.dbName" class="easyui-validatebox"
+					<td><input type="text" disabled="true" name="funTroubleVariable.dbName" class="easyui-textbox"
 						required="true" missingMessage="存储名名称必填!" value="" /></td>
 				</tr>
 				<tr>
 					<td>代码：</td>
-					<td><input type="text" name="funTroubleVariable.code" class="easyui-validatebox"
+					<td><input type="text" name="funTroubleVariable.code" class="easyui-textbox"
 						required="true" missingMessage="代码必填!" value="" /></td>
 				</tr>
 				<tr>
 					<td>描述：</td>
-					<td><input type="text" name="funTroubleVariable.description" class="easyui-validatebox"
+					<td><input type="text" name="funTroubleVariable.description" class="easyui-textbox"
 						required="true" missingMessage="描述必填!" value="" /></td>
 				</tr>
 				
@@ -247,7 +248,7 @@
 	<div id="searchDialog" class="easyui-dialog" title="查询窗口" modal="true" 
 		draggable="false" closed="true" >
 		<form id="searchForm" action="" method="post">
-			变量名关键字：<input type="text" class="easyui-validatebox" name='searchKey' required="true"
+			变量名关键字：<input type="text" class="easyui-textbox" name='searchKey' required="true"
 						missingMessage="关键字必填!" style="width:400px;height:30px;"/>
 				<a id="searchSubmit" class="easyui-linkbutton">查询</a>
 		</form>

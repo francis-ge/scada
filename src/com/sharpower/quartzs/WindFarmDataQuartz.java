@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.apache.log4j.Logger;
 
 import com.sharpower.beckhoff.FunDataReadWriteBeckhoffService;
 import com.sharpower.beckhoff.FunTroubleBeckhoffService;
@@ -13,11 +16,15 @@ import com.sharpower.service.FunTroubleRecodeService;
 import com.sharpower.service.RecodeService;
 import com.sharpower.service.WindFarmService;
 
+import de.beckhoff.jni.tcads.AdsCallDllFunction;
+
 public class WindFarmDataQuartz {
 	private WindFarmService windFarmService;
 	private Set<Fun> funs;
 	private FunDataReadWriteBeckhoffService funDataReadWriteBeckhoffService;
 	private RecodeService recodeService;
+	
+	private Map<Integer, Boolean> readDataTheadStaMap = new HashMap<>();
 	
 	private Map<Integer,Map<String, Object>> dataMap = new HashMap<>();
 	
@@ -54,21 +61,36 @@ public class WindFarmDataQuartz {
 	public void readData(){
 		if(funs==null){
 			funs = windFarmService.getEntity(1).getFuns();
+			
+			for (Fun fun : funs) {
+				readDataTheadStaMap.put(fun.getId(), false);
+				AdsCallDllFunction.adsPortOpen();
+				AdsCallDllFunction.adsPortOpen();
+			}
 		}
 			
+		Boolean threadSta = false;
+		
 		//创建数据读取线程
 		for (Fun fun : funs) {
-			//检查上轮线程状态，如已完成则创建新线程，未完成则不创建				
+			//检查上轮线程状态，如已完成则创建新线程，未完成则不创建		
+			threadSta = readDataTheadStaMap.get(fun.getId());
+			if (threadSta==false) {
+				readDataTheadStaMap.put(fun.getId(), true);
+				
 				FunDataQuartz funDataQuartz = new FunDataQuartz();
 				funDataQuartz.setFunDataReadWriteBeckhoffService(funDataReadWriteBeckhoffService);
 				funDataQuartz.setFun(fun);
 				funDataQuartz.setParams(params);
 				funDataQuartz.setDataMap(dataMap);
+				funDataQuartz.setReadDataTheadStaMap(readDataTheadStaMap);
 				
 				Thread thread = new Thread(funDataQuartz);
 				thread.start();
-				
+
 			}
+				
+		}
 		
 	}
 	
@@ -80,10 +102,10 @@ public class WindFarmDataQuartz {
 
 			dataTemp.putAll(entry.getValue());
 			
-			dataTemp.put("id", null);
-			dataTemp.put("dateTime", now);
+			dataTemp.put( "id", null );
+			dataTemp.put( "dateTime", now );
 			
-			recodeService.save(dataTemp);
+			recodeService.save( dataTemp );
 		}
 		
 	}
@@ -115,6 +137,16 @@ public class WindFarmDataQuartz {
 			thread.start();
 				
 			}
+	}
+	
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+		
+		for (Fun fun : funs) {
+			AdsCallDllFunction.adsPortClose();
+			AdsCallDllFunction.adsPortClose();
+		}
 	}
 	
 

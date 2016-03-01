@@ -77,8 +77,10 @@
 			    			}
 
 				        	},    
-				          {field:'dateTime',title:'时间',width:150},    
-				          {field:'___wind_speed',title:'风速',width:150},    
+				          {field:'dateTime',title:'时间',width:240,
+				        		formatter:function(value,row,index){value=value.replace('T',' '); var date=new Date(value); return date.toLocaleString();}},    
+				          {field:'___wind_speed',title:'风速',width:150,
+				        	  formatter:function(value,row,index){return Math.round(value*100)/100;}},    
 				          {field:'_MAIN__BOOLTEST1',title:'booltest1',width:150},    
 				          {field:'_MAIN__SINGLETEST1',title:'singleTest1',width:150},    
 				          {field:'_MAIN__DOUBLETEST1',title:'doubleTest1',width:150},    
@@ -89,20 +91,102 @@
 				          {field:'windDirection',title:'风向',width:150},    
 				          {field:'dayOutput',title:'日发电量',width:150},    
 				          {field:'output',title:'总发电量',width:150},    
-				      ]]
-		
+				      ]],
+				 onRowContextMenu: function(e, index, row){
+					 e.preventDefault();
+					 
+					 if(index==-1){
+						 return;
+					 }
+					 $(this).datagrid('unselectAll');
+					 $(this).datagrid('selectRow',index);
+					 $('#menu').menu('show',{left:e.pageX,top:e.pageY});
+				 }
+		 
 			});
+			
+			$('#menu').menu({
+				onClick:function(item){
+					var selectRow = $('#datagrid').datagrid('getSelected');
+					
+					switch(item.id){
+					case '1':
+						if(selectRow!=null){
+							$.post("SHARPOWER_SCADA/ajaxFunControlRun",
+									{addr : selectRow.fun.address},
+									function(data){
+										$.messager.show({msg:data});
+									},
+									"json");
+						}
+						
+						break;
+					case '2':
+						if(selectRow!=null){
+							$.post("SHARPOWER_SCADA/ajaxFunControlStop",
+									{addr : selectRow.fun.address},
+									function(data){
+										$.messager.show({msg:data});
+									},
+									"json");
+						}
+						
+						break;
+					case '3':
+						if(selectRow!=null){
+							$.post("SHARPOWER_SCADA/ajaxFunControlService",
+									{addr : selectRow.fun.address},
+									function(data){
+										$.messager.show({msg:data});
+									},
+									"json");
+						}
+						
+						break;
+					case '4':
+						if(selectRow!=null){
+							$.post("SHARPOWER_SCADA/ajaxFunControlReset",
+									{addr : selectRow.fun.address},
+									function(data){
+										$.messager.show({msg:data});
+									},
+									"json");
+						}
+						
+						break;						
+					case '5':
+						$('#window').window('open');
+						break;
+					}
+				}
+			})
 			
 			setInterval(function(){
 		    	$('#datagrid').datagrid('load')}, 
-		    	1000 
+		    	1000
 			);
 		})
 	</script>
 </head>
 <body>
-	<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxMainInfo"
-		idField="id" singleSelect="true" fit="true" fitColumns="true" striped="true" loadMsg="">
+	<table id="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxMainInfo"
+		idField="id" singleSelect="true" fit="true" striped="true" rownumbers="true" fitColumns="true" loadMsg="">
 	</table>
+	
+	<div id="menu" class="easyui-menu" style="width:120px;" hideOnUnhover="false">   
+	    <div id="1" data-options="iconCls:'icon-start'">启动</div>   
+	    <div id="2" data-options="iconCls:'icon-stop'">停机</div>   
+	    <div id="3" data-options="iconCls:'icon-service'">维护</div>   
+	    <div id="4" data-options="iconCls:'icon-reset'">复位</div>   
+	    <div  class="menu-sep"></div>   
+	    <!-- <div id="5">偏航</div>  -->
+	</div>  
+	
+	<div id="window" class="easyui-window"  title="偏航控制" style="width:600px;height:400px"
+		 data-options="modal:true" closed="true" >
+	
+	</div>
+
+	
 </body>
 </html>

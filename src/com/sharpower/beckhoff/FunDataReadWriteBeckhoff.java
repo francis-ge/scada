@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.sharpower.entity.Variable;
 import com.sharpower.entity.VariableType;
 import com.sharpower.scada.exception.AdsException;
@@ -13,6 +15,7 @@ import com.sharpower.utils.AddressConvertUtils;
 import com.sharpower.utils.ByteUtil;
 import com.sharpower.utils.ReflectionUtils;
 
+import de.beckhoff.jni.Convert;
 import de.beckhoff.jni.JNIByteBuffer;
 import de.beckhoff.jni.tcads.AdsCallDllFunction;
 import de.beckhoff.jni.tcads.AmsAddr;
@@ -41,7 +44,7 @@ public class FunDataReadWriteBeckhoff {
 		JNIByteBuffer lj_pDataWrite;
 		lj_pDataWrite = new JNIByteBuffer((int) lj_lengthWrite);
 		
-		byte[] bytes = new byte[(int) lj_lengthWrite];
+		byte[] bytes = new byte[(int)lj_lengthWrite];
 		byte[] bytes1 = new byte[0];
 
 		int destPos = 0;
@@ -122,6 +125,7 @@ public class FunDataReadWriteBeckhoff {
 		lj_pDataWrite = getWriteJNIByteBuffer(size, valNames, lj_lengthWrite);
 
 	}
+	
 	/**
 	 * 根据地址读取全部PLC数据
 	 * @param sFunAddress PLC地址
@@ -138,22 +142,18 @@ public class FunDataReadWriteBeckhoff {
 		AmsAddr lj_AmsAddr = AddressConvertUtils.string2AmsAddr(sFunAddress);
 		
 		JNIByteBuffer lj_pDataRead = new JNIByteBuffer((int) lj_lengthRead);
-		
-		AdsCallDllFunction.adsPortOpen();
 
-		Long err = AdsCallDllFunction.adsSyncReadWriteReq(lj_AmsAddr, 0xF082, lj_indexOffset, lj_lengthRead,
-				lj_pDataRead, lj_lengthWrite, lj_pDataWrite);
-
-		AdsCallDllFunction.adsPortClose();
+		long err = AdsCallDllFunction.adsSyncReadWriteReq( lj_AmsAddr, 0xF082, lj_indexOffset, 
+				lj_pDataRead.getUsedBytesCount(), lj_pDataRead, lj_pDataWrite.getUsedBytesCount(), lj_pDataWrite );
 		
-		if (err == 0) {
+		if (err == 0){
 			data = getData(lj_pDataRead);
-
+			
 			return data;
 		} else {
-			throw new AdsException("ADS Error,ErrorCode:" + err);
+			throw new AdsException("ADS Error, ErrorCode:" + err + ",AmsAddr:" + lj_AmsAddr.getNetIdString());
 		}
-
+		
 	}
 	
 	/**
@@ -162,9 +162,8 @@ public class FunDataReadWriteBeckhoff {
 	 * @return
 	 */
 	private Map<Variable, Object> getData( JNIByteBuffer lj_pDataRead ) {
-		//ADS数据块转换为字节数组
 		byte[] bytes = lj_pDataRead.getByteArray();
-		
+
 		//变量读取的错误码
 		int errCode = 0;
 		//读取错误的变量数量
@@ -200,9 +199,9 @@ public class FunDataReadWriteBeckhoff {
 				
 				try {
 					result = method.invoke(new ByteUtil(), bytes2);
-					
+					method = null;
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					
+					method = null;
 					e.printStackTrace();
 				}
 
@@ -215,6 +214,8 @@ public class FunDataReadWriteBeckhoff {
 
 		}
 		
+		bytes=null;
+		
 		return data;
 		
 	}
@@ -224,5 +225,6 @@ public class FunDataReadWriteBeckhoff {
 		
 		readyToReadData(variableType);
 	}
+	
 
 }

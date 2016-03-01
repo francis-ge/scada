@@ -1,8 +1,8 @@
 eclipse.preferences.version=1
 encoding//WebContent/easyui_error_worning/report_currentError.html=UTF-8
 encoding//WebContent/easyui_error_worning/report_errorForOneQuery.html=UTF-8
-encoding//WebContent/easyui_error_worning/report_worning.html=UTF-8
 encoding//WebContent/easyui_error_worning/report_worningForOneQuery.html=UTF-8
+encoding//WebContent/easyui_error_worning/report_worningStatistics.html=UTF-8
 encoding//WebContent/easyui_error_worning/report_worningStatisticsForOne.html=UTF-8
 encoding//WebContent/easyui_realtimeInfo/realtime_info.html=UTF-8
 encoding//WebContent/easyui_report/report_day_main.html=UTF-8

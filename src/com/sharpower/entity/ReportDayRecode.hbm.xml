@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-12-30 10:02:36 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.sharpower.entity.ReportDayRecode" table="REPORTDAYRECODE">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        <property name="date" type="java.util.Date">
+            <column name="DATE" />
+        </property>
+        <many-to-one name="fun" class="com.sharpower.entity.Fun" fetch="join" lazy="false">
+            <column name="FUN_ID" />
+        </many-to-one>
+        <property name="maxEngergy" type="float">
+            <column name="MAX_ENGERGY" />
+        </property>
+        <property name="averageWindSpeed" type="float">
+            <column name="AVERAGEWIND_SPEED" />
+        </property>
+        <property name="averagePower" type="float">
+            <column name="AVERAGE_POWER" />
+        </property>
+        <property name="averageReactivePower" type="float">
+            <column name="AVERAGE_REACTIVE_POWER" />
+        </property>
+        <property name="maxSpeed" type="float">
+            <column name="MAX_SPEED" />
+        </property>
+        <property name="maxPower" type="float">
+            <column name="MAX_POWER" />
+        </property>
+        <property name="availabilityRatio" type="float">
+            <column name="AVAILABILITY_RATIO" />
+        </property>
+        <property name="nacelleOutdoorTemperature" type="float">
+            <column name="NACELLE_OUTDOOR_TEMPERATURE" />
+        </property>
+        <property name="dataTimeEnergy" type="int">
+            <column name="DATA_TIME_ENERGY" />
+        </property>
+        <property name="dataTimeService" type="int">
+            <column name="DATA_TIME_SERVICE" />
+        </property>
+        <property name="dataTimeAllError" type="int">
+            <column name="DATATIME_ALL_ERROR" />
+        </property>
+        <property name="dataTimeNormal" type="int">
+            <column name="DATATIME_NORMAL" />
+        </property>
+        <property name="dataTimeTotal" type="int">
+            <column name="DATATIME_TOTAL" />
+        </property>
+    </class>
+</hibernate-mapping>

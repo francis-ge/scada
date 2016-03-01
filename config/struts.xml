@@ -27,6 +27,14 @@
 			</result>		
 		</action>
 		
+		<action name="ajaxWindFarmRealTimeInfo" class="ajaxRealTimeInfoAction" method="windFarmRealTimeInfo">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">windFarmRealTimeInfo</param>
+			</result>
+		</action>
+		
 		<action name="ajaxAllfun" class="ajaxFunAction" method="allFun" >
 			<result type="json">
 				<param name="noCache">true</param>
@@ -54,6 +62,15 @@
 				<param name="noCache">true</param>
 				<param name="contentType">text/html</param>
 			</result>		
+		</action>
+		
+		<action name="ajaxExcelFile" class="ajaxFunAction">
+			<result type="stream">
+				<param name="contentType">application/octet-stream</param>
+       			<param name="inputName">excelFile</param>
+       			<param name="contentDisposition">filename="111.xls"</param>
+       			<param name="bufferSize">1024</param>
+			</result>
 		</action>
 		
 		<action name="ajaxAllVariableType" class="ajaxVariableTypeAction" method="allVariableType">
@@ -144,6 +161,30 @@
 			</result>
 		</action>
 
+		<action name="ajaxGetTroubleStatisticsForOne" class="ajaxFunTroublRecodeAction" method="getTroubleStatisticsForOne">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">statisticsList</param>
+			</result>
+		</action>
+		
+		<action name="ajaxGetTroubleStatistics" class="ajaxFunTroublRecodeAction" method="getTroubleStatistics">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">statisticsList</param>
+			</result>
+		</action>
+		
+		<action name="ajaxGetTroubleStatisticsForOneQuery" class="ajaxFunTroublRecodeAction" method="getTroubleStatisticsForOneQuery">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">statisticsList</param>
+			</result>
+		</action>
+				
 		<action name="ajaxGetCurrentWorning" class="ajaxFunTroublRecodeAction" method="getCurrentWorning">
 			<result type="json">
 				<param name="noCache">true</param>
@@ -152,13 +193,70 @@
 			</result>
 		</action>
 		
-		<action name="ajaxGetTroubleStatisticsForOne" class="ajaxFunTroublRecodeAction" method="getTroubleStatisticsForOne">
+		<action name="ajaxReportDayFindMainRecode" class="ajaxReportDayRecodeAction" method="findMainRecode">
 			<result type="json">
 				<param name="noCache">true</param>
 				<param name="contentType">text/html</param>
-				<param name="root">statisticsList</param>
+				<param name="root">reportDayRecodesMap</param>
 			</result>
-		</action>			
+		</action>
+	
+		<action name="ajaxReportDayFindTimeRecode" class="ajaxReportDayRecodeAction" method="findTimeRecode">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">reportDayRecodesMap</param>
+			</result>
+		</action>	
+		
+		<action name="ajaxFunControlRun" class="ajaxFunControlAction" method="run">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">result</param>
+			</result>
+		</action>
+		
+		<action name="ajaxFunControlStop" class="ajaxFunControlAction" method="stop">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">result</param>
+			</result>
+		</action>
+		
+		<action name="ajaxFunControlReset" class="ajaxFunControlAction" method="reset">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">result</param>
+			</result>
+		</action>
+		
+		<action name="ajaxFunControlService" class="ajaxFunControlAction" method="service">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">result</param>
+			</result>
+		</action>
+		
+		<action name="ajaxFunControlPowerLimit" class="ajaxFunControlAction" method="powerLimit">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">result</param>
+			</result>
+		</action>
+		
+		<action name="ajaxFunControlPowerLimitCancel" class="ajaxFunControlAction" method="powerLimitCancel">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">result</param>
+			</result>
+		</action>
+		
 	</package>
 
 </struts>

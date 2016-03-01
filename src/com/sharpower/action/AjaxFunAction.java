@@ -1,15 +1,20 @@
 package com.sharpower.action;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.struts2.json.annotations.JSON;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.sharpower.entity.Fun;
 import com.sharpower.service.FunService;
+import com.sharpower.utils.ExportExlUtils;
 
 public class AjaxFunAction extends ActionSupport {
 
@@ -20,6 +25,9 @@ public class AjaxFunAction extends ActionSupport {
 	private List<Fun> funs = new ArrayList<>();
 	private String resulte;
 	private String ids;
+	
+	private String fields;
+	private String titles;
 	
 	public Fun getFun() {
 		return fun;
@@ -62,6 +70,22 @@ public class AjaxFunAction extends ActionSupport {
 		this.ids = ids;
 	}
 	
+	public String getFields() {
+		return fields;
+	}
+
+	public void setFields(String fields) {
+		this.fields = fields;
+	}
+
+	public String getTitles() {
+		return titles;
+	}
+
+	public void setTitles(String titles) {
+		this.titles = titles;
+	}
+
 	public String allFun(){
 		try {
 			funs = funService.findAllEntities();
@@ -102,8 +126,25 @@ public class AjaxFunAction extends ActionSupport {
 			resulte = "删除失败！";
 		}
 		
-
 		return SUCCESS;
+
 	}
+	
+	public InputStream getExcelFile(){
+		//创建Excel
+		HSSFWorkbook wb = new HSSFWorkbook();
+		HSSFSheet sheet = wb.createSheet("sheet0");
+
+		List<Fun> funs = funService.findAllEntities();
+		
+		ExportExlUtils.outputHeaders(titles.split(","), sheet);
+		ExportExlUtils.outputColumns(fields.split(","), funs, sheet, 1);
+		
+		InputStream inputStream = new ByteArrayInputStream(wb.getBytes());
+		
+		return inputStream;
+			
+	}
+
 
 }

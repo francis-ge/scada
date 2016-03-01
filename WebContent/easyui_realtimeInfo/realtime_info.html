@@ -45,10 +45,11 @@
   
   <body>
 
-		<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxRealTimeInfo" idField="id" singleSelect="true" fit="true" >
+		<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxRealTimeInfo" idField="id" singleSelect="true" fit="true" rownumbers="true">
 			<thead>   
 		        <tr>   
-		            <th data-options="field:'dateTime', width:150">时间</th>
+		            <th data-options="field:'dateTime', width:150,
+		            	formatter:function(value,row,index){value=value.replace('T',' ');var date=new Date(value); return date.toLocaleString();}">时间</th>
 		            <th data-options="field:'windSpeed', width:150">风速</th>
 		            <th data-options="field:'_main__booltest1',  width:150">布尔值1</th>
 		            <th data-options="field:'_main__booltest2',  width:150">布尔值2</th>
@@ -65,7 +66,7 @@
 		
 		<div id="toolBar" style="height:25px,overflow:hidden" >
 				选择风机:
-				<select id="funSelect" class="easyui-combobox" style="width:200px;" url="SHARPOWER_SCADA/ajaxAllfun"  valueField="id" textField="name">
+				<select id="funSelect" class="easyui-combobox" style="width:200px;" url="SHARPOWER_SCADA/ajaxAllfun" valueField="id" textField="name">
 				</select>
 		</div>	
   </body>

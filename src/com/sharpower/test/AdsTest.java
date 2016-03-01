@@ -8,10 +8,13 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.junit.Test;
 
+import com.sharpower.beckhoff.FunControlBeckhoffImpl;
 import com.sharpower.beckhoff.FunDataReadWriteBeckhoff;
 import com.sharpower.entity.Variable;
 import com.sharpower.entity.VariableType;
+import com.sharpower.fun.control.FunControl;
 import com.sharpower.scada.exception.AdsException;
+import com.sharpower.scada.exception.PlcException;
 import com.sharpower.service.VariableTypeService;
 import com.sharpower.service.impl.VariableTypeServiceImpl;
 
@@ -45,6 +48,17 @@ public class AdsTest {
 		System.out.println(port);
 	}
 	
+	@Test
+	public void testWrite(){
+		FunControl funControl = new FunControlBeckhoffImpl();
+		//System.out.println(funControl.powerLimit("192.168.100.61.1.1:852",111.1f));
+		try {
+			funControl.powerLimitCancel("192.168.100.61.1.1:852");
+		} catch (PlcException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	@Test
 	public void testReadmap1(){

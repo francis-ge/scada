@@ -2,6 +2,7 @@ package com.sharpower.beckhoff;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ public class FunDataReadWriteBeckhoffService {
 	}
 	public void setVariableTypeService(VariableTypeService variableTypeService) {
 		this.variableTypeService = variableTypeService;
-		List<VariableType> variableTypes = variableTypeService.findAllEntitiesLeftJoinFetch();
+		List<VariableType> variableTypes = new ArrayList<>( new HashSet<VariableType>(variableTypeService.findAllEntitiesLeftJoinFetch()));
 		
 		for (VariableType variableType : variableTypes) {
 			funDatas.add(new FunDataReadWriteBeckhoff(variableType));
@@ -30,6 +31,7 @@ public class FunDataReadWriteBeckhoffService {
 		Map<Variable, Object> datas = new HashMap<>();
 		
 		for (FunDataReadWriteBeckhoff funData : funDatas) {
+			
 			datas.putAll(funData.readData(sFunAddress));
 		}
 	
