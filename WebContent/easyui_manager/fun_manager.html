@@ -132,10 +132,10 @@
 						}
 					}
 				}, '-', {
-					text : '保存',
+					text : '导出',
 					iconCls : 'icon-save',
 					handler : function() {
-						$.messager.confirm('确认对话框', '确定要保存该报表吗？（如果数据较多请耐心等待。）', function(r){
+						$.messager.confirm('确认对话框', '确定要保存该报表吗？', function(r){
 							if (r){
 								//获取表头信息
 								var header = $('#table').datagrid('options').columns[0];
@@ -156,7 +156,7 @@
 								form.attr('style','display:none');
 								form.attr('target','');
 								form.attr('method','post');
-								form.attr('action','ajaxExcelFile');
+								form.attr('action','funExcelFile');
 								//添加input
 								var input1 = $("<input>");
 								input1.attr('type','hidden');

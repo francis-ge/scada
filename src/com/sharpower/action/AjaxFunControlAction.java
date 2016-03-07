@@ -8,24 +8,16 @@ import com.sharpower.scada.exception.PlcException;
 public class AjaxFunControlAction extends ActionSupport{
 	private static final long serialVersionUID = 1L;
 
-	private String addr;
-	private boolean bool;
+	private Fun fun;
 	private float nfloat;
 	private FunControl funControl;
 	private String result;
 	
-	public String getAddr() {
-		return addr;
+	public Fun getFun() {
+		return fun;
 	}
-	public void setAddr(String addr) {
-		this.addr = addr;
-	}
-	
-	public boolean isBool() {
-		return bool;
-	}
-	public void setBool(boolean bool) {
-		this.bool = bool;
+	public void setFun(Fun fun) {
+		this.fun = fun;
 	}
 	public float getNfloat() {
 		return nfloat;
@@ -47,12 +39,12 @@ public class AjaxFunControlAction extends ActionSupport{
 	
 	public String run(){
 		try {
-			funControl.run(addr);
-			result="启动命令已执行。";
+			funControl.run(fun.getAddress());
+			result=fun.getName()+"  启动命令已执行。";
 			return SUCCESS;
 		} catch (PlcException e) {
 			e.printStackTrace();
-			result="启动命令未执行:,"+e.getMessage();
+			result=fun.getName()+"  启动命令未执行:,"+e.getMessage();
 			return SUCCESS;
 		}
 
@@ -60,60 +52,60 @@ public class AjaxFunControlAction extends ActionSupport{
 	
 	public String stop(){
 		try {
-			funControl.stop(addr);
-			result="停机命令已执行。";
+			funControl.stop(fun.getAddress());
+			result=fun.getName()+"  停机命令已执行。";
 			return SUCCESS;
 		} catch (PlcException e) {
 			e.printStackTrace();
-			result="停机命令未执行,"+e.getMessage();
+			result=fun.getName()+"  停机命令未执行,"+e.getMessage();
 			return SUCCESS;
 		}
 	}
 	
 	public String reset(){
 		try {
-			funControl.reset(addr);
-			result="复位命令已执行。";
+			funControl.reset(fun.getAddress());
+			result=fun.getName()+"  复位命令已执行。";
 			return SUCCESS;
 		} catch (PlcException e) {
 			e.printStackTrace();
-			result="复位命令未执行,"+e.getMessage();
+			result=fun.getName()+"  复位命令未执行,"+e.getMessage();
 			return SUCCESS;
 		}
 	}
 	
 	public String service(){
 		try {
-			funControl.service(addr);
-			result="维护模式已执行。";
+			funControl.service(fun.getAddress());
+			result=fun.getName()+"  维护模式已执行。";
 			return SUCCESS;
 		} catch (PlcException e) {
 			e.printStackTrace();
-			result="维护模式未执行,"+e.getMessage();
+			result=fun.getName()+"  维护模式未执行,"+e.getMessage();
 			return SUCCESS;
 		}
 	}
 	
 	public String powerLimit(){
 		try {
-			funControl.powerLimit(addr, nfloat);
-			result="命令已执行。";
+			funControl.powerLimit(fun.getAddress(), nfloat);
+			result=fun.getName()+"  限功率命令已执行。";
 			return SUCCESS;
 		} catch (PlcException e) {
 			e.printStackTrace();
-			result="命令未执行,"+e.getMessage();
+			result=fun.getName()+"  限功率命令未执行,"+e.getMessage();
 			return SUCCESS;
 		}
 	}
 	
 	public String powerLimitCancel(){
 		try {
-			funControl.powerLimitCancel(addr);
-			result="命令已执行。";
+			funControl.powerLimitCancel(fun.getAddress());
+			result=fun.getName()+"  取消功率限制已执行。";
 			return SUCCESS;
 		} catch (PlcException e) {
 			e.printStackTrace();
-			result="命令未执行,"+e.getMessage();
+			result=fun.getName()+"  取消功率限制未执行,"+e.getMessage();
 			return SUCCESS;
 		}
 	}

@@ -15,7 +15,7 @@
 <script src="jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
 
 <style type="text/css">
-	* {margin: 0; padding: 0;}
+	* {margin: 0; border: 0; padding: 0;}
 </style>
 
 <script type="text/javascript">
@@ -90,11 +90,12 @@
 </head>
 
 <body class="easyui-layout" fit="true">   
-    <div id='north' data-options="region:'north',title:'',split:false" style="height:50px;"></div>   
+    <div id="north" data-options="region:'north',title:'',split:false" style="height:12%;background:#85B9FF"> </div>   
     <div  data-options="region:'west',title:'导航栏',split:true" style="width:150px;">
-	    <div  class="easyui-accordion" fit="true">
+	    <div class="easyui-accordion" fit="true">
 	    	<div title="风场概览" style="overflow:auto;">
-	    		<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_realtimeInfo/windFarm_main.html" href="#">风场概览</a>
+	    	<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_realtimeInfo/windFarm_main.html" href="#">风场概览</a>
+	    		<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_realtimeInfo/windFarm_main_table.html" href="#">风场概览(表格)</a>
 	    	</div>
 	    	
 	    	<div title="瞬时信息" style="overflow:auto;">
@@ -156,7 +157,7 @@
 	    </div>
     </div>   
     <div data-options="region:'center',title:''" style="overflow:hidden;background:#eee;" border="false" >
-	    <div id="tabs" class="easyui-tabs" fit="true" border="false">
+	    <div id="tabs" class="easyui-tabs" fit="true" border="false" justified="true" pill="false">
 		</div>
     </div>  
 

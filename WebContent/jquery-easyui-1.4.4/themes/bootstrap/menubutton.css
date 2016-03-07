@@ -11,9 +11,9 @@
 }
 .m-btn-active,
 .s-btn-active {
-  background: #e6e6e6;
-  color: #00438a;
-  border: 1px solid #ddd;
+  background: #eaf2ff;
+  color: #000000;
+  border: 1px solid #b7d2ff;
   filter: none;
 }
 .m-btn-plain-active,
@@ -65,7 +65,7 @@
   width: 16px;
   height: 500px;
   border-style: solid;
-  border-color: #bbb;
+  border-color: #aac5e7;
   border-width: 0 0 0 1px;
 }
 .m-btn .l-btn-icon-top .m-btn-line,
@@ -88,7 +88,7 @@
 }
 .m-btn-plain-active,
 .s-btn-plain-active {
-  border-color: #ddd;
-  background-color: #e6e6e6;
-  color: #00438a;
+  border-color: #b7d2ff;
+  background-color: #eaf2ff;
+  color: #000000;
 }

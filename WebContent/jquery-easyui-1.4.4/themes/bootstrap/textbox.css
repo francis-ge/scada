@@ -1,6 +1,6 @@
 .textbox {
   position: relative;
-  border: 1px solid #D4D4D4;
+  border: 1px solid #95B8E7;
   background-color: #fff;
   vertical-align: middle;
   display: inline-block;
@@ -80,9 +80,9 @@
   filter: alpha(opacity=60);
 }
 .textbox-focused {
-  -moz-box-shadow: 0 0 3px 0 #D4D4D4;
-  -webkit-box-shadow: 0 0 3px 0 #D4D4D4;
-  box-shadow: 0 0 3px 0 #D4D4D4;
+  -moz-box-shadow: 0 0 3px 0 #95B8E7;
+  -webkit-box-shadow: 0 0 3px 0 #95B8E7;
+  box-shadow: 0 0 3px 0 #95B8E7;
 }
 .textbox-invalid {
   border-color: #ffa8a8;

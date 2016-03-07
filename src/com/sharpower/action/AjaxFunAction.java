@@ -1,9 +1,10 @@
 package com.sharpower.action;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -28,6 +29,10 @@ public class AjaxFunAction extends ActionSupport {
 	
 	private String fields;
 	private String titles;
+	
+	private InputStream inputStream;
+	private int contentLength;
+	private String contentDisposition;
 	
 	public Fun getFun() {
 		return fun;
@@ -85,6 +90,18 @@ public class AjaxFunAction extends ActionSupport {
 	public void setTitles(String titles) {
 		this.titles = titles;
 	}
+	
+	public InputStream getInputStream() {
+		return inputStream;
+	}
+	
+	public int getContentLength() {
+		return contentLength;
+	}
+	
+	public String getContentDisposition() {
+		return contentDisposition;
+	}
 
 	public String allFun(){
 		try {
@@ -102,7 +119,6 @@ public class AjaxFunAction extends ActionSupport {
 			funService.saveOrUpdateEntity(fun);
 			resulte = "保存成功！";
 		} catch (Exception e) {
-			// TODO: handle exception
 			resulte= e.getMessage();
 		}
 		
@@ -130,7 +146,7 @@ public class AjaxFunAction extends ActionSupport {
 
 	}
 	
-	public InputStream getExcelFile(){
+	public String getExcelFile(){
 		//创建Excel
 		HSSFWorkbook wb = new HSSFWorkbook();
 		HSSFSheet sheet = wb.createSheet("sheet0");
@@ -140,9 +156,21 @@ public class AjaxFunAction extends ActionSupport {
 		ExportExlUtils.outputHeaders(titles.split(","), sheet);
 		ExportExlUtils.outputColumns(fields.split(","), funs, sheet, 1);
 		
-		InputStream inputStream = new ByteArrayInputStream(wb.getBytes());
+		FileOutputStream fileOut;
+		try {
+			fileOut = new FileOutputStream("workbook.xls");
+			inputStream = new FileInputStream("workbook.xls");
+			wb.write(fileOut);
+			fileOut.close();
+			wb.close();
+			contentLength = inputStream.available();
+			contentDisposition = "attachment;filename=\"funInfo" + new Date() + ".xls\"";
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
 		
-		return inputStream;
+		return SUCCESS;
 			
 	}
 

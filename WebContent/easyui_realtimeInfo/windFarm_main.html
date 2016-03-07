@@ -8,7 +8,8 @@
 	<!-- easyUI -->
 	<link href="../jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
 	<link href="../jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
-	
+    <link href="../js/css/bootstrap.min.css" rel="stylesheet">
+
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
 	<script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
 	
@@ -17,94 +18,60 @@
 	<script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
 	
 	<style type="text/css">
-		* {margin: 0; padding: 0;}
+		* {margin: 0; border: 0; padding: 0;}
+		.fun{
+			background-color:#85B9FF;
+			height:120px;
+			width:100px;
+			position:relative;
+			display:inline-block;
+		}
 	</style>
+
+</head>
+<body>
+	<div class="funs">    </div>
+    <div class="fun" >1234567890</div>
+    
+	<div id="menu" class="easyui-menu" style="width:120px;" hideOnUnhover="false">   
+	    <div id="1" data-options="iconCls:'icon-start'">启动</div>   
+	    <div id="2" data-options="iconCls:'icon-stop'">停机</div>   
+	    <div id="3" data-options="iconCls:'icon-service'">维护</div>   
+	    <div id="4" data-options="iconCls:'icon-reset'">复位</div>   
+	    <div  class="menu-sep"></div>   
+	    <!-- <div id="5">偏航</div>  -->
+	</div>  
+	
+	<div id="window" class="easyui-window"  title="偏航控制" style="width:600px;height:400px"
+		 data-options="modal:true" closed="true" >
+	
+	</div>
+	
+	<form id="form" action="" method="post" style="display: none;">
+		<input type="text" name="fun.id" value="" />
+		<input type="text" name="fun.name" value="" />
+		<input type="text" name="fun.address" value="" />
+		<input type="hidden" name="fun.windFarm.id" value="1" />
+	</form>
+	
+</body>
+
 	<script type="text/javascript">
 		$(function(){
-			$('#datagrid').datagrid({
-				columns:[[    
-				          { field:'fun',
-				        	title:'风机名称',
-				        	width:150,
-				        	formatter:function(value,row,index){
-				        		return value.name;
-				        		}
-				          },    
-				          {	field:'___main_loop_mode_number',
-				        	title:'风机模式',
-				        	width:150,
-				        	formatter:function(value,row,index){
-					        		switch(value){
-					        		case 0:
-					        			return '初始化';
-					        		case 1:
-					        			return '停机';
-					        		case 2:
-					        			return '待机';
-					        		case 3:
-					        			return '启动';
-					        		case 4:
-					        			return '运行';
-					        		case 5:
-					        			return '并网';
-					        		case 9:
-					        			return '维护';
-					        		case 10:
-					        			return '通信断开';
-					        		default:
-					        			return '未知状态';
-				        			}
-				        		},
-			        		styler: function(value,row,index){
-			        			switch (value){
-			        			case 1:
-			        				return 'background-color:#FF0000;';
-			        			case 2:
-			        				return 'background-color:#FFCC00;';
-			        			case 3:
-			        				return 'background-color:#66FF00;';
-			        			case 4:
-			        				return 'background-color:#66FF00;';
-			        			case 5:
-			        				return 'background-color:#66FF00;';
-			        			case 9:
-			        				return 'background-color:#9900FF;';
-			        			case 10:
-			    					return 'background-color:#0066FF;';
-			        			default:
-			        				return 'background-color:#FFFFFF;';
-			    				}
-			    			}
-
-				        	},    
-				          {field:'dateTime',title:'时间',width:240,
-				        		formatter:function(value,row,index){value=value.replace('T',' '); var date=new Date(value); return date.toLocaleString();}},    
-				          {field:'___wind_speed',title:'风速',width:150,
-				        	  formatter:function(value,row,index){return Math.round(value*100)/100;}},    
-				          {field:'_MAIN__BOOLTEST1',title:'booltest1',width:150},    
-				          {field:'_MAIN__SINGLETEST1',title:'singleTest1',width:150},    
-				          {field:'_MAIN__DOUBLETEST1',title:'doubleTest1',width:150},    
-				          {field:'_MAIN__LONGTEST1',title:'longTest1',width:150},       
-				          {field:'power',title:'功率',width:150},    
-				          {field:'error',title:'故障',width:150},    
-				          {field:'warning',title:'警告',width:150},    
-				          {field:'windDirection',title:'风向',width:150},    
-				          {field:'dayOutput',title:'日发电量',width:150},    
-				          {field:'output',title:'总发电量',width:150},    
-				      ]],
-				 onRowContextMenu: function(e, index, row){
-					 e.preventDefault();
-					 
-					 if(index==-1){
-						 return;
-					 }
-					 $(this).datagrid('unselectAll');
-					 $(this).datagrid('selectRow',index);
-					 $('#menu').menu('show',{left:e.pageX,top:e.pageY});
-				 }
-		 
-			});
+			$(window).resize(function(){
+  				
+				});
+	
+			$.post('SHARPOWER_SCADA/ajaxMainInfo',{},function(data){
+				for(var i in data){
+					$('.fun:last').clone(true).appendTo('.funs');
+					
+				}
+				
+			},'json');
 			
+			//$('.fun:first').remove();
+				
 			$('#menu').menu({
 				onClick:function(item){
 					var selectRow = $('#datagrid').datagrid('getSelected');
@@ -112,45 +79,73 @@
 					switch(item.id){
 					case '1':
 						if(selectRow!=null){
-							$.post("SHARPOWER_SCADA/ajaxFunControlRun",
-									{addr : selectRow.fun.address},
-									function(data){
-										$.messager.show({msg:data});
-									},
-									"json");
+							$('#form').form('load',{
+								'fun.id': selectRow.fun.id,
+								'fun.name' : selectRow.fun.name,
+								'fun.address': selectRow.fun.address
+							});
+							
+							$('#form').form('submit', {
+								url:'SHARPOWER_SCADA/ajaxFunControlRun',
+								success: function(info){
+									info = eval("("+info+")");
+									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
+								}
+							});
 						}
 						
 						break;
 					case '2':
 						if(selectRow!=null){
-							$.post("SHARPOWER_SCADA/ajaxFunControlStop",
-									{addr : selectRow.fun.address},
-									function(data){
-										$.messager.show({msg:data});
-									},
-									"json");
+							$('#form').form('load',{
+								'fun.id': selectRow.fun.id,
+								'fun.name' : selectRow.fun.name,
+								'fun.address': selectRow.fun.address
+							});
+							
+							$('#form').form('submit', {
+								url:'SHARPOWER_SCADA/ajaxFunControlStop',
+								success: function(info){
+									info = eval("("+info+")");
+									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
+								}
+							});
 						}
 						
 						break;
 					case '3':
 						if(selectRow!=null){
-							$.post("SHARPOWER_SCADA/ajaxFunControlService",
-									{addr : selectRow.fun.address},
-									function(data){
-										$.messager.show({msg:data});
-									},
-									"json");
+							$('#form').form('load',{
+								'fun.id': selectRow.fun.id,
+								'fun.name' : selectRow.fun.name,
+								'fun.address': selectRow.fun.address
+							});
+							
+							$('#form').form('submit', {
+								url:'SHARPOWER_SCADA/ajaxFunControlService',
+								success: function(info){
+									info = eval("("+info+")");
+									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
+								}
+							});
 						}
 						
 						break;
 					case '4':
 						if(selectRow!=null){
-							$.post("SHARPOWER_SCADA/ajaxFunControlReset",
-									{addr : selectRow.fun.address},
-									function(data){
-										$.messager.show({msg:data});
-									},
-									"json");
+							$('#form').form('load',{
+								'fun.id': selectRow.fun.id,
+								'fun.name' : selectRow.fun.name,
+								'fun.address': selectRow.fun.address
+							});
+							
+							$('#form').form('submit', {
+								url:'SHARPOWER_SCADA/ajaxFunControlReset',
+								success: function(info){
+									info = eval("("+info+")");
+									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
+								}
+							});
 						}
 						
 						break;						
@@ -167,26 +162,4 @@
 			);
 		})
 	</script>
-</head>
-<body>
-	<table id="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxMainInfo"
-		idField="id" singleSelect="true" fit="true" striped="true" rownumbers="true" fitColumns="true" loadMsg="">
-	</table>
-	
-	<div id="menu" class="easyui-menu" style="width:120px;" hideOnUnhover="false">   
-	    <div id="1" data-options="iconCls:'icon-start'">启动</div>   
-	    <div id="2" data-options="iconCls:'icon-stop'">停机</div>   
-	    <div id="3" data-options="iconCls:'icon-service'">维护</div>   
-	    <div id="4" data-options="iconCls:'icon-reset'">复位</div>   
-	    <div  class="menu-sep"></div>   
-	    <!-- <div id="5">偏航</div>  -->
-	</div>  
-	
-	<div id="window" class="easyui-window"  title="偏航控制" style="width:600px;height:400px"
-		 data-options="modal:true" closed="true" >
-	
-	</div>
-
-	
-</body>
 </html>

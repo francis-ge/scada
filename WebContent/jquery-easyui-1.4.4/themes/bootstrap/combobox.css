@@ -15,10 +15,10 @@
   font-weight: bold;
 }
 .combobox-item-hover {
-  background-color: #e6e6e6;
-  color: #00438a;
+  background-color: #eaf2ff;
+  color: #000000;
 }
 .combobox-item-selected {
-  background-color: #0081c2;
-  color: #fff;
+  background-color: #ffe48d;
+  color: #000000;
 }

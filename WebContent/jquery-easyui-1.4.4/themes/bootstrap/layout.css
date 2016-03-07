@@ -111,23 +111,23 @@
 }
 .layout-split-proxy-h,
 .layout-split-proxy-v {
-  background-color: #bbb;
+  background-color: #aac5e7;
 }
 .layout-split-north {
-  border-bottom: 5px solid #eee;
+  border-bottom: 5px solid #E6EEF8;
 }
 .layout-split-south {
-  border-top: 5px solid #eee;
+  border-top: 5px solid #E6EEF8;
 }
 .layout-split-east {
-  border-left: 5px solid #eee;
+  border-left: 5px solid #E6EEF8;
 }
 .layout-split-west {
-  border-right: 5px solid #eee;
+  border-right: 5px solid #E6EEF8;
 }
 .layout-expand {
-  background-color: #F2F2F2;
+  background-color: #E0ECFF;
 }
 .layout-expand-over {
-  background-color: #F2F2F2;
+  background-color: #E0ECFF;
 }

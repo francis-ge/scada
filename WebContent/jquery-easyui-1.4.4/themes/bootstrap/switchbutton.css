@@ -32,12 +32,12 @@
   border-radius: 5px 5px 5px 5px;
 }
 .switchbutton-on {
-  background: #0081c2;
-  color: #fff;
+  background: #ffe48d;
+  color: #000000;
 }
 .switchbutton-off {
   background-color: #ffffff;
-  color: #333;
+  color: #000000;
 }
 .switchbutton-on,
 .switchbutton-reversed .switchbutton-off {
@@ -56,7 +56,7 @@
   top: 0;
   left: 50%;
   background-color: #ffffff;
-  color: #333;
+  color: #000000;
   border: 1px solid #bbb;
   -moz-box-shadow: 0 0 3px 0 #bbb;
   -webkit-box-shadow: 0 0 3px 0 #bbb;
