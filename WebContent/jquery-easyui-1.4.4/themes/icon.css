@@ -109,3 +109,28 @@
 .icon-download{
 	background:url('icons/download.png') no-repeat center center;
 }
+
+.fun_init{
+	background:url('icons/fun_gray.png') no-repeat center center;
+}
+.fun_standby{
+	background:url('icons/fun_yellow.png') no-repeat center center;
+}
+.fun_stop{
+	background:url('icons/fun_red.png') no-repeat center center;
+}
+.fun_run{
+	background:url('icons/fun_green.png') no-repeat center center;
+}
+.fun_communicationFailure{
+	background:url('icons/fun_blue.png') no-repeat center center;
+}
+.fun_service{
+	background:url('icons/fun_purple.png') no-repeat center center;
+}
+.fun_yepian{
+	background:url('icons/fun_yepian.png') no-repeat center center;
+}
+.fun_tatong{
+	background:url('icons/fun_tatong.png') no-repeat center center;
+}

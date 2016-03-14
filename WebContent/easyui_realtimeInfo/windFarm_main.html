@@ -8,7 +8,6 @@
 	<!-- easyUI -->
 	<link href="../jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
 	<link href="../jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
-    <link href="../js/css/bootstrap.min.css" rel="stylesheet">
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
 	<script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
@@ -17,34 +16,52 @@
 	<script src="../jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
 	<script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
 	
+	<!-- velocity js动画框架 -->
+	<script src="../js/velocity.min.js" charset="utf-8"></script>
+	<script src="../js/velocity.ui.min.js" charset="utf-8"></script>
+	
+	<script src="fun.js" charset="utf-8"></script>
+	
 	<style type="text/css">
-		* {margin: 0; border: 0; padding: 0;}
+		* {margin: 0; border: 0}
 		.fun{
 			background-color:#85B9FF;
-			height:120px;
-			width:100px;
 			position:relative;
 			display:inline-block;
+		}
+		
+		.funData{
+			background-color:#0000FF;
+			position:relative;
+			display:inline-block;
+			height:50px;
+			width:50px;
+			/*transform-origin: 100% 100%;*/
+		}
+		
+		img{
+			height:100%;
+			width:100%;
+			position:absolute;
 		}
 	</style>
 
 </head>
-<body>
-	<div class="funs">    </div>
-    <div class="fun" >1234567890</div>
+<body style="overflow: hidden" >
+	<div id='funData' class="funData">
+    </div>
     
 	<div id="menu" class="easyui-menu" style="width:120px;" hideOnUnhover="false">   
 	    <div id="1" data-options="iconCls:'icon-start'">启动</div>   
 	    <div id="2" data-options="iconCls:'icon-stop'">停机</div>   
 	    <div id="3" data-options="iconCls:'icon-service'">维护</div>   
 	    <div id="4" data-options="iconCls:'icon-reset'">复位</div>   
-	    <div  class="menu-sep"></div>   
+	    <div class="menu-sep"></div>   
 	    <!-- <div id="5">偏航</div>  -->
 	</div>  
 	
 	<div id="window" class="easyui-window"  title="偏航控制" style="width:600px;height:400px"
 		 data-options="modal:true" closed="true" >
-	
 	</div>
 	
 	<form id="form" action="" method="post" style="display: none;">
@@ -53,25 +70,56 @@
 		<input type="text" name="fun.address" value="" />
 		<input type="hidden" name="fun.windFarm.id" value="1" />
 	</form>
-	
-</body>
 
 	<script type="text/javascript">
 		$(function(){
-			$(window).resize(function(){
-  				
-				});
-	
-			$.post('SHARPOWER_SCADA/ajaxMainInfo',{},function(data){
-				for(var i in data){
-					$('.fun:last').clone(true).appendTo('.funs');
+			//$('.dspBox').velocity({rotateZ:'360deg'},{ duration:5000,loop:true,easing:'linear'});
+	$('#funData').funData();
+/* 			$(window).resize(function(){
+				$.post('SHARPOWER_SCADA/ajaxMainInfo',{},function(data){
 					
+					setDspBoxHW(data);
+					
+				},'json');
+			})
+
+			$.post('SHARPOWER_SCADA/ajaxMainInfo',{},function(data){
+				
+				for(var i in data){
+					$('.funs').append("<div class='dspBox easyui-panel' title='My Panel'>"+
+										"<div id='fun1' class='fun' >" +
+											"<img id='yepian1' class='yepian' src='../pic/yepian.png' alt=''>"+
+											"<img id='tatong1' class='tatong' src='../pic/tatong.png' alt=''>" + 
+										"</div>")+
+										"<div id='dataBox1' class='dataBox'>"+
+										"</div>" +
+									  "</div>";
+					$('.fun:last').attr('id','fun' + data[i].id);
+					$('.yepian:last').attr('id','yepian' + data[i].id);
+					$('.tatong:last').attr('id','tatong' + data[i].id);
+					
+					$('#yepian' + data[i].id).velocity({rotateZ:'360deg'},{ duration:5000,loop:true,easing:'linear'});
 				}
+				
+				setDspBoxHW(data);
 				
 			},'json');
 			
-			//$('.fun:first').remove();
+			function setDspBoxHW(data){
+				var funCount = 3;
+				var height = $(window).height();
+				var width = $(window).width();
+				var funArea = (height*width/funCount)*0.5;
 				
+				var funHeight = Math.sqrt(funArea/3);
+				
+				$('.dspBox').height(funHeight);
+				$('.dspBox').width(funHeight*3);
+				$('.fun').height(funHeight);
+				$('.fun').width(funHeight);
+				
+			}
+ */			
 			$('#menu').menu({
 				onClick:function(item){
 					var selectRow = $('#datagrid').datagrid('getSelected');
@@ -162,4 +210,7 @@
 			);
 		})
 	</script>
+	
+</body>
+
 </html>
