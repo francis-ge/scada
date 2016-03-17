@@ -1,46 +1,72 @@
 (function($) {
     var privateFunction = function() {
-        
+	
 // 执行代码
     }
  
     var methods = {
         init: function(options) {
- 
             
         	// 在每个元素上执行方法
             return this.each(function() {
                 var $this = $(this);
+                $this.attr({style:'display:inline-block;height:100px;width:200px'});
                 
-                $this.append('<div class=fun style=background-color:#00FF00,position:relative,display:inline-block,height:50px,width:50px>' +
-                				'<img class=yepian src= style=height:100%,width:100%,position:absolute>' +
-                				'<img class=tatong >' +
-                			'</div>');
+                $this.append( "<div class='fun' data-options=region:'west',border:false>"+
+                				  "<img class='' src='../pic/fun_gray.png' style='height:100%;width:100%' />"+
+                				  "<img style='height:100%;width:100%;position:absolute;' />"+ 
+                				  "<img style='height:100%;width:100%;position:absolute;' />"+
+    						  "</div>"+
+    						  "<div class='data1' data-options=region:'center',border:false style='overflow:hidden;'>"+
+					    		  "<ul class='datalist1 easyui-datalist' data-options='fit:true,scrollbarSize:0' >"+
+					    		  	" <li valueField='aaa' textField='bbb' value='AL'>Alabama</li>"+
+					    		  "</ul>"+
+    						  "</div>"
+    		);
+                $('.fun',$this).width($this.height());
+                $('.datalist1',$this).datalist();
+                $('.datagird-row div',$this).css('font-size','5px');
+                
+                //$('.datalist1',$this).datalist({rowStyler:function(){ return 'font-size:50px'}});
+                
+                $this.layout();
+                
+                //$('.datalist1',$this).datalist('appendRow',{value:'fds',text:'asd'});
+                
                 // 尝试去获取settings，如果不存在，则返回“undefined”
-                var settings = $this.data('funData');
+                var settings = $this.data('fundata');
  
                 
                 // 如果获取settings失败，则根据options和default创建它
                 if(typeof(settings) == 'undefined') {
  
                     var defaults = {
-                    	funName:'机组',
+                    	funName:'#机组',
                         funMode: 0.00,
                         windSpeed: 0.00,
                         power: 0.00,
-                        worning: false,
-                        error: false,
                         energy: 0.00,
                         energyCounter: 0.00,
+                        worning: false,
+                        error: false,
+                        url:'',
                         
                         onSomeEvent: function(){}
                     }
- 
+                    
+                    $('.datalist1',$this).datalist('loadData',[{value:'',text:defaults.funName},
+                                                               {value:'',text:defaults.funMode},
+                                                               {value:'',text:"风速："+defaults.windSpeed},
+                                                               {value:'',text:"有功功率："+defaults.power},
+                                                               {value:'',text:"日发电量："+defaults.energy},
+                                                               {value:'',text:"总发电量："+defaults.energyCounter}]);
+
                     settings = $.extend({}, defaults, options);
  
-                    
                     // 保存我们新创建的settings
-                    $this.data('funData', settings);
+                    $this.data('fundata', settings);
+                    
+                    
                 } else {
                     //如果我们获取了settings，则将它和options进行合并（这不是必须的，你可以选择不这样做）
                     settings = $.extend({}, settings, options);
@@ -48,7 +74,7 @@
                     
                     // 如果你想每次都保存options，可以添加下面代码：
                     
-                    // $this.data('funData', settings);
+                    // $this.data('fundata', settings);
                 }
  
                 
@@ -69,7 +95,7 @@
  
                 
                 // 删除元素对应的数据
-                $this.removeData('funData');
+                $this.removeData('fundata');
             });
         },
         
@@ -85,7 +111,7 @@
         }
     };
  
-    $.fn.funData = function() {
+    $.fn.fundata = function() {
         var method = arguments[0];
  
         if(methods[method]) {
