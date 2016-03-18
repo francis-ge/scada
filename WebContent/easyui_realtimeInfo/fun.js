@@ -18,16 +18,18 @@
                 				  "<img style='height:100%;width:100%;position:absolute;' />"+
     						  "</div>"+
     						  "<div class='data1' data-options=region:'center',border:false style='overflow:hidden;'>"+
-					    		  "<ul class='datalist1 easyui-datalist' data-options='fit:true,scrollbarSize:0' >"+
-					    		  	" <li valueField='aaa' textField='bbb' value='AL'>Alabama</li>"+
-					    		  "</ul>"+
+    						  		"<table class='table-3'>"+
+                						"<tr> <td class='ft8'><em>1</em></td><td></td> </tr>"+
+                						"<tr> <td class='ft8'><em>2</em></td><td></td> </tr>"+
+                						"<tr> <td class='ft8'><em>3</em></td><td></td> </tr>"+
+                						"<tr> <td class='ft8'><em>4</em></td><td></td> </tr>"+
+                						"<tr> <td class='ft8'><em>5</em></td><td></td> </tr>"+
+                						"<tr> <td class='ft8'><em>6</em></td><td></td> </tr>"+
+                				 	"</table>"+
     						  "</div>"
     		);
                 $('.fun',$this).width($this.height());
-                $('.datalist1',$this).datalist();
-                $('.datagird-row div',$this).css('font-size','5px');
-                
-                //$('.datalist1',$this).datalist({rowStyler:function(){ return 'font-size:50px'}});
+
                 
                 $this.layout();
                 
