@@ -275,7 +275,7 @@
 	<bean id="windFarmDataReadTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
         <property name="jobDetail" ref="windFarmDataRead"></property>
         <property name="repeatInterval">
-            <value>100000</value>
+            <value>1000</value>
         </property>
         <property name="startDelay">
             <value>3000</value>

@@ -11,67 +11,14 @@
 	
 	<style type="text/css">
 		* {margin: 0; border: 0;}
-		
-		/* Border styles */
-		.table-3 thead, .table-3 tr {
-		border-top-width: 1px;
-		border-top-style: solid;
-		border-top-color: rgb(235, 242, 224);
-		height:12px;
-		}
-		.table-3 {
-		border-bottom-width: 1px;
-		border-bottom-style: solid;
-		border-bottom-color: rgb(235, 242, 224);
-		}
-		
-		/* Padding and font style */
-		.table-3 td, .table-3 th {
-		padding: 5px 10px;
-		font-size: 8px;
-		font-family: Verdana;
-		color: rgb(149, 170, 109);
-		
-		}
-		
-		/* Alternating background colors */
-		.table-3 tr:nth-child(even) {
-		background: rgb(230, 238, 214)
-		}
-		.table-3 tr:nth-child(odd) {
-		background: #FFF
-		}
-		
-		.ft8 em {
-			display: inline-block;
-			width: 10px;
-			height: 10px;
-			-webkit-transform: scale(0.5,0.5);
-		}
-		
 	</style>
 
 </head>
 <body style="overflow: hidden" >
-<!-- 
-	<div id='dspBox1' class='dspBox easyui-layout' title='My Panel' style="height:150px;width:300px;">
-		<div id='fun1' class='fun' data-options="region:'west'" style="height:150px;width:150px">
-			<img id='yepian1' class='yepian' src='../pic/yepian.png' alt='' >
-			<img id='tatong1' class='tatong' src='../pic/tatong.png' alt='' > 
-		</div>
-		<div data-options="region:'center'" style="overflow:hidden;height:150px;width:150px">
-			<ul id='dataBox' class='dataBox easyui-datalist' style="height:150px;width:150px" data-options="scrollbarSize:0">
-				<li value='AL'>Alabama</li> 
-				<li value='AK'>Alaska</li>
-				<li value='AZ'>Arizona</li>
-			</ul>
-		</div>
-	</div>
-	 -->
-	 <div id="funData" class='fundata'></div>
-	 	 <div id="funData1" class='fundata'></div>
 	<div id='funs' >
     </div>
+    
+    
     
 	<div id="menu" class="easyui-menu" style="width:120px;" hideOnUnhover="false">   
 	    <div id="1" data-options="iconCls:'icon-start'">启动</div>   
@@ -104,26 +51,40 @@
 	<!-- velocity js动画框架 -->
 	<script src="../js/velocity.min.js" charset="utf-8"></script>
 	<script src="../js/velocity.ui.min.js" charset="utf-8"></script>
-	<!--  --> 
-	<script src="fun.js" charset="utf-8"></script>
+	<!--   
+	-->
+	<script src="jquery.easyui.extend.fundata.js" charset="utf-8"></script>
 	
 	<script type="text/javascript">
 		$(function(){
-			//$('.dspBox').velocity({rotateZ:'360deg'},{ duration:5000,loop:true,easing:'linear'});
-			$('.fundata').fundata();
-			$(window).resize(function(){
-				$.post('SHARPOWER_SCADA/ajaxMainInfo',{},function(data){
-					
-				},'json');
-			})
-
 			$.post('SHARPOWER_SCADA/ajaxMainInfo',{},function(data){
 
 				for(var i in data){
-					
+					$('#funs').append("<div class='easyui-fundata'></div>")
 				}
+				
+			$('.easyui-fundata').fundata(data);
+			$('.easyui-fundata').fundata('resize',data);
+			
 			},'json');
- 		
+			
+			setInterval(function(){
+		    	
+				$.post('SHARPOWER_SCADA/ajaxMainInfo',{},function(data){
+	
+					$('.easyui-fundata').fundata('refresh',data);
+					
+				},'json');
+			},1000);
+			
+			$(window).resize(function(){
+				$.post('SHARPOWER_SCADA/ajaxMainInfo',{},function(data){
+					
+					$('.easyui-fundata').fundata('resize',data);
+					
+				},'json');
+			})
+			
 			$('#menu').menu({
 				onClick:function(item){
 					var selectRow = $('#datagrid').datagrid('getSelected');
@@ -208,10 +169,6 @@
 				}
 			})
 			
-			setInterval(function(){
-		    	$('#datagrid').datagrid('load')}, 
-		    	1000
-			);
 		})
 	</script>
 	
