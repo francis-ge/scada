@@ -6,7 +6,7 @@ public class Fun {
 	private Integer id;
 	private String name;
 	// PLC类型beckhoff
-	private String type;
+	private PlcType plcType;
 	private String address;
 	private String line;
 	private WindFarm windFarm;
@@ -27,12 +27,12 @@ public class Fun {
 		this.name = name;
 	}
 
-	public String getType() {
-		return type;
+	public PlcType getPlcType() {
+		return plcType;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setPlcType(PlcType plcType) {
+		this.plcType = plcType;
 	}
 
 	public String getAddress() {
@@ -60,11 +60,11 @@ public class Fun {
 		this.windFarm = windFarm;
 	}
 	
-	public Fun(int id, String name, String type, String address, String line) {
+	public Fun(int id, String name, PlcType type, String address, String line) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.type = type;
+		this.plcType = type;
 		this.address = address;
 		this.line = line;
 	}

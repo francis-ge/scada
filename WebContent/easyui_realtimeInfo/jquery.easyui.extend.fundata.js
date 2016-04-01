@@ -10,19 +10,17 @@
         				  "<img class='error'  src='../pic/fun_null.png' style='height:100%;width:100%;position:absolute;left:0;top:0' />"+
 					  "</div>"+
 					  "<div class='data1' data-options=region:'center',border:false style='overflow:hidden;'>"+
-					  	"<p class='funName' style='font-family: Verdana;'>111</p>"+
-					  	"<p class='funMode' style='font-family: Verdana;background: rgb(230, 238, 214)'>222</p>"+
-					  	"<p class='windSpeed' style='font-family: Verdana;'>333</p>"+
-					  	"<p class='power' style='font-family: Verdana;background: rgb(230, 238, 214)'>444</p>"+
-					  	"<p class='energy'style='font-family: Verdana;'>1113</p>"+
-					  	"<p class='energyCounter' style='font-family: Verdana;background: rgb(230, 238, 214)'>222</p>"+
+					  	"<p class='funName' style='font-family: Verdana;'></p>"+
+					  	"<p class='funMode' style='font-family: Verdana;background: rgb(230, 238, 214)'></p>"+
+					  	"<p class='windSpeed' style='font-family: Verdana;'></p>"+
+					  	"<p class='power' style='font-family: Verdana;background: rgb(230, 238, 214)'></p>"+
+					  	"<p class='energy'style='font-family: Verdana;'></p>"+
+					  	"<p class='energyCounter' style='font-family: Verdana;background: rgb(230, 238, 214)'></p>"+
 					  "</div>"
 	);
         $('.fun',$this).width($this.height());
         
         $this.layout();
-        
-        $this.fundata('resize');
         
         // 尝试去获取settings，如果不存在，则返回“undefined”
         var settings = $this.data('fundata');
@@ -33,6 +31,7 @@
             var defaults = {
             	funName:'#机组',
             	___main_loop_mode_number: 0,
+            	funModeTest:'初始化',
                 windSpeed: 0.00,
                 power: 0.00,
                 energy: 0.00,
@@ -55,11 +54,9 @@
             // 保存新创建的settings
             $this.data('fundata', defaults);
             
-            
         } else {
             //如果获取了settings，则将它和options进行合并（这不是必须的，你可以选择不这样做）
             settings = $.extend({}, settings, thisOptions);
-
             
             // 如果你想每次都保存options，可以添加下面代码：
             
@@ -101,7 +98,7 @@
 			var width = $(window).width();
 			var funArea = (height*width/funCount)*0.6;
 			var funHeight = (Math.sqrt(10000-(-4*funArea))-100)/2;//求解四边形边长的一元二次方程
-			
+
 			return jq.each(function(){
 				   var $this = $(this);
 				   $this.height(funHeight).width(funHeight+100);
@@ -131,19 +128,24 @@
 	            		$('.yepian',$this).attr('src','../pic/fun_null.png');
 	            		$('.error',$this).attr('src','../pic/fun_null.png');
 	            		
-	            		$('.yepian',$this).velocity('stop');
+	            		$('.yepian',$this).velocity('finish');
+	            		
+	            		settings.funModeTest='初始化';
 	            		break;
 	            	case 1:
 	            		$('.fun1',$this).attr('src','../pic/fun_red.png');
 	            		$('.yepian',$this).attr('src','../pic/fun_null.png');
 	            		$('.error',$this).attr('src','../pic/fun_null.png');
-	            		$('.yepian',$this).velocity('stop');
+	            		$('.yepian',$this).velocity('finish');
+	            		
+	            		settings.funModeTest='故障';
 	            		break;
 	            	case 2:
 	            		$('.fun1',$this).attr('src','../pic/fun_yellow.png');
 	            		$('.yepian',$this).attr('src','../pic/fun_null.png');
 	            		$('.error',$this).attr('src','../pic/fun_null.png');
-	            		$('.yepian',$this).velocity('stop');
+	            		$('.yepian',$this).velocity('finish');
+	            		settings.funModeTest='待机';
 	            		break;
 	            	case 3:
 	            	case 4:
@@ -151,32 +153,36 @@
 	            		$('.fun1',$this).attr('src','../pic/tatong.png');
 	            		$('.yepian',$this).attr('src','../pic/yepian.png');
 	            		$('.error',$this).attr('src','../pic/fun_null.png');
+	            		$('.yepian',$this).velocity('finish');
 	        			$('.yepian',$this).velocity({rotateZ:'360deg'},{ duration:5000,loop:true,easing:'linear'});
+	        			settings.funModeTest='运行';
 	            		break;
 	            	case 9:
 	            		$('.fun1',$this).attr('src','../pic/fun_purple.png');
 	            		$('.yepian',$this).attr('src','../pic/fun_null.png');
 	            		$('.error',$this).attr('src','../pic/fun_null.png');
-	            		$('.yepian',$this).velocity('stop');
+	            		$('.yepian',$this).velocity('finish');
+	            		settings.funModeTest='维护';
 	            		break;
 	            	case 10:
 	            		$('.fun1',$this).attr('src','../pic/fun_blue.png');
 	            		$('.yepian',$this).attr('src','../pic/fun_null.png');
 	            		$('.error',$this).attr('src','../pic/fun_null.png');
-	            		$('.yepian',$this).velocity('stop');
+	            		$('.yepian',$this).velocity('finish');
+	            		settings.funModeTest='通信故障';
 	            		break;
 	            	}
 	            }
 	            
 	            $('.funName',$this).text(thisOptions.fun.name);
-	            $('.funMode',$this).text('风机模式：' + thisOptions.___main_loop_mode_number);
+	            $('.funMode',$this).text('风机模式：' + settings.funModeTest);
 	            
 	            if(thisOptions.___wind_speed!=undefined){
 	            	
-	            	$('.windSpeed',$this).text('风速：    ' + thisOptions.___wind_speed);
-	            	$('.power',$this).text('有功功率：' + thisOptions.___visu_grid_power);
-	            	$('.energy',$this).text('日发电量：' + thisOptions.___visu_grid_energy);
-	            	$('.energyCounter',$this).text('总发电量：' + thisOptions.___visu_grid_energy_counter);
+	            	$('.windSpeed',$this).text('风速：    ' + Math.round(thisOptions.___wind_speed*100)/100 );
+	            	$('.power',$this).text('有功功率：' + Math.round(thisOptions.___visu_grid_power*100)/100 );
+	            	$('.energy',$this).text('日发电量：' + Math.round(thisOptions.___visu_grid_energy) );
+	            	$('.energyCounter',$this).text('总发电量：' + Math.round(thisOptions.___visu_grid_energy_counter) );
 	            }
 	            
 	            settings = $.extend({}, settings, thisOptions);

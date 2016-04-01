@@ -105,6 +105,8 @@
     <bean id="funDataReadWriteBeckhoffService" 
 		class="com.sharpower.beckhoff.FunDataReadWriteBeckhoffService">
     	<property name="variableTypeService" ref="variableTypeService"></property>
+    	<property name="plcTypeService" ref="plcTypeService"></property>
+    	<property name="variableService" ref="variableService"></property>
     </bean>
     
     <bean id="recodeService" 
@@ -129,7 +131,7 @@
     
     <bean id="funTroubleBeckhoffService"
     	class="com.sharpower.beckhoff.FunTroubleBeckhoffService" >
-    	<constructor-arg ref="funTroubleVariableService"></constructor-arg>
+    	<property name="plcTypeService" ref="plcTypeService"></property>
     </bean>
     
     <bean id="reportDayRecodeService"
@@ -165,6 +167,12 @@
 		<property name="variableTypeService" ref="variableTypeService"></property>
 	</bean>
 	
+	<bean id="ajaxPlcTypeAction"
+		class="com.sharpower.action.AjaxPlcTypeAction"
+		scope="prototype">
+		<property name="plcTypeService" ref="plcTypeService"></property>
+	</bean>
+	
 	<bean id="ajaxVariableAction" 
 		class="com.sharpower.action.AjaxVariableAction"
 		scope="prototype">
@@ -176,7 +184,7 @@
 		scope="prototype">
 		<property name="recodeService" ref="recodeService"></property>
 		<property name="variableService" ref="variableService"></property>
-		<property name="windFarmDataQuartz" ref="windFarmData"></property>
+		<property name="plcTypeDataQuartz" ref="data"></property>
 	</bean>
 	
 	<bean id="ajaxFunTroubleVariableAction" 
@@ -228,13 +236,13 @@
 			expression="execution(* com.sharpower.service.impl.*.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="myPointcut" />
 	</aop:config>
-	
-    <bean id="windFarmData" class="com.sharpower.quartzs.WindFarmDataQuartz">
-    	<property name="windFarmService" ref="windFarmService"></property>
+
+    <bean id="data" class="com.sharpower.quartzs.DataQuartz">
     	<property name="funDataReadWriteBeckhoffService" ref="funDataReadWriteBeckhoffService"></property>
-    	<property name="recodeService" ref="recodeService"></property>
+    	<property name="plcTypeService" ref="plcTypeService"></property>
     	<property name="funTroubleBeckhoffService" ref="funTroubleBeckhoffService"></property>
     	<property name="funTroubleRecodeService" ref="funTroubleRecodeService"></property>
+    	<property name="recodeService" ref="recodeService"></property>
     	<property name="params" >
     		<map>
     			<entry key="windSpeedParam" value="0" value-type="float" />
@@ -242,48 +250,48 @@
     		</map>
     	</property>
     </bean>
-    
-    <bean id="windFarmReportDayQuartz" class="com.sharpower.quartzs.WindFarmReportDayQuartz">
+     
+    <bean id="reportDayQuartz" class="com.sharpower.quartzs.ReportDayQuartz">
     	<property name="recodeService" ref="recodeService"></property>
     	<property name="reportDayRecodeService" ref="reportDayRecodeService"></property>
     </bean>
-    
-	<!-- 风机数据读取的任务调度 -->
-    <bean id="windFarmDataRead" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-       <property name="targetObject" ref="windFarmData"></property>
+    	
+	<!-- 按照PLC类型读取风机数据的任务调度 -->
+    <bean id="dataRead" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+       <property name="targetObject" ref="data"></property>
        <property name="targetMethod" value="readData"></property>
 	</bean>
 	
 	<!-- 风机数据存储的任务调度 -->
-	<bean id="windFarmDataSave" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="windFarmData"></property>
+	<bean id="dataSave" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="data"></property>
 		<property name="targetMethod" value="saveData"></property>
 	</bean>
 	
-	<!-- 风机故障记录的任务调度 -->
-	<bean id="windFarmTroubleSave" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="windFarmData"></property>
+	<!-- 风机故障记录的任务调度 	-->
+	<bean id="troubleSave" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="data"></property>
 		<property name="targetMethod" value="checkTrouble"></property>
 	</bean>
 	
 	<!-- 风场日报表统计任务调度 -->
-	<bean id="windFarmReportDayStatistic" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="windFarmReportDayQuartz"></property>
+	<bean id="reportDayStatistic" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="reportDayQuartz"></property>
 		<property name="targetMethod" value="statistic"></property>
-	</bean>
-	
-	<bean id="windFarmDataReadTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
-        <property name="jobDetail" ref="windFarmDataRead"></property>
+	</bean>   
+    
+    <bean id="dataReadTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="dataRead"></property>
         <property name="repeatInterval">
             <value>1000</value>
         </property>
         <property name="startDelay">
-            <value>3000</value>
+            <value>1000</value>
         </property>
-    </bean>    
+    </bean> 
     
-    <bean id="windFarmDataSaveTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
-        <property name="jobDetail" ref="windFarmDataSave"></property>
+    <bean id="dataSaveTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="dataSave"></property>
         <property name="repeatInterval">
             <value>10000</value>
         </property>
@@ -292,8 +300,8 @@
         </property>
     </bean>  
 
-    <bean id="windFarmTroubleSaveTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
-        <property name="jobDetail" ref="windFarmTroubleSave"></property>
+    <bean id="troubleSaveTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="troubleSave"></property>
         <property name="repeatInterval">
             <value>3000</value>
         </property>
@@ -302,8 +310,8 @@
         </property>
     </bean>      
     
-   <bean id="ReportDayStatisticTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="windFarmReportDayStatistic"></property>
+   <bean id="reportDayStatisticTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="reportDayStatistic"></property>
         <property name="cronExpression">
         	  <!-- s m h d m w(?) y(?) -->  
             <value>20 58 15 * * ?</value>
@@ -314,12 +322,12 @@
     	<property name="triggers">
     	<list>   	
     	<!-- 
-    		<ref bean="windFarmDataSaveTrigger"/>
-    	 	<ref bean="windFarmTroubleSaveTrigger"/>
-    	 	    	-->
-			<ref bean="windFarmDataReadTrigger"/>
-    	  	<ref bean="ReportDayStatisticTrigger"/>
-
+    		<ref bean="dataSaveTrigger"/>
+    	 	<ref bean="troubleSaveTrigger"/>
+    	  	<ref bean="reportDayStatisticTrigger"/>
+    	 -->
+   			<ref bean="dataReadTrigger"/>
+		
     	</list>
     	</property>
     </bean>

@@ -11,7 +11,7 @@ import com.sharpower.entity.ReportDayRecode;
 import com.sharpower.service.RecodeService;
 import com.sharpower.service.ReportDayRecodeService;
 
-public class WindFarmReportDayQuartz {
+public class ReportDayQuartz {
 	private ReportDayRecodeService reportDayRecodeService;
 	private RecodeService recodeService;
 	

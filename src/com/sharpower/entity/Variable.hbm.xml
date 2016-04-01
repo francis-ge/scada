@@ -13,7 +13,7 @@
             <column name="NAME" />
         </property>
         
-        <property name="dbName" type="java.lang.String" unique="true">
+        <property name="dbName" type="java.lang.String" not-null="true">
             <column name="DBNAME" />
         </property>
         
@@ -21,8 +21,13 @@
         	<column name="SHOW_NAME_CN"></column>
         </property>
         
+		<many-to-one name="plcType" class="com.sharpower.entity.PlcType" fetch="join" lazy="false">
+            <column name="PLC_TYPE" />
+        </many-to-one>
+                
         <many-to-one name="type" class="com.sharpower.entity.VariableType" fetch="join" lazy="false">
             <column name="TYPE" />
         </many-to-one>
+        
     </class>
 </hibernate-mapping>

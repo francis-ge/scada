@@ -8,10 +8,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 import org.dom4j.Document;
@@ -31,7 +35,7 @@ public class AppDBInit {
 		
 		try {
 			properties.load(inputStream);
-			
+
 			String user = properties.getProperty("user");
 			String password = properties.getProperty("password");
 			String jdbcUrl = properties.getProperty("jdbcUrl");
@@ -108,15 +112,25 @@ public class AppDBInit {
 		dateElement.addAttribute("column", "DATE_TIME");
 		dateElement.addAttribute("type", "timestamp");
 		
+		List<String> dbNames = new ArrayList<>();
+		
 		while (resultSet.next()) {
 			String name = resultSet.getString(1);
 			String dbName = resultSet.getString(2);
+			
 			String variableType = resultSet.getString(3);
 			
-			Element propertyElement = classElement.addElement("property");
-			propertyElement.addAttribute("name", dbName);
-			propertyElement.addAttribute("column", dbName.toUpperCase());
-			propertyElement.addAttribute("type","java.lang."+variableType);			
+			if(dbNames.indexOf(dbName)<0){
+				
+				Element propertyElement = classElement.addElement("property");
+				propertyElement.addAttribute("name", dbName);
+				propertyElement.addAttribute("column", dbName);
+				propertyElement.addAttribute("type","java.lang."+variableType);			
+			}
+			
+					
+			dbNames.add(dbName);
+			
 		}
 		
 		resultSet.beforeFirst();
@@ -127,7 +141,7 @@ public class AppDBInit {
 		writer.write(document);
 		writer.close();
 		
-		fileCopy(getClass().getClassLoader().getResource(xmlPath).getPath(),  "D://myEclipseWorkspace//eclipseWorkspace//SHARPOWER_SCADA//src//"+xmlPath);
+		fileCopy(getClass().getClassLoader().getResource(xmlPath).getPath(), "D://myEclipseWorkspace//eclipseWorkspace//SHARPOWER_SCADA//src//"+xmlPath);
 	}
 	
 	public static void fileCopy(String readfile,String writeFile) {  

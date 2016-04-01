@@ -1,8 +1,6 @@
 package com.sharpower.quartzs;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -32,11 +30,11 @@ public class FunTroubleQuartz implements Runnable{
 	
 	public void readTrouble(){
 		try {
-			Map<FunTroubleVariable, Object> trouble = funTroubleBeckhoffService.readData(fun.getAddress());
+			Map<FunTroubleVariable, Object> trouble = funTroubleBeckhoffService.readDataAll(fun);
 			
 			for (Entry<FunTroubleVariable, Object> entry : trouble.entrySet()) {
 				String hql = "FROM FunTroubleRecode ftr WHERE ftr.fun.id=? AND ftr.id=(SELECT MAX(id) FROM FunTroubleRecode ftr1 WHERE ftr1.funTroubleVariable.id=?)"; 
-				FunTroubleRecode funTroubleRecode = (FunTroubleRecode) funTroubleRecodeService.uniqueResult(hql, fun.getId(),entry.getKey().getId());
+				FunTroubleRecode funTroubleRecode = (FunTroubleRecode)funTroubleRecodeService.uniqueResult(hql, fun.getId(),entry.getKey().getId());
 				
 				if (funTroubleRecode!=null) {
 					if ((Boolean)entry.getValue()) {

@@ -3,15 +3,13 @@ package com.sharpower.action;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.struts2.json.annotations.JSON;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.sharpower.entity.Fun;
-import com.sharpower.entity.Variable;
 import com.sharpower.entity.WindFarmRealTimeInfo;
-import com.sharpower.quartzs.WindFarmDataQuartz;
+import com.sharpower.quartzs.DataQuartz;
 import com.sharpower.service.RecodeService;
 import com.sharpower.service.VariableService;
 
@@ -22,7 +20,7 @@ public class AjaxRealTimeInfoAction extends ActionSupport{
 	private VariableService variableService;
 	private RecodeService recodeService;
 	
-	private WindFarmDataQuartz windFarmDataQuartz;
+	private DataQuartz plcTypeDataQuartz;
 	
 	private Fun fun;
 	private int funId;
@@ -30,7 +28,7 @@ public class AjaxRealTimeInfoAction extends ActionSupport{
 	private List<Map<String, Object>> realtimeInfo=new ArrayList<>();
 	
 	private List<WindFarmRealTimeInfo> windFarmRealTimeInfo= new ArrayList<>();
-
+	
 	@JSON(serialize=false)
 	public Fun getFun() {
 		return fun;
@@ -57,8 +55,8 @@ public class AjaxRealTimeInfoAction extends ActionSupport{
 		this.recodeService = recodeService;
 	}
 	
-	public void setWindFarmDataQuartz(WindFarmDataQuartz windFarmDataQuartz) {
-		this.windFarmDataQuartz = windFarmDataQuartz;
+	public void setPlcTypeDataQuartz(DataQuartz plcTypeDataQuartz) {
+		this.plcTypeDataQuartz = plcTypeDataQuartz;
 	}
 	
 	@JSON(serialize=false)
@@ -80,13 +78,13 @@ public class AjaxRealTimeInfoAction extends ActionSupport{
 	
 	public String mainInfo(){		
 
-		realtimeInfo.addAll(windFarmDataQuartz.getDataMap().values());
+		realtimeInfo.addAll(plcTypeDataQuartz.getDataMap().values());
 		
 		return SUCCESS;
 	}
 	
 	public String windFarmRealTimeInfo(){
-		Map<Integer, Map<String, Object>> dateMap = windFarmDataQuartz.getDataMap();
+		Map<Integer, Map<String, Object>> dateMap = plcTypeDataQuartz.getDataMap();
 		
 		int communicationFailureFunCount = 0;
 		int serviceFunCount = 0;
@@ -190,7 +188,7 @@ public class AjaxRealTimeInfoAction extends ActionSupport{
 			id= fun.getId();
 		}
 		
-		Map<String, Object> map = windFarmDataQuartz.getDataMap().get(id);
+		Map<String, Object> map = plcTypeDataQuartz.getDataMap().get(id);
 		
 		if (map!=null) {
 			realtimeInfo.add(map);

@@ -4,17 +4,17 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.log4j.Logger;
 
 import com.sharpower.beckhoff.FunDataReadWriteBeckhoffService;
 import com.sharpower.entity.Fun;
 import com.sharpower.entity.Variable;
-import com.sharpower.scada.exception.AdsException;
+import com.sharpower.scada.exception.PlcException;
+import com.sharpower.service.PlcDataReader;
 
 public class FunDataQuartz implements Runnable {
-	private FunDataReadWriteBeckhoffService funDataReadWriteBeckhoffService;
+	private PlcDataReader plcDataReader;
 	private Fun fun;
 	private Map<String, Object> params;
 	private Map<Integer,Map<String, Object>> dataMap = new HashMap<>();
@@ -24,8 +24,8 @@ public class FunDataQuartz implements Runnable {
 	public FunDataQuartz() {
 	}
 	
-	public void setFunDataReadWriteBeckhoffService(FunDataReadWriteBeckhoffService funDataReadWriteBeckhoffService) {
-		this.funDataReadWriteBeckhoffService = funDataReadWriteBeckhoffService;
+	public void setPlcData(PlcDataReader plcDataReader) {
+		this.plcDataReader = plcDataReader;
 	}
 	public void setReadDataTheadStaMap(Map<Integer, Boolean> readDataTheadStaMap) {
 		this.readDataTheadStaMap = readDataTheadStaMap;
@@ -46,7 +46,7 @@ public class FunDataQuartz implements Runnable {
 		Map<String, Object> saveData = new HashMap<>();
 		
 		try {
-			Map<Variable, Object> data = funDataReadWriteBeckhoffService.readDataAll(fun.getAddress());
+			Map<Variable, Object> data = plcDataReader.readDataAll(fun);
 			
 			saveData.put("id", fun.getId());
 			saveData.put("fun", fun);
@@ -68,7 +68,7 @@ public class FunDataQuartz implements Runnable {
 			
 			dataMap.put(fun.getId(), saveData);
 						
-		} catch (AdsException e) {
+		} catch (PlcException e) {
 			
 			saveData.put("id", fun.getId());
 			saveData.put("fun", fun);

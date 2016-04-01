@@ -53,7 +53,15 @@
 				align : 'center'
 			},{
 				field : 'type',
-				title : '类型',
+				title : '数据类型',
+				width : 100,
+				align : 'center',
+				formatter: function(value,row,index){
+										return value.name;
+									}
+			},{
+				field : 'plcType',
+				title : 'PLC类型',
 				width : 100,
 				align : 'center',
 				formatter: function(value,row,index){
@@ -227,11 +235,21 @@
 				</tr>
 				
 				<tr>
-					<td>类型:</td>
+					<td>告警类型:</td>
 					<td><select id="variableType" name="funTroubleVariable.type.id"
 						class="easyui-combobox" required="true"
 						missingMessage="类型必填!" style="width:180px;" 
 						url="SHARPOWER_SCADA/ajaxAllFunTroubleType" valueField="id" 
+						textField="name" value="" ></select>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>PLC类型：</td>
+					<td><select id="plcType" name="funTroubleVariable.plcType.id"
+						class="easyui-combobox" required="true"
+						missingMessage="PLC类型必填!" style="width:180px;" 
+						url="SHARPOWER_SCADA/ajaxAllPlcType" valueField="id" 
 						textField="name" value="" ></select>
 					</td>
 				</tr>

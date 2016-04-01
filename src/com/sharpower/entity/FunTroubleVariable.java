@@ -7,6 +7,7 @@ public class FunTroubleVariable {
 	private String description;
 	private String code;
 	private TroubleType type;//0:Error, 1:Worning
+	private PlcType plcType; 
 	
 	public Integer getId() {
 		return id;
@@ -38,11 +39,17 @@ public class FunTroubleVariable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
 	public TroubleType getType() {
 		return type;
 	}
 	public void setType(TroubleType type) {
 		this.type = type;
 	}
-	
+	public PlcType getPlcType() {
+		return plcType;
+	}
+	public void setPlcType(PlcType plcType) {
+		this.plcType = plcType;
+	}
 }

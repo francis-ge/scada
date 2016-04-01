@@ -56,12 +56,20 @@
 				align : 'center'
 			}, {
 				field : 'type',
-				title : '类型',
+				title : '数据类型',
 				width : 100,
 				align : 'center',
 				formatter: function(value,row,index){
-										return 'PLC类型：'+value.plcType+'，存储类型：'+value.type;
+										return 'PLC数据类型：'+value.plcType+'，存储类型：'+value.type;
 									}
+			},{
+				field : 'plcType',
+				title : 'PLC类型',
+				width : 100,
+				align : 'center',
+				formatter: function(value,row,index){
+					return value.name;
+				}
 			}
 			] ],
 			toolbar : [ {
@@ -218,18 +226,27 @@
 						required="true" missingMessage="存储名名称必填!" value="" /></td>
 				</tr>
 				<tr>
-					<td>显示名（中文）:</td>
+					<td>显示名（中文）：</td>
 					<td><input type="text" name="variable.showNameCN"
 						class="easyui-textbox" required="true"
 						missingMessage="显示名必填!" value="" /></td>
 				</tr>
 				<tr>
-					<td>PLC类型:</td>
+					<td>PLC变量类型：</td>
 					<td><select id="variableType" name="variable.type.id"
 						class="easyui-combobox" required="true"
 						missingMessage="变量类型必填!" style="width:180px;" 
 						url="SHARPOWER_SCADA/ajaxAllVariableType" valueField="id" 
 						textField="plcType" value="" ></select>
+					</td>
+				</tr>
+				<tr>
+					<td>PLC类型：</td>
+					<td><select id="plcType" name="variable.plcType.id"
+						class="easyui-combobox" required="true"
+						missingMessage="PLC类型必填!" style="width:180px;" 
+						url="SHARPOWER_SCADA/ajaxAllPlcType" valueField="id" 
+						textField="name" value="" ></select>
 					</td>
 				</tr>
 				<tr align="center">

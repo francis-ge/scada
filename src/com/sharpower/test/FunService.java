@@ -25,8 +25,8 @@ public class FunService {
 		WindFarm windFarm = new WindFarm();
 		windFarm.setName("Sharpower");
 
-		Fun fun = new Fun(5, "#1", "beckhoff", "192.168.100.61.1.1:852", "A");
-		Fun fun1 = new Fun(6, "2ºÅ·ç»ú", "beckhoff", "192.168.100.62.1.1:852", "B");
+		Fun fun = new Fun();
+		Fun fun1 = new Fun();
 
 		fun.setWindFarm(windFarm);
 		fun1.setWindFarm(windFarm);

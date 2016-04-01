@@ -1,85 +1,92 @@
 package com.sharpower.quartzs;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.apache.log4j.Logger;
 
 import com.sharpower.beckhoff.FunDataReadWriteBeckhoffService;
 import com.sharpower.beckhoff.FunTroubleBeckhoffService;
 import com.sharpower.entity.Fun;
+import com.sharpower.entity.PlcType;
 import com.sharpower.service.FunTroubleRecodeService;
+import com.sharpower.service.PlcDataReader;
+import com.sharpower.service.PlcTypeService;
 import com.sharpower.service.RecodeService;
-import com.sharpower.service.WindFarmService;
 
 import de.beckhoff.jni.tcads.AdsCallDllFunction;
 
-public class WindFarmDataQuartz {
-	private WindFarmService windFarmService;
-	private Set<Fun> funs;
+public class DataQuartz {
+	private PlcTypeService plcTypeService;
 	private FunDataReadWriteBeckhoffService funDataReadWriteBeckhoffService;
 	private RecodeService recodeService;
-	
+	private FunTroubleBeckhoffService funTroubleBeckhoffService;
+	private FunTroubleRecodeService funTroubleRecodeService;
+	private List<PlcType> plcTypes = new ArrayList<>();
 	private Map<Integer, Boolean> readDataTheadStaMap = new HashMap<>();
-	
 	private Map<Integer,Map<String, Object>> dataMap = new HashMap<>();
+	private Map<String, Object> params = new HashMap<>();
+	private List<Fun> funs = new ArrayList<>();
 	
-	private Map<String, Object> params;
-	
-	public void setWindFarmService(WindFarmService windFarmService) {
-		this.windFarmService = windFarmService;
+	public void setPlcTypeService(PlcTypeService plcTypeService) {
+		this.plcTypeService = plcTypeService;
 	}
-	
 	public void setFunDataReadWriteBeckhoffService(FunDataReadWriteBeckhoffService funDataReadWriteBeckhoffService) {
 		this.funDataReadWriteBeckhoffService = funDataReadWriteBeckhoffService;
 	}
-	
 	public void setRecodeService(RecodeService recodeService) {
 		this.recodeService = recodeService;
 	}
-	
-	public Map<String, Object> getParams() {
-		return params;
+	public void setFunTroubleBeckhoffService(FunTroubleBeckhoffService funTroubleBeckhoffService) {
+		this.funTroubleBeckhoffService = funTroubleBeckhoffService;
 	}
-
+	public void setFunTroubleRecodeService(FunTroubleRecodeService funTroubleRecodeService) {
+		this.funTroubleRecodeService = funTroubleRecodeService;
+	}
 	public void setParams(Map<String, Object> params) {
 		this.params = params;
 	}
-
 	public Map<Integer, Map<String, Object>> getDataMap() {
 		return dataMap;
 	}
 
-	public void setDataMap(Map<Integer, Map<String, Object>> dataMap) {
-		this.dataMap = dataMap;
-	}
-
 	public void readData(){
-		if(funs==null){
-			funs = windFarmService.getEntity(1).getFuns();
+		if (funs.isEmpty()){
+			plcTypes = this.plcTypeService.findEntityByHQL("FROM PlcType p LEFT JOIN FETCH p.funs");
 			
-			for (Fun fun : funs) {
-				readDataTheadStaMap.put(fun.getId(), false);
-				AdsCallDllFunction.adsPortOpen();
-				AdsCallDllFunction.adsPortOpen();
+			for ( PlcType plcType : plcTypes ) {
+				funs.addAll(plcType.getFuns());
+				
+				for (Fun fun : funs) {
+					readDataTheadStaMap.put(fun.getId(), false);
+					
+					if (fun.getPlcType().getPlcCommType().getName().equals("beckhoff")) {					
+						AdsCallDllFunction.adsPortOpen();
+						AdsCallDllFunction.adsPortOpen();
+					}
+				}
 			}
 		}
 			
-		Boolean threadSta = false;
-		
-		//创建数据读取线程
 		for (Fun fun : funs) {
+			PlcDataReader plcDataReader;
+			
+			if (fun.getPlcType().getPlcCommType().getName().equals("beckhoff")) {
+				plcDataReader = funDataReadWriteBeckhoffService;
+			}else {
+				plcDataReader = funDataReadWriteBeckhoffService;
+			}
+			
 			//检查上轮线程状态，如已完成则创建新线程，未完成则不创建		
-			threadSta = readDataTheadStaMap.get(fun.getId());
-			if (threadSta==false) {
+			Boolean threadSta = readDataTheadStaMap.get(fun.getId());
+
+			if (threadSta!=true) {
 				readDataTheadStaMap.put(fun.getId(), true);
 				
 				FunDataQuartz funDataQuartz = new FunDataQuartz();
-				funDataQuartz.setFunDataReadWriteBeckhoffService(funDataReadWriteBeckhoffService);
+				funDataQuartz.setPlcData(plcDataReader);
 				funDataQuartz.setFun(fun);
 				funDataQuartz.setParams(params);
 				funDataQuartz.setDataMap(dataMap);
@@ -91,7 +98,6 @@ public class WindFarmDataQuartz {
 			}
 				
 		}
-		
 	}
 	
 	public void saveData(){
@@ -109,20 +115,14 @@ public class WindFarmDataQuartz {
 		}
 		
 	}
-
-	private FunTroubleBeckhoffService funTroubleBeckhoffService;
-	private FunTroubleRecodeService funTroubleRecodeService;
-	
-	public void setFunTroubleBeckhoffService(FunTroubleBeckhoffService funTroubleBeckhoffService) {
-		this.funTroubleBeckhoffService = funTroubleBeckhoffService;
-	}
-	public void setFunTroubleRecodeService(FunTroubleRecodeService funTroubleRecodeService) {
-		this.funTroubleRecodeService = funTroubleRecodeService;
-	}
 	
 	public void checkTrouble(){
-		if(funs==null){
-			funs = windFarmService.getEntity(1).getFuns();
+		if (funs.isEmpty()){
+			plcTypes = this.plcTypeService.findEntityByHQL("FROM PlcType p LEFT JOIN FETCH p.funs");
+			
+			for ( PlcType plcType : plcTypes ) {
+				funs.addAll(plcType.getFuns());
+			}
 		}
 			
 		//创建风机故障检测线程
@@ -149,7 +149,5 @@ public class WindFarmDataQuartz {
 		}
 	}
 	
-
+		
 }
-	
-

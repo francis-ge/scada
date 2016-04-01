@@ -14,5 +14,33 @@
             <column name="NAME" />
         </property>
         
+        <many-to-one name="plcCommType" class="com.sharpower.entity.PlcCommType" fetch="join" lazy="false">
+            <column name="PLC_COMM_TYPE" />
+        </many-to-one>
+        
+        <bag name="variables" table="VARIABLE" lazy="true" fetch="join" inverse="false" order-by="id asc">
+            <key>
+                <column name="PLC_TYPE" />
+            </key>
+            
+            <one-to-many class="com.sharpower.entity.Variable" />
+        </bag>
+        
+        <bag name="funTroubleVariables" table="FUNTROUBLEVARIABLE" lazy="true" fetch="join" inverse="false" order-by="id asc">
+            <key>
+                <column name="PLC_TYPE" />
+            </key>
+            
+            <one-to-many class="com.sharpower.entity.FunTroubleVariable" />
+        </bag>
+        
+        <bag name="funs" table="FUN" lazy="true" fetch="join" inverse="false" order-by="id asc">
+           	<key>
+                <column name="PLC_TYPE" />
+            </key>
+            
+            <one-to-many class="com.sharpower.entity.Fun" />
+        </bag>
+        
     </class>
 </hibernate-mapping>

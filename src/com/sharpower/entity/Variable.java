@@ -5,6 +5,8 @@ public class Variable{
 	private String name;
 	private String dbName;
 	private String showNameCN;
+	
+	private PlcType plcType; 
 	private VariableType type;
 	
 	public Integer getId() {
@@ -33,6 +35,14 @@ public class Variable{
 	public void setShowNameCN(String showName) {
 		this.showNameCN = showName;
 	}
+	
+	public PlcType getPlcType() {
+		return plcType;
+	}
+	public void setPlcType(PlcType plcType) {
+		this.plcType = plcType;
+	}
+	
 	public VariableType getType() {
 		return type;
 	}

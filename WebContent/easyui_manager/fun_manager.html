@@ -230,9 +230,13 @@
 						value="" /></td>
 				</tr>
 				<tr>
-					<td>主控类型:</td>
-					<td>beckhoff <input type="radio" checked="checked" name="fun.type"
-						value="beckhoff" /></td>
+					<td>主控类型：</td>
+					<td><select id="plcType" name="variable.plcType.id"
+						class="easyui-combobox" required="true"
+						missingMessage="主控类型必填!" style="width:180px;" 
+						url="SHARPOWER_SCADA/ajaxAllPlcType" valueField="id" 
+						textField="name" value="" ></select>
+					</td>
 				</tr>
 				<tr>
 					<td>主控地址:</td>
