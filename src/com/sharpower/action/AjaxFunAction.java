@@ -146,13 +146,13 @@ public class AjaxFunAction extends ActionSupport {
 
 	}
 	
-	public String getExcelFile(){
+	public String excelFile(){
 		//创建Excel
 		HSSFWorkbook wb = new HSSFWorkbook();
 		HSSFSheet sheet = wb.createSheet("sheet0");
 
 		List<Fun> funs = funService.findAllEntities();
-		
+
 		ExportExlUtils.outputHeaders(titles.split(","), sheet);
 		ExportExlUtils.outputColumns(fields.split(","), funs, sheet, 1);
 		

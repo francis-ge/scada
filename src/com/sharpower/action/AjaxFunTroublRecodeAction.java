@@ -39,7 +39,7 @@ public class AjaxFunTroublRecodeAction extends ActionSupport{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public String getTroubleStatisticsForOne(){
+	public String troubleStatisticsForOne(){
 		String hql = "SELECT new map(ftr.fun.name as name, ftr.funTroubleVariable.code as code, "
 				+ "ftr.funTroubleVariable.description as description, count(ftr) as count, max(ftr.startTime) as maxTime) "
 				+ "FROM FunTroubleRecode ftr "
@@ -52,7 +52,7 @@ public class AjaxFunTroublRecodeAction extends ActionSupport{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public String getTroubleStatistics(){
+	public String troubleStatistics(){
 		String hql = "SELECT new map(ftr.funTroubleVariable.code as code, ftr.funTroubleVariable.description as description, "
 				+ "count(ftr) as count, max(ftr.startTime) as maxTime) "
 				+ "FROM FunTroubleRecode ftr "
@@ -64,7 +64,7 @@ public class AjaxFunTroublRecodeAction extends ActionSupport{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public String getTroubleStatisticsForOneQuery(){
+	public String troubleStatisticsForOneQuery(){
 		
 		if (funTroubleRecode.getFunTroubleVariable().getCode().equals("all")) {
 			String hql = "SELECT new map(ftr.fun.name as name, ftr.funTroubleVariable.code as code, ftr.startTime as startTime, "
@@ -104,14 +104,14 @@ public class AjaxFunTroublRecodeAction extends ActionSupport{
 	}
 	
 	
-	public String getCurrentError(){
+	public String currentError(){
 		String hql ="FROM FunTroubleRecode ftr WHERE ftr.fun.id=? AND ftr.funTroubleVariable.type.id=1 AND ftr.endTime is null";
 		funTroubleRecodes = funTroubleRecodeService.findEntityByHQL(hql, funId);
 		
 		return SUCCESS;
 	}
 	
-	public String getCurrentWorning(){
+	public String currentWorning(){
 		String hql ="FROM FunTroubleRecode ftr WHERE ftr.fun.id=? AND ftr.funTroubleVariable.type.id=2 AND ftr.endTime is null";
 		funTroubleRecodes = funTroubleRecodeService.findEntityByHQL(hql, funId);
 		

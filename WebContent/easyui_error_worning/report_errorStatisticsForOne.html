@@ -9,16 +9,44 @@
 	<link href="../jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
 	<link href="../jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
 	
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+	<style type="text/css">
+		* {margin: 0; padding: 0;}
+	</style>
+	
+  </head>
+  
+  <body>
+
+		<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxGetTroubleStatisticsForOne" 
+			idField="id" singleSelect="true" fit="true" striped="true" fitColumns="true" rownumbers="true">
+			<thead>   
+		        <tr>   
+		            <th data-options="field:'name',width:150,align:'center'">风机名称</th>  
+		            <th data-options="field:'code',width:120">代码</th>  
+		            <th data-options="field:'description',width:200">描述</th>  
+		            <th data-options="field:'count',width:50">发生次数</th>  
+		            <th data-options="field:'maxTime',width:120">最近发生时间</th>  
+		        </tr>   
+		    </thead>   
+		</table>
+		
+		<div id="toolBar" style="height:25px,overflow:hidden" >
+			<form id="from1" method="post">
+				选择风机：<select id="funSelect" name="funTroubleRecode.fun.id" class="easyui-combobox" style="width:200px;" url="SHARPOWER_SCADA/ajaxAllfun"  valueField="id" textField="name" required="required">
+						</select>
+						<input name="funTroubleRecode.funTroubleVariable.type.id" value="1" type="hidden"></input>
+				开始时间：<input name="funTroubleRecode.startTime"  class="easyui-datetimebox" required="required"></input>
+				结束时间：<input name="funTroubleRecode.endTime"  class="easyui-datetimebox" required="required"></input>
+				<a id="SubmitBtn" class="easyui-linkbutton" title="" href="javascript:void(0)">查询</a> 
+			</form>
+		</div>	
+		
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
 	<script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
 	
 	<!-- easyUI -->
 	<script src="../jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
 	<script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
-	
-	<style type="text/css">
-		* {margin: 0; padding: 0;}
-	</style>
 
 	<script type="text/javascript">
 		$(function(){
@@ -63,33 +91,6 @@
 	}
 		
 	</script>
-
-  </head>
-  
-  <body>
-
-		<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxGetTroubleStatisticsForOne" 
-			idField="id" singleSelect="true" fit="true" striped="true" fitColumns="true" rownumbers="true">
-			<thead>   
-		        <tr>   
-		            <th data-options="field:'name',width:150,align:'center'">风机名称</th>  
-		            <th data-options="field:'code',width:120">代码</th>  
-		            <th data-options="field:'description',width:200">描述</th>  
-		            <th data-options="field:'count',width:50">发生次数</th>  
-		            <th data-options="field:'maxTime',width:120">最近发生时间</th>  
-		        </tr>   
-		    </thead>   
-		</table>
 		
-		<div id="toolBar" style="height:25px,overflow:hidden" >
-			<form id="from1" method="post">
-				选择风机：<select id="funSelect" name="funTroubleRecode.fun.id" class="easyui-combobox" style="width:200px;" url="SHARPOWER_SCADA/ajaxAllfun"  valueField="id" textField="name" required="required">
-						</select>
-						<input name="funTroubleRecode.funTroubleVariable.type.id" value="1" type="hidden"></input>
-				开始时间：<input name="funTroubleRecode.startTime"  class="easyui-datetimebox" required="required"></input>
-				结束时间：<input name="funTroubleRecode.endTime"  class="easyui-datetimebox" required="required"></input>
-				<a id="SubmitBtn" class="easyui-linkbutton" title="" href="javascript:void(0)">查询</a> 
-			</form>
-		</div>	
   </body>
 </html>

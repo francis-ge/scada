@@ -7,84 +7,10 @@
 <link href="jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
 <link href="jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
 
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
-<script src="jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
-
-<!-- easyUI -->
-<script src="jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
-<script src="jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
-
 <style type="text/css">
 	* {margin: 0; border: 0; padding: 0;}
 </style>
 
-<script type="text/javascript">
-	$(function(){
-		$(".easyui-accordion a[plain='true'], .accordionMenu a").click(
-			function(){
-				var src = $(this).attr('title');
-				var title = $(this).html();
-				
-				if (src=="") return false;
-				
-				if($('.easyui-tabs').tabs('exists', title)==true){
-					$('.easyui-tabs').tabs('select',title);
-				}else{
-					$('#tabs').tabs('add',{
-						title : title,
-						content : '<iframe frameborder=0 style=height:100%;width:100%; src=' + src + '></iframe>',
-						closable : true
-						})		
-				}
-			})
-			
-		function formatField(value){
-			return '<span style="font-size:25px">'+value+'</span>';
-		}
-		
-		$('#datagrid').datagrid({       
-		    columns:[[    
-		        {field:'communicationFailureFunCount',title:'通信故障',width:150,align:'center',formatter:formatField},    
-		        {field:'serviceFunCount',title:'维护',width:150,align:'center',formatter:formatField},    
-		        {field:'runFunCount',title:'运行',width:150,align:'center',formatter:formatField},    
-		        {field:'standbyFunCount',title:'待机',width:150,align:'center',formatter:formatField},    
-		        {field:'errorFunCount',title:'故障',width:150,align:'center',formatter:formatField},    
-		        {field:'power',title:'有功功率',width:150,align:'center',formatter:formatField},    
-		        {field:'reactivePower',title:'无功功率',width:150,align:'center',formatter:formatField},    
-		        {field:'energy',title:'本日发电量',width:150,align:'center',formatter:formatField},    
-		        {field:'energyCounter',title:'累计发电量',width:150,align:'center',formatter:formatField},    
-		        {field:'maxWindSpeed',title:'最大风速',width:150,align:'center',formatter:formatField},    
-		        {field:'minWindSpeed',title:'最小风速',width:150,align:'center',formatter:formatField},    
-		        {field:'averageWindSpeed',title:'平均风速',width:150,align:'center',formatter:formatField},    
-		        {field:'maxPower',title:'最大功率',width:150,align:'center',formatter:formatField},    
-		        {field:'minPower',title:'最小功率',width:150,align:'center',formatter:formatField},    
-		        {field:'averagePower',title:'平均功率',width:150,align:'center',formatter:formatField}    
-		    ]],
-		    rowStyler: function(index,row){
-	    			return 'height:40px';
-		    	}
-		    
-		}); 
-		
-		setInterval(function(){
-			$('#datagrid').datagrid('load')}, 		
-			 1000 
-		);
-		
-			/*
-			$(window).resize(function(){
-				$('#north').panel('resize',{
-					height:  $(window).height()*0.1
-				});
-				
-				$('#south').panel('resize',{
-					height:  $(window).height()*0.15
-				});
-				
-			});
-		*/
-	})
-</script>
 
 <title></title>
 </head>
@@ -92,7 +18,6 @@
 <body class="easyui-layout" fit="true">   
     <div id="north" data-options="region:'north',title:'',split:false" style="height:12%;background:#85B9FF">
     	<a href="http://www.sharpower.cn" target="_blank"><img alt="logo" src="pic/logo.jpg" style="height:100%;"></a>
-    	<p>北京锋电能源技术有限公司</p>
     </div>   
     <div  data-options="region:'west',title:'导航栏',split:true" style="width:150px;">
 	    <div class="easyui-accordion" fit="true">
@@ -107,8 +32,8 @@
 	    	
 	    	<div title="风机曲线" style="overflow:auto;">
 	    		<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_curve/realTime_curve.html" href="#">实时曲线</a>
-	    		<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="" href="#">历史曲线</a>
-	    		<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="" href="#">一年内日统计曲线</a>
+	    		<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_curve/history_curve.html" href="#">历史曲线</a>
+	    		<!-- <a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="" href="#">一年内日统计曲线</a> -->
 	    		<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_curve/windFrequency_curve.html" href="#">风频图</a>
 	    		<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_curve/power_curve.html" href="#">风速功率图</a>
 	    	</div>
@@ -162,13 +87,88 @@
     <div data-options="region:'center',title:''" style="overflow:hidden;background:#eee;" border="false" >
 	    <div id="tabs" class="easyui-tabs" fit="true" border="false" justified="true" pill="false">
 		</div>
-    </div>  
+    </div>
 
     <div id="south" data-options="region:'south',title:'',split:false" style="height:60px">
     	<table id="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxWindFarmRealTimeInfo"
 			singleSelect="true" fit="true" striped="true" fitColumns="true" loadMsg="">
 		</table>
     </div> 
+    
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+	<script src="jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
+	
+	<!-- easyUI -->
+	<script src="jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
+	<script src="jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
+	
+	<script type="text/javascript">
+		$(function(){
+			$(".easyui-accordion a[plain='true'], .accordionMenu a").click(
+				function(){
+					var src = $(this).attr('title');
+					var title = $(this).html();
+					
+					if (src=="") return false;
+					
+					if($('.easyui-tabs').tabs('exists', title)==true){
+						$('.easyui-tabs').tabs('select',title);
+					}else{
+						$('#tabs').tabs('add',{
+							title : title,
+							content : '<iframe frameborder=0 style=height:100%;width:100%; src=' + src + '></iframe>',
+							closable : true
+							})		
+					}
+				})
+				
+			function formatField(value){
+				return '<span style="font-size:25px">'+value+'</span>';
+			}
+			
+			$('#datagrid').datagrid({       
+			    columns:[[    
+			        {field:'communicationFailureFunCount',title:'通信故障',width:150,align:'center',formatter:formatField},    
+			        {field:'serviceFunCount',title:'维护',width:150,align:'center',formatter:formatField},    
+			        {field:'runFunCount',title:'运行',width:150,align:'center',formatter:formatField},    
+			        {field:'standbyFunCount',title:'待机',width:150,align:'center',formatter:formatField},    
+			        {field:'errorFunCount',title:'故障',width:150,align:'center',formatter:formatField},    
+			        {field:'power',title:'有功功率',width:150,align:'center',formatter:formatField},    
+			        {field:'reactivePower',title:'无功功率',width:150,align:'center',formatter:formatField},    
+			        {field:'energy',title:'本日发电量',width:150,align:'center',formatter:formatField},    
+			        {field:'energyCounter',title:'累计发电量',width:150,align:'center',formatter:formatField},    
+			        {field:'maxWindSpeed',title:'最大风速',width:150,align:'center',formatter:formatField},    
+			        {field:'minWindSpeed',title:'最小风速',width:150,align:'center',formatter:formatField},    
+			        {field:'averageWindSpeed',title:'平均风速',width:150,align:'center',formatter:formatField},    
+			        {field:'maxPower',title:'最大功率',width:150,align:'center',formatter:formatField},    
+			        {field:'minPower',title:'最小功率',width:150,align:'center',formatter:formatField},    
+			        {field:'averagePower',title:'平均功率',width:150,align:'center',formatter:formatField}    
+			    ]],
+			    rowStyler: function(index,row){
+		    			return 'height:40px';
+			    	}
+			    
+			}); 
+			
+			setInterval(function(){
+				$('#datagrid').datagrid('load')}, 		
+				 1000 
+			);
+			
+				/*
+				$(window).resize(function(){
+					$('#north').panel('resize',{
+						height:  $(window).height()*0.1
+					});
+					
+					$('#south').panel('resize',{
+						height:  $(window).height()*0.15
+					});
+					
+				});
+			*/
+		})
+	</script>
   
 </body>  
 

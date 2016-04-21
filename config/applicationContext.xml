@@ -217,8 +217,13 @@
 		<property name="funControl" ref="FunControlServiceBeckhoffImpl"></property>
 	</bean>
 	
-	<tx:advice id="txAdvice" 
-		transaction-manager="transactionManager">
+	<bean id="ajaxMainRecodeAcrion" 
+		class="com.sharpower.action.AjaxMainRecodeAcrion"
+		scope="prototype">
+		<property name="recodeService" ref="recodeService"></property>
+	</bean>
+	
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
 			<tx:method name="get*" read-only="true" />
 			<tx:method name="*" />
@@ -240,8 +245,6 @@
     <bean id="data" class="com.sharpower.quartzs.DataQuartz">
     	<property name="funDataReadWriteBeckhoffService" ref="funDataReadWriteBeckhoffService"></property>
     	<property name="plcTypeService" ref="plcTypeService"></property>
-    	<property name="funTroubleBeckhoffService" ref="funTroubleBeckhoffService"></property>
-    	<property name="funTroubleRecodeService" ref="funTroubleRecodeService"></property>
     	<property name="recodeService" ref="recodeService"></property>
     	<property name="params" >
     		<map>
@@ -250,7 +253,13 @@
     		</map>
     	</property>
     </bean>
-     
+    
+    <bean id="troubleData" class="com.sharpower.quartzs.TroubleQuartz">
+      <property name="funTroubleBeckhoffService" ref="funTroubleBeckhoffService"></property>
+      <property name="funTroubleRecodeService" ref="funTroubleRecodeService"></property>
+      <property name="plcTypeService" ref="plcTypeService"></property>
+    </bean>
+         
     <bean id="reportDayQuartz" class="com.sharpower.quartzs.ReportDayQuartz">
     	<property name="recodeService" ref="recodeService"></property>
     	<property name="reportDayRecodeService" ref="reportDayRecodeService"></property>
@@ -269,8 +278,8 @@
 	</bean>
 	
 	<!-- 风机故障记录的任务调度 	-->
-	<bean id="troubleSave" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="data"></property>
+	<bean id="checkTrouble" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="troubleData"></property>
 		<property name="targetMethod" value="checkTrouble"></property>
 	</bean>
 	
@@ -300,10 +309,10 @@
         </property>
     </bean>  
 
-    <bean id="troubleSaveTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
-        <property name="jobDetail" ref="troubleSave"></property>
+    <bean id="checkTroubleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="checkTrouble"></property>
         <property name="repeatInterval">
-            <value>3000</value>
+            <value>2000</value>
         </property>
         <property name="startDelay">
             <value>5000</value>
@@ -323,9 +332,9 @@
     	<list>   	
     	<!-- 
     		<ref bean="dataSaveTrigger"/>
-    	 	<ref bean="troubleSaveTrigger"/>
     	  	<ref bean="reportDayStatisticTrigger"/>
     	 -->
+    	 	<ref bean="checkTroubleTrigger"/>
    			<ref bean="dataReadTrigger"/>
 		
     	</list>

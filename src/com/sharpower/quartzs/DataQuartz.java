@@ -6,12 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.sharpower.beckhoff.FunDataReadWriteBeckhoffService;
-import com.sharpower.beckhoff.FunTroubleBeckhoffService;
 import com.sharpower.entity.Fun;
 import com.sharpower.entity.PlcType;
-import com.sharpower.service.FunTroubleRecodeService;
 import com.sharpower.service.PlcDataReader;
 import com.sharpower.service.PlcTypeService;
 import com.sharpower.service.RecodeService;
@@ -22,11 +21,9 @@ public class DataQuartz {
 	private PlcTypeService plcTypeService;
 	private FunDataReadWriteBeckhoffService funDataReadWriteBeckhoffService;
 	private RecodeService recodeService;
-	private FunTroubleBeckhoffService funTroubleBeckhoffService;
-	private FunTroubleRecodeService funTroubleRecodeService;
 	private List<PlcType> plcTypes = new ArrayList<>();
-	private Map<Integer, Boolean> readDataTheadStaMap = new HashMap<>();
-	private Map<Integer,Map<String, Object>> dataMap = new HashMap<>();
+	private Map<Integer, Boolean> readDataTheadStaMap = new ConcurrentHashMap<>();
+	private Map<Integer,Map<String, Object>> dataMap = new ConcurrentHashMap<>();
 	private Map<String, Object> params = new HashMap<>();
 	private List<Fun> funs = new ArrayList<>();
 	
@@ -39,12 +36,6 @@ public class DataQuartz {
 	public void setRecodeService(RecodeService recodeService) {
 		this.recodeService = recodeService;
 	}
-	public void setFunTroubleBeckhoffService(FunTroubleBeckhoffService funTroubleBeckhoffService) {
-		this.funTroubleBeckhoffService = funTroubleBeckhoffService;
-	}
-	public void setFunTroubleRecodeService(FunTroubleRecodeService funTroubleRecodeService) {
-		this.funTroubleRecodeService = funTroubleRecodeService;
-	}
 	public void setParams(Map<String, Object> params) {
 		this.params = params;
 	}
@@ -52,51 +43,57 @@ public class DataQuartz {
 		return dataMap;
 	}
 
-	public void readData(){
+	private void init(){
 		if (funs.isEmpty()){
-			plcTypes = this.plcTypeService.findEntityByHQL("FROM PlcType p LEFT JOIN FETCH p.funs");
+			plcTypes = plcTypeService.findEntityByHQL("FROM PlcType p LEFT JOIN FETCH p.funs");
 			
 			for ( PlcType plcType : plcTypes ) {
 				funs.addAll(plcType.getFuns());
+			}
+		
+			for (Fun fun : funs) {
+				readDataTheadStaMap.put(fun.getId(), false);
 				
-				for (Fun fun : funs) {
-					readDataTheadStaMap.put(fun.getId(), false);
-					
-					if (fun.getPlcType().getPlcCommType().getName().equals("beckhoff")) {					
-						AdsCallDllFunction.adsPortOpen();
-						AdsCallDllFunction.adsPortOpen();
-					}
+				if (fun.getPlcType().getPlcCommType().getName().equals("beckhoff")) {					
+					AdsCallDllFunction.adsPortOpen();
 				}
 			}
+			
 		}
+	}
+	
+	public void readData(){
+		synchronized (this) {
+			init();
 			
-		for (Fun fun : funs) {
-			PlcDataReader plcDataReader;
-			
-			if (fun.getPlcType().getPlcCommType().getName().equals("beckhoff")) {
-				plcDataReader = funDataReadWriteBeckhoffService;
-			}else {
-				plcDataReader = funDataReadWriteBeckhoffService;
+			for (Fun fun : funs) {
+				PlcDataReader plcDataReader;
+				
+				if (fun.getPlcType().getPlcCommType().getName().equals("beckhoff")) {
+					plcDataReader = funDataReadWriteBeckhoffService;
+				}else {
+					plcDataReader = funDataReadWriteBeckhoffService;
+				}
+				
+				//检查上轮线程状态，如已完成则创建新线程，未完成则不创建		
+				Boolean threadSta = readDataTheadStaMap.get(fun.getId());
+	
+				if (threadSta!=true) {
+					readDataTheadStaMap.put(fun.getId(), true);
+					
+					FunDataThread funDataThread = new FunDataThread();
+					funDataThread.setPlcData(plcDataReader);
+					funDataThread.setFun(fun);
+					funDataThread.setParams(params);
+					funDataThread.setDataMap(dataMap);
+					funDataThread.setReadDataTheadStaMap(readDataTheadStaMap);
+					
+					Thread thread = new Thread(funDataThread);
+					thread.start();
+	
+				}
+					
 			}
-			
-			//检查上轮线程状态，如已完成则创建新线程，未完成则不创建		
-			Boolean threadSta = readDataTheadStaMap.get(fun.getId());
-
-			if (threadSta!=true) {
-				readDataTheadStaMap.put(fun.getId(), true);
-				
-				FunDataQuartz funDataQuartz = new FunDataQuartz();
-				funDataQuartz.setPlcData(plcDataReader);
-				funDataQuartz.setFun(fun);
-				funDataQuartz.setParams(params);
-				funDataQuartz.setDataMap(dataMap);
-				funDataQuartz.setReadDataTheadStaMap(readDataTheadStaMap);
-				
-				Thread thread = new Thread(funDataQuartz);
-				thread.start();
-
-			}
-				
 		}
 	}
 	
@@ -116,35 +113,12 @@ public class DataQuartz {
 		
 	}
 	
-	public void checkTrouble(){
-		if (funs.isEmpty()){
-			plcTypes = this.plcTypeService.findEntityByHQL("FROM PlcType p LEFT JOIN FETCH p.funs");
-			
-			for ( PlcType plcType : plcTypes ) {
-				funs.addAll(plcType.getFuns());
-			}
-		}
-			
-		//创建风机故障检测线程
-		for (Fun fun : funs) {
-			//检查上轮线程状态，如已完成则创建新线程，未完成则不创建
-			FunTroubleQuartz funTroubleQuartz = new FunTroubleQuartz();
-			funTroubleQuartz.setFun(fun);
-			funTroubleQuartz.setFunTroubleBeckhoffService(funTroubleBeckhoffService);
-			funTroubleQuartz.setFunTroubleRecodeService(funTroubleRecodeService);
-			
-			Thread thread = new Thread(funTroubleQuartz);
-			thread.start();
-				
-			}
-	}
 	
 	@Override
 	protected void finalize() throws Throwable {
 		super.finalize();
 		
 		for (Fun fun : funs) {
-			AdsCallDllFunction.adsPortClose();
 			AdsCallDllFunction.adsPortClose();
 		}
 	}

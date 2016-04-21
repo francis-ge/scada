@@ -174,7 +174,7 @@ public class FunTroubleBeckhoffService implements FunTroubleVariableReader{
 
 				return data;
 			} else {
-				throw new AdsException("ADS Error,ErrorCode:" + err);
+				throw new AdsException("ADS Error,ErrorCode:" + err + ",TroubleReader,fun:" + fun.getName() + fun.getAddress());
 			}
 
 		}
@@ -239,5 +239,4 @@ public class FunTroubleBeckhoffService implements FunTroubleVariableReader{
 		
 	}
 
-	
 }

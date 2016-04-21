@@ -52,5 +52,6 @@
 		<mapping resource="com/sharpower/entity/FunTroubleRecode.hbm.xml"/>
 		<mapping resource="com/sharpower/entity/FunTroubleVariable.hbm.xml"/>
 		<mapping resource="com/sharpower/entity/TroubleType.hbm.xml"/>
+		<mapping resource="com/sharpower/entity/PlcCommType.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

@@ -25,8 +25,7 @@ public class AjaxRealTimeInfoAction extends ActionSupport{
 	private Fun fun;
 	private int funId;
 	
-	private List<Map<String, Object>> realtimeInfo=new ArrayList<>();
-	
+	private List<Map<String, Object>> realtimeInfo=new ArrayList<>();	
 	private List<WindFarmRealTimeInfo> windFarmRealTimeInfo= new ArrayList<>();
 	
 	@JSON(serialize=false)
@@ -77,9 +76,7 @@ public class AjaxRealTimeInfoAction extends ActionSupport{
 	}
 	
 	public String mainInfo(){		
-
 		realtimeInfo.addAll(plcTypeDataQuartz.getDataMap().values());
-		
 		return SUCCESS;
 	}
 	

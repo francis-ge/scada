@@ -40,17 +40,22 @@
 				field : 'name',
 				title : '变量名',
 				width : 100,
-				align : 'center'
+				align : 'left'
 			}, {
 				field : 'dbName',
 				title : '存储名',
 				width : 100,
-				align : 'center'
+				align : 'left'
 			}, {
 				field : 'code',
 				title : '代码',
 				width : 100,
 				align : 'center'
+			},{
+				field : 'description',
+				title : '描述',
+				width : 100,
+				align : 'left'
 			},{
 				field : 'type',
 				title : '数据类型',
@@ -61,7 +66,7 @@
 									}
 			},{
 				field : 'plcType',
-				title : 'PLC类型',
+				title : '主控类型',
 				width : 100,
 				align : 'center',
 				formatter: function(value,row,index){
@@ -137,7 +142,8 @@
 												'funTroubleVariable.dbName':rows[0].dbName,
 												'funTroubleVariable.code':rows[0].code,
 												'funTroubleVariable.description':rows[0].description,
-												'funTroubleVariable.type.id':rows[0].type.id});
+												'funTroubleVariable.type.id':rows[0].type.id,
+												'funTroubleVariable.plcType.id':rows[0].plcType.id});
 						}
 					}
 				},'-',{
@@ -245,7 +251,7 @@
 				</tr>
 				
 				<tr>
-					<td>PLC类型：</td>
+					<td>主控类型：</td>
 					<td><select id="plcType" name="funTroubleVariable.plcType.id"
 						class="easyui-combobox" required="true"
 						missingMessage="PLC类型必填!" style="width:180px;" 

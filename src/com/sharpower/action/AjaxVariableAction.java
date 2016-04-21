@@ -21,6 +21,8 @@ public class AjaxVariableAction extends ActionSupport {
 	private String resulte;
 	private String ids;
 	private String searchKey;
+	private Integer funId;
+	private String variableNames;;
 	
 	public Variable getVariable() {
 		return variable;
@@ -28,6 +30,14 @@ public class AjaxVariableAction extends ActionSupport {
 	
 	public void setVariable(Variable variable) {
 		this.variable = variable;
+	}
+	
+	public void setFunId(Integer funId) {
+		this.funId = funId;
+	}
+	
+	public void setVariableNames(String variableNames) {
+		this.variableNames = variableNames;
 	}
 	
 	@JSON(serialize=false)
@@ -65,8 +75,8 @@ public class AjaxVariableAction extends ActionSupport {
 			if (searchKey==null) {
 				variables = variableService.findAllEntities();
 			}else{
-				String hql = "From Variable v WHERE v.name like ?";
-				variables = variableService.findEntityByHQL(hql, "%"+searchKey+"%");
+				String hql = "From Variable v WHERE v.fun.plcType.id=? WHERE v.name like ?";
+				variables = variableService.findEntityByHQL(hql, funId,"%"+searchKey+"%");
 			}
 			resulte = "共查到" + variables.size() + "条记录。";
 		} catch (Exception e) {

@@ -9,6 +9,64 @@
 	rel="stylesheet">
 <link href="../jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
 
+<style type="text/css">
+* {margin: 0;padding: 0;}
+</style>
+
+</head>
+
+<body>
+	<table id="table">
+	</table>
+	<div id="dialog" title="1" modal="true" draggable="false"
+		class="easyui-dialog" closed="true" style="width: 280px;">
+		<form id="form" action="" method="post">
+			<input type="hidden" name="fun.id" value="" />
+			<table>
+				<tr>
+					<td>风机名称:</td>
+					<td><input type="text" name="fun.name" class="easyui-textbox"
+						required="true" validType="midLength[1,10]"
+						missingMessage="风机名称必填!" invalidMessage="风机名称必须在1到10个字符之间!"
+						value="" /></td>
+				</tr>
+				<tr>
+					<td>主控类型：</td>
+					<td><select id="plcType" name="fun.plcType.id"
+						class="easyui-combobox" required="true"
+						missingMessage="主控类型必填!" style="width:180px;" 
+						url="SHARPOWER_SCADA/ajaxAllPlcType" valueField="id" 
+						textField="name" value="" ></select>
+					</td>
+				</tr>
+				<tr>
+					<td>主控地址:</td>
+					<td><input type="text" name="fun.address"
+						class="easyui-textbox" required="true"
+						missingMessage="主控地址必填!" value="" /></td>
+				</tr>
+				<tr>
+					<td>所属分组:</td>
+					<td><input type="text" name="fun.line"
+						class="easyui-textbox" required="true"
+						missingMessage="所属分组必填!" value="" /></td>
+				</tr>
+				<input type="hidden" name="fun.windFarm.id" value="1" />
+				<tr align="center">
+					<td colspan="2">
+						<a id="submitBtn" class="easyui-linkbutton">确定</a>
+						<a id="closeBtn"  class="easyui-linkbutton">关闭</a>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	
+	<form id='form1' style='display:none' target='' method='post' action='' ajax='false'>
+		<input type='hidden' name='fields' />
+		<input type='hidden' name='titles' />
+	</form>
+	
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
 
@@ -18,12 +76,6 @@
 <script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js"
 	charset="utf-8"></script>
 
-<style type="text/css">
-* {
-	margin: 0;
-	padding: 0;
-}
-</style>
 <script type="text/javascript">
 	var flag='';
 	$(function() {
@@ -46,10 +98,13 @@
 				width : 100,
 				align : 'center'
 			}, {
-				field : 'type',
+				field : 'plcType.name',
 				title : '主控类型',
 				width : 100,
-				align : 'center'
+				align : 'center',
+				formatter: function(value,row,index){
+					return row.plcType.name;
+				}
 			}, {
 				field : 'address',
 				title : '主控地址',
@@ -103,7 +158,7 @@
 						);
 					
 					}else{
-						$.messager.alert({title : '我的消息',msg : '请至少选择一项。'});
+						$.messager.alert({title : '我的消息', msg : '请至少选择一项。'});
 					}
 				}
 			}, '-', {
@@ -126,6 +181,7 @@
 						$('#dialog').dialog('open');
 						$('#form').form('load', {'fun.id':rows[0].id,
 												'fun.name':rows[0].name,
+												'fun.plcType.id':rows[0].plcType.id,
 												'fun.address':rows[0].address,
 												'fun.type':rows[0].type,
 												'fun.line':rows[0].line});
@@ -146,33 +202,15 @@
 									var title = header[i].title;
 									var hiddenFlag = header[i].hidden;
 									if(!hiddenFlag){
-										var dh = i == (header.length -1) ? "" :",";
+										var dh = (i == (header.length -1) ? "" :",");
 										fields = fields + field + dh;
 										titles = titles + title + dh;
 									}
 								}
 								//向后台发送请求  
-								var form = $("<form>");//定义一个form表单
-								form.attr('style','display:none');
-								form.attr('target','');
-								form.attr('method','post');
-								form.attr('action','funExcelFile');
-								//添加input
-								var input1 = $("<input>");
-								input1.attr('type','hidden');
-								input1.attr('name','fields');
-								input1.attr('value',fields);
+								$('#form1').form('load',{fields:fields,titles:titles});
 								
-								var input2 = $("<input>");
-								input2.attr('type','hidden');
-								input2.attr('name','titles');
-								input2.attr('value',titles);
-								
-								//将表单放到body中
-								$('body').append(form);
-								form.append(input1);
-								form.append(input2);
-								form.submit();//提交表单
+								$('#form1').form('submit',{url:'../funExcelFile'});
 							}
 						});
 
@@ -211,55 +249,7 @@
 	});
 
 });
-</script>
-</head>
-
-<body>
-	<table id="table">
-	</table>
-	<div id="dialog" title="1" modal="true" draggable="false"
-		class="easyui-dialog" closed="true" style="width: 280px;">
-		<form id="form" action="" method="post">
-			<input type="hidden" name="fun.id" value="" />
-			<table>
-				<tr>
-					<td>风机名称:</td>
-					<td><input type="text" name="fun.name" class="easyui-textbox"
-						required="true" validType="midLength[1,10]"
-						missingMessage="风机名称必填!" invalidMessage="风机名称必须在1到10个字符之间!"
-						value="" /></td>
-				</tr>
-				<tr>
-					<td>主控类型：</td>
-					<td><select id="plcType" name="variable.plcType.id"
-						class="easyui-combobox" required="true"
-						missingMessage="主控类型必填!" style="width:180px;" 
-						url="SHARPOWER_SCADA/ajaxAllPlcType" valueField="id" 
-						textField="name" value="" ></select>
-					</td>
-				</tr>
-				<tr>
-					<td>主控地址:</td>
-					<td><input type="text" name="fun.address"
-						class="easyui-textbox" required="true"
-						missingMessage="主控地址必填!" value="" /></td>
-				</tr>
-				<tr>
-					<td>所属分组:</td>
-					<td><input type="text" name="fun.line"
-						class="easyui-textbox" required="true"
-						missingMessage="所属分组必填!" value="" /></td>
-				</tr>
-				<input type="hidden" name="fun.windFarm.id" value="1" />
-				<tr align="center">
-					<td colspan="2">
-						<a id="submitBtn" class="easyui-linkbutton">确定</a>
-						<a id="closeBtn" class="easyui-linkbutton">关闭</a>
-					</td>
-				</tr>
-			</table>
-		</form>
-	</div>
-
+	
+</script>	
 </body>
 </html>

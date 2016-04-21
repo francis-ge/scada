@@ -21,6 +21,89 @@ import com.sharpower.utils.ApplicationContextSingle;
 
 public class HibernateTest {
 	@Test
+	public void testPowerCurve(){
+	SessionFactory sessionFactory = null;
+		
+		Configuration configuration = new Configuration().configure("hibernate.cfg2.xml"); 
+		
+		sessionFactory = configuration.buildSessionFactory();
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		Date date1= new Date();
+		Date date2= new Date();
+		
+		try {
+			date1 = dateFormat.parse("2016-04-01 00:00:00");
+			date2 = dateFormat.parse("2016-04-01 23:10:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		Session session = sessionFactory.openSession();
+		String hql ="SELECT new map((sum(CASE WHEN mr.___wind_speed>=0 AND mr.___wind_speed<1.5 THEN mr.___visu_grid_power else 0 end))/(sum(CASE WHEN mr.___wind_speed>=0 AND mr.___wind_speed<1.5 THEN 1 else 0 end)), ";
+		
+		for(int i = 0; i < 47; i++){
+			hql = hql + " (sum( CASE WHEN mr.___wind_speed>=" + (1.5+i*0.5) + " AND mr.___wind_speed<" + (1.5+i*0.5+0.5) + " THEN mr.___visu_grid_power ELSE 0 END))/(sum( CASE WHEN mr.___wind_speed>=" + (1.5+i*0.5) + " AND mr.___wind_speed<" + (1.5+i*0.5+0.5) + " THEN 1 ELSE 0 END)),";
+		}
+		
+		hql = hql + " (sum(CASE WHEN mr.___wind_speed>=25 THEN mr.___visu_grid_power ELSE 0 END))/(sum(CASE WHEN mr.___wind_speed>=25 THEN 1 ELSE 0 END))) " 
+				 + " FROM MainRecode mr WHERE mr.fun.id=? AND mr.dateTime>? AND mr.dateTime<?";
+		
+		session.getTransaction().begin();
+		List<Map<String, Object>> list = session.createQuery(hql).setParameter(0, 1).setParameter( 1, date1).setParameter(2, date2).list();
+		session.getTransaction().commit();
+		System.out.println(list);
+		
+		session.close();
+		sessionFactory.close();
+	}
+	
+	@Test
+	public void testWindFrequencyCurve(){
+		SessionFactory sessionFactory = null;
+		
+		Configuration configuration = new Configuration().configure("hibernate.cfg2.xml"); 
+		
+		sessionFactory = configuration.buildSessionFactory();
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		Date date1= new Date();
+		Date date2= new Date();
+		
+		try {
+			date1 = dateFormat.parse("2016-04-01 00:00:00");
+			date2 = dateFormat.parse("2016-04-01 23:10:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		Session session = sessionFactory.openSession();
+		String hql ="SELECT new map(sum(CASE WHEN mr.___wind_speed>=0 AND mr.___wind_speed<1.5 THEN 1 else 0 end), "
+							+ " sum( case WHEN mr.___wind_speed>=1.5 AND mr.___wind_speed<3 THEN 1 else 0 END),"
+							+ " sum( case WHEN mr.___wind_speed>=3 AND mr.___wind_speed<4.5 THEN 1 else 0 END),"
+							+ " sum( case WHEN mr.___wind_speed>=4.5 AND mr.___wind_speed<6 THEN 1 else 0 END),"
+							+ " sum( case WHEN mr.___wind_speed>=6 AND mr.___wind_speed<7.5 THEN 1 else 0 END),"
+							+ " sum( case WHEN mr.___wind_speed>=7.5 AND mr.___wind_speed<9 THEN 1 else 0 END),"
+							+ " sum( case WHEN mr.___wind_speed>=9 AND mr.___wind_speed<10.5 THEN 1 else 0 END),"
+							+ " sum( case WHEN mr.___wind_speed>=10.5 AND mr.___wind_speed<12 THEN 1 else 0 END),"
+							+ " sum( case WHEN mr.___wind_speed>=12 AND mr.___wind_speed<13.5 THEN 1 else 0 END),"
+							+ " sum( case WHEN mr.___wind_speed>=13.5 AND mr.___wind_speed<15 THEN 1 else 0 END),"
+							+ " sum( case WHEN mr.___wind_speed>=15 AND mr.___wind_speed<16.5 THEN 1 else 0 END),"
+							+ " sum( case WHEN mr.___wind_speed>=16.5 AND mr.___wind_speed<18 THEN 1 else 0 END),"
+							+ " sum( case WHEN mr.___wind_speed>=18 AND mr.___wind_speed<19.5 THEN 1 else 0 END),"
+							+ " sum( case WHEN mr.___wind_speed>=19.5 AND mr.___wind_speed<21 THEN 1 else 0 END),"
+							+ " sum( case WHEN mr.___wind_speed>=21 AND mr.___wind_speed<22.5 THEN 1 else 0 END),"
+							+ " sum( case WHEN mr.___wind_speed>=22.5  THEN 1 else 0 END))"
+							+ " FROM MainRecode mr WHERE mr.fun.id=? AND mr.dateTime>? AND mr.dateTime<? ";
+		
+		session.getTransaction().begin();
+		List<Map<String, Object>> list = session.createQuery(hql).setParameter(0, 1).setParameter(1,date1 ).setParameter(2, date2).list();
+		session.getTransaction().commit();
+		System.out.println(list);
+		
+		session.close();
+		sessionFactory.close();
+	}
+	
+	@Test
 	public void testGetErrorForOne(){
 		SessionFactory sessionFactory = null;
 		

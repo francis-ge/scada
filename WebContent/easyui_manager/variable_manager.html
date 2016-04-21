@@ -43,28 +43,36 @@
 				field : 'name',
 				title : '变量名',
 				width : 100,
-				align : 'center'
+				align : 'left'
 			}, {
 				field : 'dbName',
 				title : '数据存储名',
 				width : 100,
-				align : 'center'
+				align : 'left'
 			}, {
 				field : 'showNameCN',
 				title : '显示名（中文）',
 				width : 100,
-				align : 'center'
+				align : 'left'
 			}, {
-				field : 'type',
-				title : '数据类型',
+				field : 'type.plcType',
+				title : 'PLC数据类型',
 				width : 100,
-				align : 'center',
+				align : 'left',
 				formatter: function(value,row,index){
-										return 'PLC数据类型：'+value.plcType+'，存储类型：'+value.type;
+										return row.type.plcType;
+									}
+			}, {
+				field : 'type.type',
+				title : '存储类型',
+				width : 100,
+				align : 'left',
+				formatter: function(value,row,index){
+										return row.type.type;
 									}
 			},{
 				field : 'plcType',
-				title : 'PLC类型',
+				title : '主控类型',
 				width : 100,
 				align : 'center',
 				formatter: function(value,row,index){
@@ -139,7 +147,8 @@
 												'variable.name':rows[0].name,
 												'variable.dbName':rows[0].dbName,
 												'variable.showNameCN':rows[0].showNameCN,
-												'variable.type.id':rows[0].type.id});
+												'variable.type.id':rows[0].type.id,
+												'variable.plcType.id':rows[0].plcType.id});
 						}
 					}
 				},'-',{
@@ -241,7 +250,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td>PLC类型：</td>
+					<td>主控类型：</td>
 					<td><select id="plcType" name="variable.plcType.id"
 						class="easyui-combobox" required="true"
 						missingMessage="PLC类型必填!" style="width:180px;" 

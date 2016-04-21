@@ -9,34 +9,32 @@
 	<link href="../jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
 	<link href="../jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
 	
+	<style type="text/css">
+		* {margin: 0; padding: 0;}
+	</style>
+
+  </head>
+  
+  <body>
+  	<form id="form1" method="post">
+		<label for="funSelect">选择风机：</label>
+		<select name="funId" class="easyui-combobox" style="width:200px;" url="SHARPOWER_SCADA/ajaxAllfun"  valueField="id" textField="name" required="required"></select>
+		
+        <label for="date1">选择时间：</label>   
+     	<input name="beginTime"  class="easyui-datebox" required="required"></input>
+	    <input name="endTime"  class="easyui-datebox" required="required"></input>
+    	<a class="easyui-linkbutton" id="submitBtn" title="" href="javascript:void(0)">查询</a>
+	</form>  
+  	
+	<div id="chart" style="height:500px"></div>
+	
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
 	<script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
 	
 	<!-- easyUI -->
 	<script src="../jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
 	<script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
-	<script src="../js/echarts-all.js" charset="utf-8"></script>
-	
-	<style type="text/css">
-		* {margin: 0; padding: 0;}
-	</style>
-
-
-
-  </head>
-  
-  <body>
-  	<form id="form" method="post">
-		<label for="funSelect">选择风机：</label>
-		<select id="funSelect" class="easyui-combobox" style="width:200px;" url="SHARPOWER_SCADA/ajaxAllfun"  valueField="id" textField="name" required="required"></select>
-		
-        <label for="date1">选择时间：</label>   
-     	<input id="date1" type="text" class="easyui-datebox" required="required"></input>
-	    <input id="date2" type="text" class="easyui-datebox" required="required"></input>
-    	<a class="easyui-linkbutton" title="" href="javascript:void(0)">查询</a>
-	</form>  
-  	
-	<div id="chart" style="height:500px"></div>
+	<script src="../js/echarts.min.js" charset="utf-8"></script>
 	
 	<script type="text/javascript">
 		var chart = echarts.init(document.getElementById('chart'));
@@ -54,7 +52,6 @@
 			    toolbox: {
 			        show : true,
 			        feature : {
-			            mark : {show: true},
 			            dataView : {show: true, readOnly: false},
 			            magicType : {show: true, type: ['line', 'bar']},
 			            restore : {show: true},
@@ -63,43 +60,92 @@
 			    },
 
 			    xAxis : [
-			        {
-			            type : 'category',
-			            boundaryGap : true,
-			            data : [1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,
-			                    8.5,9,9.5,10,10.5,11,11.5,12,12.5,13,13.5,
-			                    14,14.5,15,15.5,16,16.5,17,17.5,18,18.5,19,
-			                    19.5,20,20.5,21,21.5,22,22.5,23,23.5,24,24.5,25]
-			        }
-			    ],
+					        {
+					            type : 'category',
+					            name : '风速(m/s)',
+					            boundaryGap : true,
+					            data : ['<1.5',1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,
+					                    8.5,9,9.5,10,10.5,11,11.5,12,12.5,13,13.5,
+					                    14,14.5,15,15.5,16,16.5,17,17.5,18,18.5,19,
+					                    19.5,20,20.5,21,21.5,22,22.5,23,23.5,24,24.5,'>25']
+					        }
+					    ],
 			    yAxis : [
-			        {
-			            type : 'value',
-			            scale: true,
-			            name : '频次',
-			            boundaryGap: [0.2, 0.2]
-			        }
-			    ],
+					        {
+					            type : 'value',
+					            scale: true,
+					            name : '频次',
+					            boundaryGap: [0.2, 0.2]
+					        }
+					    ],
+			    dataZoom : [
+					     {
+				            show: true,
+				            realtime: true,
+				            start: 0,
+				            end: 100
+				         },
+				         {
+					    	type: 'inside',
+					        show : true,
+					        start : 0,
+					        end : 100
+					    }],
 			    series : [
-			        {
-			            name:'频次',
-			            type:'line',
-			            data:(function (){
-			                var res = [];
-			                var len = 10;
-			                while (len--) {
-			                    res.push((Math.random()*10 + 5).toFixed(1) - 0);
-			                }
-			                return res;
-			            })()
-			        }
-			    ]
+					        {
+					            name:'频次',
+					            type:'line'
+					        }
+					    ]
 			};
 		
 			chart.setOption(option);
+			
+			$(function(){
+				$('#submitBtn').click(function(){
+					$.messager.progress();
+					
+					$('#form1').form('submit',{
+						url:'SHARPOWER_SCADA/ajaxWindFrequencyCurve',
+						onSubmit: function(){
+						
+							var isValid = $(this).form('validate');
+							if (!isValid){
+								$.messager.progress('close');	// 如果表单是无效的则隐藏进度条
+							}
+							return isValid;	// 返回false终止表单提交
+						},
+						success: function(info){
+							$.messager.progress('close');	// 如果提交成功则隐藏进度条
+							info = eval("("+info+")");
+							
+							var option1 = chart.getOption();
+							
+							var data = new Array();
+							
+							var dataMap = info.dataMap;
+							
+							for (var key in dataMap){
+								data.push(dataMap[key]);
+							}
+							
+							option1.series[0].data=data;
+							
+							chart.clear();							
+							chart.setOption(option1);
+							
+							$.messager.show({title:'我的消息',msg:info.result,showType:'slide'});
+							
+							
+						}
+					});
+					
+					}
+				)
+			
+			})
+			
 	</script>
   </body>
   
-  
-
 </html>

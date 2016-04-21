@@ -9,133 +9,124 @@
 	<link href="../jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
 	<link href="../jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
 	
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
-	<script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
-	
-	<!-- easyUI -->
-	<script src="../jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
-	<script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
-	<script src="../js/echarts-all.js" charset="utf-8"></script>
-	
 	<style type="text/css">
 		* {margin: 0; padding: 0;}
 	</style>
-
-
-
   </head>
   
   <body>
   	<form id="form" method="post">
 		<label for="funSelect">选择风机：</label>
-		<select id="funSelect" class="easyui-combobox" style="width:200px;" url="SHARPOWER_SCADA/ajaxAllfun"  valueField="id" textField="name" required="required"></select>
+		<select id="funSelect" name="funId" class="easyui-combobox" style="width:200px;" data-options="url:'SHARPOWER_SCADA/ajaxAllfun',valueField:'id', textField:'name',required:'false'"></select>
 		
         <label for="valSelect">选择数据：</label>   
-        <select id="valSelect" class="easyui-combobox" style="width:200px;" required="required" >
-			<option value="windSpeed">风速(m/s)</option>
-			<option value="windDirection">风向(°)</option>
-			<option value="power">有功功率(kW)</option>
-			<option value="reactivePower">无功功率(kVar)</option>
-			<option value="ambientTemperature">环境温度(℃)</option>
+        <select id="valSelect" name="variables" class="easyui-combobox" style="width:200px;" data-options="valueField:'dbName', textField:'showNameCN',multiple:'true',required:'false'" >
 		</select>
 		     
-	</form>  
+	</form>
   	
 	<div id="chart" style="height:500px"></div>
+   
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+	<script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
 	
+	<!-- easyUI -->
+	<script src="../jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
+	<script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
+	
+	<script src="../js/echarts.min.js" charset="utf-8"></script>
+		
 	<script type="text/javascript">
 		var chart = echarts.init(document.getElementById('chart'));
+		var dataItem = 1000;
+	
 		var option = {
 			    title : {
-			        text: '动态数据',
+			        text: '实时曲线',
 			        subtext: ''
 			    },
 			    tooltip : {
-			        trigger: 'axis'
+			        trigger: 'axis',
+			        formatter: '{b}<br />{a0}: {c0}<br />{a1}: {c1}'
 			    },
-			    legend: {
-			        data:['风速(s/m)', '功率(kWh)']
-			    },
-			    toolbox: {
+			    legend : [{
+			        data : [{name:''},{name:''}]
+			    }],
+			    toolbox : {
 			        show : true,
 			        feature : {
-			            mark : {show: true},
-			            dataView : {show: true, readOnly: false},
-			            magicType : {show: true, type: ['line', 'bar']},
 			            restore : {show: true},
 			            saveAsImage : {show: true}
 			        }
 			    },
-			    dataZoom : {
-			        show : false,
-			        start : 0,
-			        end : 100
-			    },
 			    xAxis : [
-			        {
-			            type : 'category',
-			            boundaryGap : true,
-			            data : (function (){
-			                var now = new Date();
-			                var res = [];
-			                var len = 10;
-			                while (len--) {
-			                    res.unshift(now.toLocaleTimeString().replace(/^\D*/,''));
-			                    now = new Date(now - 1000);
-			                }
-			                return res;
-			            })()
-			        },
-			        {
-			            type : 'category',
-			            boundaryGap : true,
-			            data : (function (){
-			                var res = [];
-			                var len = 10;
-			                while (len--) {
-			                    res.push(len + 1);
-			                }
-			                return res;
-			            })()
-			        }
-			    ],
+					        {
+					            type : 'category',
+					            boundaryGap : true,
+					            data : (function (){
+					                var now = new Date();
+					                var res = [];
+					                var len = dataItem;
+					                while (len--) {
+					                    res.unshift(now.toLocaleTimeString().replace(/^\D*/,''));
+					                    now = new Date(now - 1000);
+					                }
+					                return res;
+					            })()
+					        }
+					    ],
 			    yAxis : [
 			        {
 			            type : 'value',
 			            scale: true,
-			            name : '风速(s/m)',
-			            boundaryGap: [0.2, 0.2]
+			            name : '',
+			            boundaryGap: [0.1, 0.1]
 			        },
 			        {
 			            type : 'value',
 			            scale: true,
-			            name : '功率(kWh)',
-			            boundaryGap: [0.2, 0.2]
+			            name : '',
+			            boundaryGap: [0.1, 0.1]
 			        }
 			    ],
+			    dataZoom :  [
+   						     {
+					            show: true,
+					            realtime: true,
+					            start: 0,
+					            end: 100
+						      },
+							  {
+						    	type: 'inside',
+						        show : true,
+						        start : 0,
+						        end : 100
+  							  }],
 			    series : [
 			        {
-			            name:'风速(s/m)',
-			            type:'bar',
-			            xAxisIndex: 1,
-			            yAxisIndex: 1,
+			            name:'',
+			            type:'line',
+			            xAxisIndex: 0,
+			            yAxisIndex: 0,
 			            data:(function (){
 			                var res = [];
-			                var len = 10;
+			                var len = dataItem;
 			                while (len--) {
-			                    res.push(Math.round(Math.random() * 1000));
+			                    res.push(null);
 			                }
 			                return res;
 			            })()
 			        },
 			        {
-			            name:'功率(kWh)',
+			            name:'',
 			            type:'line',
+			            xAxisIndex: 0,
+			            yAxisIndex: 1,
 			            data:(function (){
 			                var res = [];
-			                var len = 10;
+			                var len = dataItem;
 			                while (len--) {
-			                    res.push((Math.random()*10 + 5).toFixed(1) - 0);
+			                    res.push(null);
 			                }
 			                return res;
 			            })()
@@ -143,41 +134,130 @@
 			    ]
 			};
 		
-			chart.setOption(option);
+		chart.setOption(option);
 			
-			var lastData = 11;
-			var axisData;
-			var timeTicket;
-			
-			clearInterval(timeTicket);
-			timeTicket = setInterval(function (){
-			    lastData += Math.random() * ((Math.round(Math.random() * 10) % 2) == 0 ? 1 : -1);
-			    lastData = lastData.toFixed(1) - 0;
-		 
-			    axisData = (new Date()).toLocaleTimeString().replace(/^\D*/,''); 
+		var axisData;
+		var timeTicket;
 		
-			    // 动态数据接口 addData
+		clearInterval(timeTicket);
+		
+		var previousVal1;
+		var previousVal2;
+		
+		timeTicket = setInterval(function (){
+			var funId = $('#funSelect').combobox('getValue');
+			var vals = $('#valSelect').combobox('getValues');
 			
-			    chart.addData([
-			        [
-			            0,        // 系列索引
-			            Math.round(Math.random() * 1000), // 新增数据
-			            true,     // 新增数据是否从队列头部插入
-			            false     // 是否增加队列长度，false则自定删除原有数据，队头插入删队尾，队尾插入删队头
-			        ],
-			        [
-			            1,        // 系列索引
-			            lastData, // 新增数据
-			            true,    // 新增数据是否从队列头部插入
-			            false,    // 是否增加队列长度，false则自定删除原有数据，队头插入删队尾，队尾插入删队头
-			            axisData  // 坐标轴标签
-			        ]
-			    ]);
-			}, 1000);
-		                   
+			if(funId==''){
+				return;
+			}
+			
+			$.post('SHARPOWER_SCADA/ajaxRealTimeInfo', {funId:funId}, function(data){
+				axisData = (new Date()).toLocaleTimeString().replace(/^\D*/,'');
+				var option2 = chart.getOption();
+
+				var data0 = option2.series[0].data;
+				var data1 = option2.series[1].data;
+				
+				if(vals[0]==previousVal1 && vals[0]!=undefined){
+					data0.shift();
+					if (data[0][vals[0]]!=undefined){
+						data0.push(data[0][vals[0]]);
+					}else{
+						data0.push(null);
+					}
+				}else{
+					data0.splice(0, data0.length);
+					  var len = dataItem;
+		                while (len--) {
+		                	data0.push(null);
+		                }
+				}		
+				
+				previousVal1 = vals[0];
+				
+				if(vals[1]==previousVal2 && vals[0]!=undefined ){
+					data1.shift();
+					if(data[0][vals[1]]!=undefined){
+						data1.push(data[0][vals[1]]);
+					}else{
+						data1.push(null);
+					}
+				}else{
+					data1.splice(0, data1.length);
+					  var len = dataItem;
+		                while (len--) {
+		                	data1.push(null);
+		                }
+				}
+				
+				previousVal2 = vals[1];
+			
+				option2.xAxis[0].data.shift();
+				option2.xAxis[0].data.push(axisData);
+				
+				var option3 = {
+						xAxis : [{data:option2.xAxis[0].data}],
+						series : [{data:data0},{data:data1}]
+				};
+				
+				chart.setOption(option3);
+			},'json');
+		}, 1000 );
+		
+ 		$(function(){
+ 			$('#funSelect').combobox({
+ 				onSelect : function(recode){
+ 							$('#valSelect').combobox('clear');
+ 							$('#valSelect').combobox('reload', 'SHARPOWER_SCADA/ajaxAllVariable?funId='+recode.id);
+					}
+ 			});
+	 		
+			$('#valSelect').combobox({
+				onSelect : function(recode){
+					var vals = $('#valSelect').combobox('getValues');
+					
+					if (vals.length>2){
+						$('#valSelect').combobox('unselect', recode.dbName);
+						$.messager.show({ title:'我的消息', msg:'最多选择两项。', showType:'slide'});
+						return;
+					}
+
+					var text = $('#valSelect').combobox('getText');
+					var legends = text.split(',');
+					
+					var option1 = chart.getOption();
+					
+					option1.legend[0].data[0].name = legends[0];
+					option1.legend[0].data[1].name = legends[1];
+					option1.yAxis[0].name = legends[0];
+					option1.yAxis[1].name = legends[1];
+					option1.series[0].name = legends[0];
+					option1.series[1].name = legends[1];
+					
+					chart.clear();
+					chart.setOption(option1);
+				},
+				onUnselect : function(recode){
+					var text = $('#valSelect').combobox('getText');
+					var legends = text.split(',');
+					
+					var option1 = chart.getOption();
+					
+					option1.legend[0].data[0].name = legends[0];
+					option1.legend[0].data[1].name = legends[1];
+					option1.yAxis[0].name = legends[0];
+					option1.yAxis[1].name = legends[1];
+					option1.series[0].name = legends[0];
+					option1.series[1].name = legends[1];
+					
+					chart.clear();
+					chart.setOption(option1);
+				},
+			});
+			
+ 		})
+				                   
 	</script>
   </body>
-  
-  
-
 </html>
