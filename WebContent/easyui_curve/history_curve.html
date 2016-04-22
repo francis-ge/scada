@@ -1,0 +1,224 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title></title>
+	
+	<!-- easyUI -->
+	<link href="../jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
+	<link href="../jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
+	
+	<style type="text/css">
+		* {margin: 0; padding: 0;}
+	</style>
+  </head>
+  
+  <body>
+  	<form id="form1" method="post">
+		<label for="funSelect">选择风机：</label>
+		<select id="funSelect" name="funId" class="easyui-combobox" style="width:200px;" data-options="url:'SHARPOWER_SCADA/ajaxAllfun',valueField:'id', textField:'name',required:'false'"></select>
+		
+        <label for="valSelect">选择数据：</label>   
+        <select id="valSelect" name="variables" class="easyui-combobox" style="width:200px;" data-options="valueField:'dbName', textField:'showNameCN',multiple:'true',required:'false'" ></select>
+		 开始时间：   
+     	<input name="beginTime" type="text" class="easyui-datebox" required="required"></input>
+     	结束时间：
+	    <input name="endTime" type="text" class="easyui-datebox" required="required"></input>
+    	<a class="easyui-linkbutton" id="submitBtn" title="" href="javascript:void(0)">查询</a>     
+	</form>
+  	
+	<div id="chart" style="height:500px"></div>
+   
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+	<script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
+	
+	<!-- easyUI -->
+	<script src="../jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
+	<script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
+	
+	<script src="../js/echarts.min.js" charset="utf-8"></script>
+		
+	<script type="text/javascript">
+		var chart = echarts.init(document.getElementById('chart'));
+		var dataItem = 1000;
+	
+		var option = {
+			    title : {
+			        text: '历史曲线',
+			        subtext: ''
+			    },
+			    tooltip : {
+			        trigger: 'axis',
+			        formatter: '{b}<br />{a0}: {c0}<br />{a1}: {c1}'
+			    },
+			    legend : [{
+			        data : [{name:' '},{name:' '}]
+			    }],
+			    toolbox : {
+			        show : true,
+			        feature : {
+			            dataView : {show: true, readOnly: false},
+			            magicType : {show: true, type: ['line', 'bar']},
+			            restore : {show: true},
+			            saveAsImage : {show: true}
+			        }
+			    },
+			    xAxis : [
+					        {
+					            type : 'category',
+					            name: '时间',
+					            boundaryGap : true,
+					            data :[]
+					        }
+					    ],
+			    yAxis : [
+			        {
+			            type : 'value',
+			            scale: true,
+			            name : ' ',
+			            boundaryGap: [0.1, 0.1],
+			            data:[]
+			        },
+			        {
+			            type : 'value',
+			            scale: true,
+			            name : ' ',
+			            boundaryGap: [0.1, 0.1],
+			            data:[]
+			        }
+			    ],
+			    dataZoom :  [
+						     {
+					            show: true,
+					            realtime: true,
+					            start: 0,
+					            end: 100
+						      },
+						      {
+						    	type: 'inside',
+						        show : true,
+						        start : 0,
+						        end : 100
+						    }],
+			    series : [
+			        {
+			            name:' ',
+			            type:'line',
+			            xAxisIndex: 0,
+			            yAxisIndex: 0,
+			        },
+			        {
+			            name:' ',
+			            type:'line',
+			            xAxisIndex: 0,
+			            yAxisIndex: 1,
+			        }
+			    ]
+			};
+		
+		chart.setOption(option);	
+		
+ 		$(function(){
+ 			$('#funSelect').combobox({
+ 				onSelect : function(recode){
+ 							$('#valSelect').combobox('clear');
+ 							$('#valSelect').combobox('reload', 'SHARPOWER_SCADA/ajaxAllVariable?funId='+recode.id);
+					}
+ 			});
+	 		
+			$('#valSelect').combobox({
+				onSelect : function(recode){
+					var vals = $('#valSelect').combobox('getValues');
+					
+					if (vals.length>2){
+						$('#valSelect').combobox('unselect', recode.dbName);
+						$.messager.show({ title:'我的消息', msg:'最多选择两项。', showType:'slide'});
+						return;
+					}
+
+					var text = $('#valSelect').combobox('getText');
+					var legends = text.split(',');
+					
+					var option1 = chart.getOption();
+					
+					option1.legend[0].data[0].name = legends[0];
+					option1.legend[0].data[1].name = legends[1];
+					option1.yAxis[0].name = legends[0];
+					option1.yAxis[1].name = legends[1];
+					option1.series[0].name = legends[0];
+					option1.series[1].name = legends[1];
+					
+					chart.clear();
+					chart.setOption(option1);
+				},
+				onUnselect : function(recode){
+					var text = $('#valSelect').combobox('getText');
+					var legends = text.split(',');
+					
+					var option1 = chart.getOption();
+					
+					option1.legend[0].data[0].name = legends[0];
+					option1.legend[0].data[1].name = legends[1];
+					option1.yAxis[0].name = legends[0];
+					option1.yAxis[1].name = legends[1];
+					option1.series[0].name = legends[0];
+					option1.series[1].name = legends[1];
+					
+					chart.clear();
+					chart.setOption(option1);
+				},
+			});
+			
+			$('#submitBtn').click(function(){
+				$.messager.progress();
+				
+				$('#form1').form('submit',{
+					url:'SHARPOWER_SCADA/ajaxMainRecodeForOne',
+					
+					onSubmit: function(){
+						var isValid = $(this).form('validate');
+						if (!isValid){
+							$.messager.progress('close');	// 如果表单是无效的则隐藏进度条
+						}
+						return isValid;	// 返回false终止表单提交
+					},
+					success: function(info){
+						$.messager.progress('close');	// 如果提交成功则隐藏进度条
+						info = eval("("+info+")");
+						
+						var option1 = chart.getOption();
+						
+						var data0 = new Array();
+						var data1 = new Array();
+						var time = new Array();
+						
+						var dataList = info.dataList;
+						
+						var vals = $('#valSelect').combobox('getValues');
+						
+						for (var key in dataList){
+							time.push(dataList[key]['time']);
+							data0.push(dataList[key][vals[0]]);
+							data1.push(dataList[key][vals[1]]);
+						}
+						
+						option1.xAxis[0].data = time;
+						option1.series[0].data = data0;
+						option1.series[1].data = data1;
+						
+						chart.clear();
+						chart.setOption(option1);
+						
+						$.messager.show({ title:'我的消息', msg:info.result, showType:'slide'});
+					}
+				});
+				
+				}
+			)
+			
+ 		})
+				                   
+	</script>
+  </body>
+</html>
