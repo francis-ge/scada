@@ -10,7 +10,14 @@
 	<constant name="struts.devMode" value="true" />
 	
 	<package name="ajaxPackage" extends="json-default">
-	
+		<action name="ajaxLogin" class="ajaxUserAction" method="verificationUser" >
+			<result name="success" type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="includeProperties">result</param>
+			</result>
+		</action>
+		
 		<action name="ajaxMainInfo" class="ajaxRealTimeInfoAction" method="mainInfo" >
 			<result type="json">
 				<param name="noCache">true</param>
@@ -275,6 +282,30 @@
 			<result type="json">
 				<param name="noCache">true</param>
 				<param name="contentType">text/html</param>
+			</result>
+		</action>
+		
+		<action name="ajaxReportHourForOne" class="ajaxMainRecodeAcrion" method="reportHourForOne">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">dataList</param>
+			</result>
+		</action>		
+		
+		<action name="ajaxFunChangeOfState" class="ajaxMainRecodeAcrion" method="funChangeOfState">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">dataList1</param>
+			</result>
+		</action>	
+		
+		<action name="ajaxReportWindFarmHour" class="ajaxMainRecodeAcrion" method="reportWindFarmHour">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">dataList</param>
 			</result>
 		</action>		
 		

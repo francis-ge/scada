@@ -76,6 +76,11 @@
 		class="com.sharpower.dao.impl.ReportDayRecodeDaoImpl">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
+	
+	<bean id="userDao"
+		class="com.sharpower.dao.impl.UserDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
 
 	<bean id="funService" 
 		class="com.sharpower.service.impl.FunServiceImpl">
@@ -139,6 +144,11 @@
    		<property name="dao" ref="reportDayRecodeDao"></property>
     </bean>
     
+    <bean id="userService"
+    	class="com.sharpower.service.impl.UserServiceImpl">
+   		<property name="dao" ref="userDao"></property>
+    </bean>
+    
     <bean id="FunControlServiceBeckhoffImpl"
     	class="com.sharpower.beckhoff.FunControlBeckhoffImpl">
     </bean>
@@ -153,6 +163,12 @@
 	<bean name="transactionManager"
 		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="ajaxUserAction"
+		class="com.sharpower.action.AjaxUserAction"
+		scope="prototype">
+		<property name="userService" ref="userService"></property>
 	</bean>
 	
 	<bean id="ajaxFunAction"

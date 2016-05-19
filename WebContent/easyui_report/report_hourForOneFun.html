@@ -11,43 +11,26 @@
 	<link href="../jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
 	<link href="../jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
 	
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
-	<script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
-	
-	<!-- easyUI -->
-	<script src="../jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
-	<script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
-	
 	<style type="text/css">
 		* {margin: 0; padding: 0;}
 	</style>
-
-	<script type="text/javascript">
-		$(function(){
-			$('#datagrid').datagrid({
-				toolbar:'#toolBar'
-			});
-			
-		})
-		
-	</script>
 
   </head>
   
   <body>
 
-		<table id ="datagrid" class="easyui-datagrid" url="" idField="id" singleSelect="true" fit="true" striped="true" fitColumns="true" rownumbers="true">
+		<table id ="datagrid" class="easyui-datagrid" idField="id" url="SHARPOWER_SCADA/ajaxReportHourForOne" singleSelect="true" fit="true" striped="true" fitColumns="true" rownumbers="true">
 			<thead>   
 		        <tr>   
 		            <th data-options="field:'name',width:'10%',align:'center'">风机名称</th>  
-		            <th data-options="field:'date',width:'5%',align:'center'">小时</th>
-		            <th data-options="field:'b',width:'10%'">平均风速(m/s)</th>  
-		            <th data-options="field:'c',width:'10%'">平均功率(kW)</th>  
-		            <th data-options="field:'d',width:'10%'">平均无功功率(KVar)</th>  
-		            <th data-options="field:'e',width:'10%'">最大风速(m/s)</th>  
-		            <th data-options="field:'f',width:'10%'">最大功率(kW)</th>  
-		            <th data-options="field:'g',width:'10%'">环境温度</th>  
-		            <th data-options="field:'a',width:'10%'">发电量(kWh)</th>  
+		            <th data-options="field:'time',width:'5%',align:'center'">小时</th>
+		            <th data-options="field:'averageWindSpeed',width:'10%'">平均风速(m/s)</th>  
+		            <th data-options="field:'averagePower',width:'10%'">平均功率(kW)</th>  
+		            <th data-options="field:'averageReactivePower',width:'10%'">平均无功功率(KVar)</th>  
+		            <th data-options="field:'maxSpeed',width:'10%'">最大风速(m/s)</th>  
+		            <th data-options="field:'maxPower',width:'10%'">最大功率(kW)</th>  
+		            <th data-options="field:'nacelleOutdoorTemperature',width:'10%'">环境温度</th>  
+		            <th data-options="field:'maxEngergy',width:'10%'">发电量(kWh)</th>  
 		        </tr>   
 		    </thead>   
 		</table>
@@ -55,14 +38,64 @@
 		<div id="toolBar" style="height:25px,overflow:hidden" >
 				<form id="from1" method="post"> 
 					<label for="funSelect">选择风机 ：</label>  
-					<select id="funSelect" class="easyui-combobox" style="width:200px;" url="SHARPOWER_SCADA/ajaxAllfun"  valueField="id" textField="name" required="required">
+					<select id="funSelect" name="funId" class="easyui-combobox" style="width:200px;" url="SHARPOWER_SCADA/ajaxAllfun"  valueField="id" textField="name" required="required">
 					</select>
-					<label for="date1">选择日期:</label>
-					<input id="date1" type="text" class="easyui-datebox" required="required"></input>
-					<a class="easyui-linkbutton" title="" href="javascript:void(0)">查询</a> 
+					<label for="time">选择日期:</label>
+					<input name="time" class="easyui-datebox" required="required"></input>
+					<a id="SubmitBtn" class="easyui-linkbutton" title="" href="javascript:void(0)">查询</a> 
 				</form>
 				
 		</div>	
+		
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+	<script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
+	
+	<!-- easyUI -->
+	<script src="../jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
+	<script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
+	
+	<script type="text/javascript">
+		$(function(){
+			$('#datagrid').datagrid({
+				toolbar:'#toolBar'
+			});
+			
+			$('#funSelect').combobox({
+				onChange:function(){
+					$('#datagrid').datagrid('loadData',{ total:0, rows:[] });
+				}
+			})
+			
+			$('#SubmitBtn').click(
+				function(){
+					$('#datagrid').datagrid('loadData', { total:0, rows:[] });
+					
+					var isValid = $('#from1').form('validate');
+					if (!isValid){
+						return false;	// 返回false终止表单提交
+					}
+
+					$('#datagrid').datagrid('load', serializeForm($('#from1')));
+					
+				}
+			)
+			
+		})
+		
+		//js方法：序列化表单 			
+		function serializeForm(form){
+			var obj = {};
+			$.each(form.serializeArray(),function(index){
+				if(obj[this['name']]){
+					obj[this['name']] = obj[this['name']] + ','+this['value'];
+				} else {
+					obj[this['name']] =this['value'];
+				}
+			});
+			return obj;
+		}
+	</script>
+		
   </body>
 
 </html>

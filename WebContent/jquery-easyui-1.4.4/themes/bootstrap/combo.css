@@ -39,17 +39,17 @@
   background-color: #ffffff;
 }
 .combo {
-  border-color: #D4D4D4;
+  border-color: #95B8E7;
   background-color: #fff;
 }
 .combo-arrow {
-  background-color: #F2F2F2;
+  background-color: #E0ECFF;
 }
 .combo-arrow-hover {
-  background-color: #e6e6e6;
+  background-color: #eaf2ff;
 }
 .combo-arrow:hover {
-  background-color: #e6e6e6;
+  background-color: #eaf2ff;
 }
 .combo .textbox-icon-disabled:hover {
   cursor: default;

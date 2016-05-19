@@ -137,7 +137,7 @@
 	            		$('.yepian',$this).attr('src','../pic/fun_null.png');
 	            		$('.yepian',$this).velocity('finish');
 	            		
-	            		settings.funModeTest='故障';
+	            		settings.funModeTest='停机';
 	            		break;
 	            	case 2:
 	            		$('.fun1',$this).attr('src','../pic/fun_yellow.png');

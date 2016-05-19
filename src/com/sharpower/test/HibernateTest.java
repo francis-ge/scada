@@ -2,6 +2,7 @@ package com.sharpower.test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,9 +21,63 @@ import com.sharpower.utils.ApplicationContextSingle;
 
 
 public class HibernateTest {
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testreportHourForOne() throws ParseException{
+		SessionFactory sessionFactory = null;
+		Configuration configuration = new Configuration().configure("hibernate.cfg2.xml"); 
+		sessionFactory = configuration.buildSessionFactory();
+		
+		Calendar calendar = Calendar.getInstance();
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		Date time = dateFormat.parse("2016-04-01 04:00:00");
+		calendar.setTime(time);
+		
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		
+		Date beginTime = calendar.getTime();
+		
+		calendar.set(Calendar.HOUR_OF_DAY, 23);		
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.SECOND, 59);
+		calendar.set(Calendar.MILLISECOND, 999);
+		Date endTime = calendar.getTime();
+
+		
+		String hql = "SELECT new map( hour(mr.dateTime),  "
+				+ "mr.fun.id as funId, "
+				+ "mr.fun.name as name, "
+				+ "max(mr.___visu_grid_energy) as maxEngergy, "
+				+ "avg(mr.___wind_speed) as averageWindSpeed, "
+				+ "avg(mr.___visu_grid_power) as averagePower, "
+				+ "avg(mr.___visu_grid_reactive_power) as averageReactivePower, "
+				+ "max(mr.___wind_speed) as maxSpeed, "
+				+ "max(mr.___visu_grid_power) as maxPower, "
+				+ "avg(mr.___visu_nacelle_outdoor_temperature) as nacelleOutdoorTemperature) "
+				+ "FROM MainRecode mr WHERE mr.fun.id=? AND mr.dateTime>? AND mr.dateTime<? "
+				+ "GROUP BY hour(mr.dateTime)";
+		
+		Session session = sessionFactory.openSession();
+		
+		session.getTransaction().begin();
+		List<Map<String, Object>> list = session.createQuery(hql).setParameter(0, 1).setParameter(1, beginTime)
+				.setParameter(2, endTime).list();
+				
+		
+		session.getTransaction().commit();
+		System.out.println(list);
+		
+		session.close();
+		sessionFactory.close();
+				
+	}
 	@Test
 	public void testPowerCurve(){
-	SessionFactory sessionFactory = null;
+		SessionFactory sessionFactory = null;
 		
 		Configuration configuration = new Configuration().configure("hibernate.cfg2.xml"); 
 		

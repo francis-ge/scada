@@ -22,16 +22,6 @@
 		* {margin: 0; padding: 0;}
 	</style>
 
-	<script type="text/javascript">
-		$(function(){
-			$('#datagrid').datagrid({
-				toolbar:'#toolBar'
-			});
-			
-		})
-		
-	</script>
-
   </head>
   
   <body>
@@ -54,11 +44,29 @@
 		
 		<div id="toolBar" style="height:25px,overflow:hidden" >
 				<form id="from1" method="post">   
-					选择日期:<input id="date" type="text" class="easyui-datebox" required="required"></input>
+					选择年份:<input id="date" type="text" class="easyui-datebox" required="required"></input>
 					<a class="easyui-linkbutton" title="" href="javascript:void(0)">查询</a> 
 				</form>
 				
-		</div>	
+		</div>
+		
+		<script type="text/javascript">
+			$(function(){
+				$('#datagrid').datagrid({
+					toolbar:'#toolBar'
+				});
+				
+		        $('#date').datebox({
+		            parser: function (s) {
+	            	   if (!s) return new Date();
+		               return new Date( parseInt(s,10), 0, 1);
+		            },
+		            
+		            formatter: function (d) { return d.getFullYear(); }
+		        });
+			})
+		
+	</script>
   </body>
-	<div id="timer"></div>
+
 </html>

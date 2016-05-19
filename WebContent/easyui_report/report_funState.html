@@ -10,52 +10,83 @@
 	<link href="../jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
 	<link href="../jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
 	
+	<style type="text/css">
+		* {margin: 0; padding: 0;}
+	</style>
+	
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
 	<script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
 	
 	<!-- easyUI -->
 	<script src="../jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
 	<script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
-	
-	<style type="text/css">
-		* {margin: 0; padding: 0;}
-	</style>
-
-	<script type="text/javascript">
-		$(function(){
-			$('#datagrid').datagrid({
-				toolbar:'#toolBar'
-			});
-			
-		})
-		
-	</script>
 
   </head>
   
   <body>
 
-		<table id ="datagrid" class="easyui-datagrid" url="" idField="id" singleSelect="true" fit="true" striped="true" fitColumns="true" rownumbers="true">
+		<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxFunChangeOfState" idField="id" singleSelect="true" fit="true" striped="true" fitColumns="true" rownumbers="true">
 			<thead>   
 		        <tr>   
-		            <th data-options="field:'number',width:'20px',align:'center'">序号</th>
 		            <th data-options="field:'name',width:'30px',align:'center'">风机名称</th>  
-		            <th data-options="field:'date',width:'60px',align:'center'">机组状态发生时间</th>  
-		            <th data-options="field:'describe',width:'100px',align:'center'">事件描述</th>  
+		            <th data-options="field:'dateTime',width:'60px',align:'center'">机组状态发生时间</th>  
+		            <th data-options="field:'state',width:'100px',align:'center'">事件描述</th>  
 		        </tr>   
 		    </thead>   
 		</table>
 		
 		<div id="toolBar" style="height:25px,overflow:hidden" >
 				<form id="from1" method="post">   
-					选择风机：<select id="funSelect" class="easyui-combobox" style="width:200px;" url="SHARPOWER_SCADA/ajaxAllfun"  valueField="id" textField="name" required="required">
+					选择风机：<select id="funSelect" name="funId" class="easyui-combobox" style="width:200px;" url="SHARPOWER_SCADA/ajaxAllfun"  valueField="id" textField="name" required="required">
 							</select>
-					开始时间：<input id="date1" type="text" class="easyui-datebox" required="required"></input>
-					结束时间：<input id="date2" type="text" class="easyui-datebox" required="required"></input>
-					<a class="easyui-linkbutton" title="" href="javascript:void(0)">查询</a> 
+					开始时间：<input name="beginTime" type="text" class="easyui-datetimebox" required="required"></input>
+					结束时间：<input name="endTime" type="text" class="easyui-datetimebox" required="required"></input>
+					<a id="SubmitBtn" class="easyui-linkbutton" title="" href="javascript:void(0)">查询</a> 
 				</form>
 				
 		</div>	
+		
+		<script type="text/javascript">
+			$(function(){
+				$('#datagrid').datagrid({
+					toolbar:'#toolBar'
+				});
+				
+				$('#funSelect').combobox({
+					onChange:function(){
+						$('#datagrid').datagrid('loadData',{ total:0, rows:[] });
+					}
+				})
+				
+				$('#SubmitBtn').click(
+					function(){
+						$('#datagrid').datagrid('loadData', { total:0, rows:[] });
+						
+						var isValid = $('#from1').form('validate');
+						if (!isValid){
+							return false;	// 返回false终止表单提交
+						}
+		
+						$('#datagrid').datagrid('load', serializeForm($('#from1')));
+						
+					}
+				)
+				
+			})
+			
+			//js方法：序列化表单 			
+			function serializeForm(form){
+				var obj = {};
+				$.each(form.serializeArray(),function(index){
+					if(obj[this['name']]){
+						obj[this['name']] = obj[this['name']] + ','+this['value'];
+					} else {
+						obj[this['name']] =this['value'];
+					}
+				});
+				return obj;
+			}
+		</script>
   </body>
 	
 </html>

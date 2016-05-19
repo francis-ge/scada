@@ -44,7 +44,7 @@ public class FunDataReadWriteBeckhoffService implements PlcDataReader{
 		if (funDataReaders.isEmpty()) {
 			
 			List<VariableType> variableTypes = variableTypeService.findEntityByHQL("FROM VariableType");
-			List<PlcType> plcTypes = plcTypeService.findEntityByHQL("FROM PlcType p  WHERE p.plcCommType.name='beckhoff'");
+			List<PlcType> plcTypes = plcTypeService.findEntityByHQL("FROM PlcType p WHERE p.plcCommType.name='beckhoff'");
 			
 			for (PlcType plcType : plcTypes){
 				List<FunDataReadWriteBeckhoff> funDataReader = new ArrayList<>();

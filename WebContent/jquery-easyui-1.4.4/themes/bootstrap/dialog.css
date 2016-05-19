@@ -20,13 +20,13 @@
 }
 .dialog-toolbar,
 .dialog-button {
-  background: #F5F5F5;
+  background: #F4F4F4;
   border-width: 1px;
   border-style: solid;
 }
 .dialog-toolbar {
-  border-color: #D4D4D4 #D4D4D4 #e6e6e6 #D4D4D4;
+  border-color: #95B8E7 #95B8E7 #dddddd #95B8E7;
 }
 .dialog-button {
-  border-color: #e6e6e6 #D4D4D4 #D4D4D4 #D4D4D4;
+  border-color: #dddddd #95B8E7 #95B8E7 #95B8E7;
 }

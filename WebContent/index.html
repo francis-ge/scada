@@ -11,6 +11,12 @@
 	* {margin: 0; border: 0; padding: 0;}
 </style>
 
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+<script src="jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
+
+<!-- easyUI -->
+<script src="jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
+<script src="jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
 
 <title></title>
 </head>
@@ -19,7 +25,7 @@
     <div id="north" data-options="region:'north',title:'',split:false" style="height:12%;background:#85B9FF">
     	<a href="http://www.sharpower.cn" target="_blank"><img alt="logo" src="pic/logo.jpg" style="height:100%;"></a>
     </div>   
-    <div  data-options="region:'west',title:'导航栏',split:true" style="width:150px;">
+    <div data-options="region:'west',title:'导航栏',split:true" style="width:150px;">
 	    <div class="easyui-accordion" fit="true">
 	    	<div title="风场概览" style="overflow:auto;">
 	    	<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_realtimeInfo/windFarm_main.html" href="#">风场概览</a>
@@ -50,8 +56,8 @@
 	    	</div>
 	    	
 	    	<div title="风场报表" style="overflow:auto;">
-		    	<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_report/report_hourForOneFun.html" href="#">单台小时报表</a>
 		    	<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_report/report_funState.html" href="#">机组状态变化记录</a>
+		    	<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_report/report_hourForOneFun.html" href="#">单台小时报表</a>
 		    	<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_report/report_hour.html" href="#">风场小时报表</a>
 		    	<a class="easyui-menubutton" plain="true" style="display:block;width:100%;" title="" data-options="menu:'#dayReportMenu'" href="javascript:void(0)">风场日报表</a>   
 					<div class="accordionMenu" id="dayReportMenu" style="width:150px;">   
@@ -94,13 +100,6 @@
 			singleSelect="true" fit="true" striped="true" fitColumns="true" loadMsg="">
 		</table>
     </div> 
-    
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
-	<script src="jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
-	
-	<!-- easyUI -->
-	<script src="jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
-	<script src="jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
 	
 	<script type="text/javascript">
 		$(function(){
@@ -126,6 +125,9 @@
 				return '<span style="font-size:25px">'+value+'</span>';
 			}
 			
+			
+			var $loadMsg;
+			
 			$('#datagrid').datagrid({       
 			    columns:[[    
 			        {field:'communicationFailureFunCount',title:'通信故障',width:150,align:'center',formatter:formatField},    
@@ -146,15 +148,30 @@
 			    ]],
 			    rowStyler: function(index,row){
 		    			return 'height:40px';
-			    	}
+			    	},
+				onLoadSuccess:function(){
+						if($loadMsg){
+							$.messager.progress('close');
+							$loadMsg = undefined; 		
+						}
+					 },
+				onLoadError:function(){
+					 if(!$loadMsg){
+						 $loadMsg = $.messager.progress({
+							 text:'与SCADA服务器连接已断开，正在重连……'
+						 }); 
+					 }
+				 }
 			    
 			}); 
 			
-			setInterval(function(){
-				$('#datagrid').datagrid('load')}, 		
-				 1000 
+			setInterval(
+				function(){
+					$('#datagrid').datagrid('load');
+				}, 		
+				1000 
 			);
-			
+
 				/*
 				$(window).resize(function(){
 					$('#north').panel('resize',{
