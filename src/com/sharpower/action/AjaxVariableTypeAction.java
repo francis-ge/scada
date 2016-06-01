@@ -18,7 +18,7 @@ public class AjaxVariableTypeAction extends ActionSupport {
 	private VariableTypeService variableTypeService;
 	private List<VariableType> variableTypes = new ArrayList<>();
 
-	private String resulte;
+	private String result;
 	
 	
 	@JSON(serialize=false)
@@ -45,7 +45,7 @@ public class AjaxVariableTypeAction extends ActionSupport {
 			variableTypes = variableTypeService.findAllEntities();
 			
 		} catch (Exception e) {
-			resulte = "获取失败！"+e.getMessage();
+			result = "获取失败！"+e.getMessage();
 		}
 		
 		return SUCCESS;

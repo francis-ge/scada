@@ -113,7 +113,6 @@ public class DataQuartz {
 		
 	}
 	
-	
 	@Override
 	protected void finalize() throws Throwable {
 		super.finalize();
@@ -122,6 +121,5 @@ public class DataQuartz {
 			AdsCallDllFunction.adsPortClose();
 		}
 	}
-	
 		
 }

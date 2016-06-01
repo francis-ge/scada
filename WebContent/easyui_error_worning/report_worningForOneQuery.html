@@ -31,7 +31,7 @@
 				onChange:function(){
 					$('#datagrid').datagrid('loadData',{ total:0, rows:[] });
 				}
-			})
+			});
 			
 			$('#SubmitBtn').click(
 				function(){
@@ -45,23 +45,57 @@
 					$('#datagrid').datagrid('load', serializeForm($('#from1')));
 					
 				}
-			)
-
+			);
 			
+			$('#saveBtn').click(
+					function(){
+						$.messager.confirm('确认对话框', '确定要保存该报表吗？', function(r){
+							if (r){
+								//获取表头信息
+								var header = $('#datagrid').datagrid('options').columns[0];
+								var fields = "";
+								var titles = "";
+								for(var i = 0;i<header.length;i++){
+									var field = header[i].field;
+									var title = header[i].title;
+									var hiddenFlag = header[i].hidden;
+									
+									if(!hiddenFlag){
+										var dh = (i == (header.length -1) ? "" :",");
+										fields = fields + field + dh;
+										titles = titles + title + dh;
+									}
+								}
+								
+								var queryParams = $('#datagrid').datagrid('options').queryParams;
+
+								$.post('SHARPOWER_SCADA/ajaxGetTroubleStatisticsForOneQuery', queryParams, function(data){
+									data = eval("(" +data+")").rows;
+									data = JSON.stringify(data);
+									//向后台发送请求  
+									$('#form2').form('load',{fields:fields,titles:titles,excelData:data});
+									
+									$('#form2').form('submit',{url:'../excelFileAction'});
+								});
+								
+							}
+					})	
+				});
+
 		})
 		
-			//js方法：序列化表单 			
-	function serializeForm(form){
-		var obj = {};
-		$.each(form.serializeArray(),function(index){
-			if(obj[this['name']]){
-				obj[this['name']] = obj[this['name']] + ','+this['value'];
-			} else {
-				obj[this['name']] =this['value'];
-			}
-		});
-		return obj;
-	}
+		//js方法：序列化表单 			
+		function serializeForm(form){
+			var obj = {};
+			$.each(form.serializeArray(),function(index){
+				if(obj[this['name']]){
+					obj[this['name']] = obj[this['name']] + ','+this['value'];
+				} else {
+					obj[this['name']] =this['value'];
+				}
+			});
+			return obj;
+		}
 		
 	</script>
 
@@ -70,7 +104,7 @@
   <body>
 
 		<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxGetTroubleStatisticsForOneQuery" 
-			idField="id" singleSelect="true" fit="true" striped="true" fitColumns="true" rownumbers="true">
+			idField="id" singleSelect="true" fit="true" striped="true" fitColumns="true" rownumbers="true" pagination="true">
 			<thead>   
 		        <tr>   
 		            <th data-options="field:'name',width:150,align:'center'">风机名称</th>  
@@ -83,17 +117,22 @@
 		</table>
 		
 		<div id="toolBar" style="height:25px,overflow:hidden" >
-				<form id="from1" method="post">   
+				<form id="from1" method="post" style="display: inline;">   
 					选择风机：<select id="funSelect" name="funTroubleRecode.fun.id" class="easyui-combobox" style="width:200px;" url="SHARPOWER_SCADA/ajaxAllfun"  valueField="id" textField="name" required="required">
 							</select>
 					开始时间：<input name="funTroubleRecode.startTime" class="easyui-datetimebox" required="required"></input>
 					结束时间：<input name="funTroubleRecode.endTime" class="easyui-datetimebox" required="required"></input>
 				   	警告代码：<input name="funTroubleRecode.funTroubleVariable.code" type="text" class="easyui-textbox" value="all" required="true"></input>
 							<input name="funTroubleRecode.funTroubleVariable.type.id" value="2" type="hidden"></input>
-				   	
-					<a id="SubmitBtn" class="easyui-linkbutton" title="" href="javascript:void(0)">查询</a>
+					<a id="SubmitBtn" class="easyui-linkbutton" title="" href="javascript:void(0)" data-options="iconCls:'icon-search'">查询</a>
 				</form>
-				
+				<a id="saveBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" style="display:inline-block;">导出</a>
 		</div>	
+		
+		<form id='form2' style='display:none' target='' method='post' action='' ajax='false'>
+			<input type='hidden' name='fields' />
+			<input type='hidden' name='titles' />
+			<input type='hidden' name='excelData' />
+		</form>
   </body>
 </html>

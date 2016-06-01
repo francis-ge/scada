@@ -9,6 +9,15 @@
 	<link href="../jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
 	<link href="../jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
 	
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+	<script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
+	
+	<!-- easyUI -->
+	<script src="../jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
+	<script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
+	
+	<script src="../js/echarts.min.js" charset="utf-8"></script>
+	
 	<style type="text/css">
 		* {margin: 0; padding: 0;}
 	</style>
@@ -17,24 +26,15 @@
   <body>
   	<form id="form" method="post">
 		<label for="funSelect">选择风机：</label>
-		<select id="funSelect" name="funId" class="easyui-combobox" style="width:200px;" data-options="url:'SHARPOWER_SCADA/ajaxAllfun',valueField:'id', textField:'name',required:'false'"></select>
+		<select id="funSelect" name="funId" style="width:200px;" data-options="url:'SHARPOWER_SCADA/ajaxAllfun',valueField:'id', textField:'name',required:'false'"></select>
 		
         <label for="valSelect">选择数据：</label>   
-        <select id="valSelect" name="variables" class="easyui-combobox" style="width:200px;" data-options="valueField:'dbName', textField:'showNameCN',multiple:'true',required:'false'" >
+        <select id="valSelect" name="variables" style="width:200px;" data-options="valueField:'dbName', textField:'showNameCN',multiple:'true',required:'false'" >
 		</select>
 		     
 	</form>
   	
 	<div id="chart" style="height:500px"></div>
-   
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
-	<script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
-	
-	<!-- easyUI -->
-	<script src="../jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
-	<script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
-	
-	<script src="../js/echarts.min.js" charset="utf-8"></script>
 		
 	<script type="text/javascript">
 		var chart = echarts.init(document.getElementById('chart'));
@@ -209,7 +209,7 @@
  			$('#funSelect').combobox({
  				onSelect : function(recode){
  							$('#valSelect').combobox('clear');
- 							$('#valSelect').combobox('reload', 'SHARPOWER_SCADA/ajaxAllVariable?funId='+recode.id);
+ 							$('#valSelect').combobox('reload', 'SHARPOWER_SCADA/ajaxVariableForFun?plcTypeId=' + recode.plcType.id);
 					}
  			});
 	 		

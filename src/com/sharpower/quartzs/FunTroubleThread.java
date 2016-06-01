@@ -17,6 +17,8 @@ public class FunTroubleThread implements Runnable {
 	private FunTroubleRecodeService funTroubleRecodeService;
 	private Fun fun;
 	private Map<Integer, Map<FunTroubleVariable, FunTroubleRecode>> funTroubleRecodeMap = new HashMap<>();
+	
+	private Map<Integer, Boolean> readDataTheadStaMap = new HashMap<>();
 
 	public void setFunTroubleBeckhoffService(FunTroubleVariableReader funTroubleVariableReader) {
 		this.funTroubleVariableReader = funTroubleVariableReader;
@@ -32,6 +34,10 @@ public class FunTroubleThread implements Runnable {
 
 	public void setFunTroubleRecodeService(FunTroubleRecodeService funTroubleRecodeService) {
 		this.funTroubleRecodeService = funTroubleRecodeService;
+	}
+	
+	public void setReadDataTheadStaMap(Map<Integer, Boolean> readDataTheadStaMap) {
+		this.readDataTheadStaMap = readDataTheadStaMap;
 	}
 
 	public void readTrouble() {
@@ -59,7 +65,6 @@ public class FunTroubleThread implements Runnable {
 				}
 
 				if (funTroubleRecode != null) {
-					
 					if ((Boolean)entry.getValue()) {
 						if (funTroubleRecode.getEndTime() != null) {
 							// 执行插入新故障记录操作
@@ -70,11 +75,17 @@ public class FunTroubleThread implements Runnable {
 							funTroubleRecodeService.saveEntity(funTroubleRecode2);
 
 							funTroubleRecode = funTroubleRecode2;
+						}else{
+							if (funTroubleRecode.getStartTime()==null) {
+								funTroubleRecode.setStartTime(new Date());
+								funTroubleRecodeService.saveEntity(funTroubleRecode);
+							}
 						}
 					} else {
-						if (funTroubleRecode.getEndTime() == null) {
+						if (funTroubleRecode.getStartTime()!=null && funTroubleRecode.getEndTime() == null) {
 							// 执行更新故障结束时间操作
 							funTroubleRecode.setEndTime(new Date());
+							System.out.println(funTroubleRecode);
 							funTroubleRecodeService.updateEntity(funTroubleRecode);
 						}
 					}
@@ -99,6 +110,8 @@ public class FunTroubleThread implements Runnable {
 			
 		} catch (PlcException e) {
 			e.printStackTrace();
+		}finally {
+			readDataTheadStaMap.put(fun.getId(), false);
 		}
 
 	}

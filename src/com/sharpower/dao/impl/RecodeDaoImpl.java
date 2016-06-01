@@ -39,4 +39,16 @@ public class RecodeDaoImpl{
 		return query.list();
 		
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> findEntityMapByHqlPaging(String hql, int startIndex, int rows, Object ... objs){		
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		
+		for (int i=0; i<objs.length;i++) {
+			query.setParameter(i, objs[i]);
+		}
+		
+		return query.setFirstResult(startIndex).setMaxResults(rows).list();
+		
+	}
 }

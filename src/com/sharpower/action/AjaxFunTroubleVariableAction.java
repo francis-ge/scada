@@ -1,7 +1,9 @@
 package com.sharpower.action;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.sharpower.entity.FunTroubleVariable;
@@ -19,9 +21,12 @@ public class AjaxFunTroubleVariableAction extends ActionSupport{
 	private String searchKey;
 	
 	private List<FunTroubleVariable> funTroubleVariables = new ArrayList<>();
-	private String resulte;
+	private Map<String, Object> result = new HashMap<>();
 	
 	private String ids;
+	
+	private int page;
+	private int rows;
 	
 	public FunTroubleVariable getFunTroubleVariable() {
 		return funTroubleVariable;
@@ -37,8 +42,8 @@ public class AjaxFunTroubleVariableAction extends ActionSupport{
 		this.searchKey = searchKey;
 	}
 	
-	public String getResulte() {
-		return resulte;
+	public Map<String, Object> getResult() {
+		return result;
 	}
 	
 	public List<FunTroubleVariable> getFunTroubleVariables() {
@@ -47,20 +52,41 @@ public class AjaxFunTroubleVariableAction extends ActionSupport{
 	public void setIds(String ids) {
 		this.ids = ids;
 	}
-
+	
+	public void setPage(int page) {
+		this.page = page;
+	}
+	public void setRows(int rows) {
+		this.rows = rows;
+	}
+	
 	public String allFunTroubleVariable(){
 		try {
+			String totalHql = "";
+			Long total;
+			
 			if (searchKey==null) {
-				funTroubleVariables = funTroubleVariableService.findAllEntities();
+				funTroubleVariables = funTroubleVariableService.findAllEntitiesPaging((page-1)*rows, rows);
+				totalHql = "SELECT count(*) From FunTroubleVariable";
+				
+				total = (Long) funTroubleVariableService.uniqueResult(totalHql);
+				 
 			}else{
 				String hql = "From FunTroubleVariable v WHERE v.name like ?";
-				funTroubleVariables = funTroubleVariableService.findEntityByHQL(hql, "%"+searchKey+"%");
+				funTroubleVariables = funTroubleVariableService.findEntityByHQLPaging( hql, (page-1)*rows, rows, "%"+searchKey+"%");
+				totalHql = "SELECT count(*) From FunTroubleVariable v WHERE v.name like ?";
+				
+				total = (Long) funTroubleVariableService.uniqueResult(totalHql, "%"+searchKey+"%");
 			}
-			resulte = "共查到" + funTroubleVariables.size() + "条记录。";
+			
+			result.put("total", total);
+			result.put("rows", funTroubleVariables);
 		} catch (Exception e) {
 			e.printStackTrace();
-			resulte = e.getMessage();
+			result.put("message", e.getMessage());
+			
 		}
+		
 		return SUCCESS;
 	}
 	
@@ -125,11 +151,13 @@ public class AjaxFunTroubleVariableAction extends ActionSupport{
 			}
 			
 			funTroubleVariableService.saveOrUpdateEntity(funTroubleVariable);
-			resulte = "保存成功！";
+			
+			result.put("message", "保存成功！");
+			
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
-			resulte= e.getMessage();
+			result.put("message", e.getMessage());
+			
 		}
 		
 		return SUCCESS;
@@ -143,10 +171,13 @@ public class AjaxFunTroubleVariableAction extends ActionSupport{
 				variable.setId(Integer.parseInt(idStr));
 				funTroubleVariableService.deleteEntity(variable);
 			}
-			resulte = "删除成功！";
+			
+			result.put("message", "删除成功！");
+		
 		} catch (Exception e) {
 			e.printStackTrace();
-			resulte = "删除失败！" + e.getMessage();
+			result.put("message", e.getMessage());
+			
 		}
 		return SUCCESS;
 	}

@@ -1,38 +1,23 @@
 package com.sharpower.action;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.struts2.json.annotations.JSON;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.sharpower.entity.Fun;
 import com.sharpower.service.FunService;
-import com.sharpower.utils.ExportExlUtils;
 
 public class AjaxFunAction extends ActionSupport {
-
 	private static final long serialVersionUID = 1L;
 
 	private Fun fun;
 	private FunService funService;
 	private List<Fun> funs = new ArrayList<>();
-	private String resulte;
+	private String result;
 	private String ids;
-	
-	private String fields;
-	private String titles;
-	
-	private InputStream inputStream;
-	private int contentLength;
-	private String contentDisposition;
 	
 	public Fun getFun() {
 		return fun;
@@ -59,12 +44,12 @@ public class AjaxFunAction extends ActionSupport {
 		this.funs = funs;
 	}
 	
-	public String getResulte() {
-		return resulte;
+	public String getResult() {
+		return result;
 	}
 	
-	public void setResulte(String resulte) {
-		this.resulte = resulte;
+	public void setResulte(String result) {
+		this.result = result;
 	}
 	
 	public String getIds() {
@@ -74,41 +59,13 @@ public class AjaxFunAction extends ActionSupport {
 	public void setIds(String ids) {
 		this.ids = ids;
 	}
-	
-	public String getFields() {
-		return fields;
-	}
-
-	public void setFields(String fields) {
-		this.fields = fields;
-	}
-
-	public String getTitles() {
-		return titles;
-	}
-
-	public void setTitles(String titles) {
-		this.titles = titles;
-	}
-	
-	public InputStream getInputStream() {
-		return inputStream;
-	}
-	
-	public int getContentLength() {
-		return contentLength;
-	}
-	
-	public String getContentDisposition() {
-		return contentDisposition;
-	}
 
 	public String allFun(){
 		try {
 			funs = funService.findAllEntities();
-			resulte = "共查到" + funs.size() + "条记录。";
+			result = "共查到" + funs.size() + "条记录。";
 		} catch (Exception e) {
-			resulte = "获取失败！"+e.getMessage();
+			result = "获取失败！"+e.getMessage();
 		}
 		
 		return SUCCESS;
@@ -117,9 +74,9 @@ public class AjaxFunAction extends ActionSupport {
 	public String saveOrUpdateFun(){
 		try {
 			funService.saveOrUpdateEntity(fun);
-			resulte = "保存成功！";
+			result = "保存成功！";
 		} catch (Exception e) {
-			resulte= e.getMessage();
+			result= e.getMessage();
 		}
 		
 		return SUCCESS;
@@ -133,46 +90,18 @@ public class AjaxFunAction extends ActionSupport {
 				fun.setId(Integer.parseInt(idStr));
 				funService.deleteEntity(fun);
 			}
-			resulte = "删除成功！";
+			result = "删除成功！";
 		}catch (DataIntegrityViolationException e) {
 			
 			e.printStackTrace();
-			resulte = "存在相关数据记录，无法删除！" + e.getMessage();
-		}finally {
-			resulte = "删除失败！";
+			result = "存在相关数据记录，无法删除！" + e.getMessage();
+		}catch (Exception e) {
+			e.printStackTrace();
+			result = "删除失败！";
 		}
 		
 		return SUCCESS;
 
 	}
-	
-	public String excelFile(){
-		//创建Excel
-		HSSFWorkbook wb = new HSSFWorkbook();
-		HSSFSheet sheet = wb.createSheet("sheet0");
-
-		List<Fun> funs = funService.findAllEntities();
-
-		ExportExlUtils.outputHeaders(titles.split(","), sheet);
-		ExportExlUtils.outputColumns(fields.split(","), funs, sheet, 1);
-		
-		FileOutputStream fileOut;
-		try {
-			fileOut = new FileOutputStream("workbook.xls");
-			inputStream = new FileInputStream("workbook.xls");
-			wb.write(fileOut);
-			fileOut.close();
-			wb.close();
-			contentLength = inputStream.available();
-			contentDisposition = "attachment;filename=\"funInfo" + new Date() + ".xls\"";
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-		
-		return SUCCESS;
-			
-	}
-
 
 }

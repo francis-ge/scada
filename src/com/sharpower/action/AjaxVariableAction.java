@@ -1,7 +1,9 @@
 package com.sharpower.action;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.struts2.json.annotations.JSON;
 
@@ -18,11 +20,13 @@ public class AjaxVariableAction extends ActionSupport {
 	private Variable variable;
 	private VariableService variableService;
 	private List<Variable> variables = new ArrayList<>();
-	private String resulte;
+	private Map<String, Object> result = new HashMap<>();
 	private String ids;
 	private String searchKey;
-	private Integer funId;
-	private String variableNames;;
+	private Integer plcTypeId;
+	
+	private int page;
+	private int rows;
 	
 	public Variable getVariable() {
 		return variable;
@@ -32,12 +36,8 @@ public class AjaxVariableAction extends ActionSupport {
 		this.variable = variable;
 	}
 	
-	public void setFunId(Integer funId) {
-		this.funId = funId;
-	}
-	
-	public void setVariableNames(String variableNames) {
-		this.variableNames = variableNames;
+	public void setPlcTypeId(Integer plcTypeId) {
+		this.plcTypeId = plcTypeId;
 	}
 	
 	@JSON(serialize=false)
@@ -53,17 +53,19 @@ public class AjaxVariableAction extends ActionSupport {
 		return variables;
 	}
 	
-	public String getResulte() {
-		return resulte;
+	public Map<String, Object> getResult() {
+		return result;
 	}
-	
-	public void setResulte(String resulte) {
-		this.resulte = resulte;
-	}
-	
 	
 	public void setIds(String ids) {
 		this.ids = ids;
+	}
+	
+	public void setPage(int page) {
+		this.page = page;
+	}
+	public void setRows(int rows) {
+		this.rows = rows;
 	}
 	
 	public void setSearchKey(String searchKey) {
@@ -72,17 +74,35 @@ public class AjaxVariableAction extends ActionSupport {
 	
 	public String allVariable(){
 		try {
+			String totalHql = "";
+			Long total;
+			
 			if (searchKey==null) {
-				variables = variableService.findAllEntities();
+				variables = variableService.findAllEntitiesPaging((page-1)*rows, rows);
+				total = (Long) variableService.uniqueResult("SELECT count(*) From Variable");
 			}else{
-				String hql = "From Variable v WHERE v.fun.plcType.id=? WHERE v.name like ?";
-				variables = variableService.findEntityByHQL(hql, funId,"%"+searchKey+"%");
+				String hql = "From Variable v WHERE v.name like ?";
+				variables = variableService.findEntityByHQLPaging(hql, (page-1)*rows, rows, "%"+searchKey+"%");
+				
+				total = (Long) variableService.uniqueResult("SELECT count(*) From Variable v WHERE v.name like ?", "%"+searchKey+"%");
 			}
-			resulte = "共查到" + variables.size() + "条记录。";
+
+			result.put("total", total);
+			result.put("rows", variables);
 		} catch (Exception e) {
 			e.printStackTrace();
-			resulte = e.getMessage();
+			result.put("message", e.getMessage());
 		}
+		return SUCCESS;
+	}
+	
+	public String variableForFun(){
+		try {
+			variables = variableService.findEntityByHQL("FROM Variable v WHERE v.plcType.id=?", plcTypeId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return SUCCESS;
 	}
 	
@@ -145,11 +165,11 @@ public class AjaxVariableAction extends ActionSupport {
 			
 			variable.setDbName(this.convertNameToDBname(variable.getName()));
 			variableService.saveOrUpdateEntity(variable);
-			resulte = "保存成功！";
+			
+			result.put("message", "保存成功！");
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
-			resulte= e.getMessage();
+			result.put("message", e.getMessage());
 		}
 		
 		return SUCCESS;
@@ -164,22 +184,10 @@ public class AjaxVariableAction extends ActionSupport {
 				variable.setId(Integer.parseInt(idStr));
 				variableService.deleteEntity(variable);
 			}
-			resulte = "删除成功！";
+			result.put("message", "删除成功！");
 		} catch (Exception e) {
 			e.printStackTrace();
-			resulte = "删除失败！" + e.getMessage();
-		}
-		return SUCCESS;
-	}
-	
-	public String findVariable(){
-		try {
-			String hql = "From Variable v WHERE v.name like ?";
-			variables = variableService.findEntityByHQL(hql, "%"+searchKey+"%");
-			resulte = "共查到" + variables.size() + "条记录。";
-		} catch (Exception e) {
-			e.printStackTrace();
-			resulte = e.getMessage();
+			result.put("message", e.getMessage());
 		}
 		return SUCCESS;
 	}

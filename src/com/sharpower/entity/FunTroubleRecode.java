@@ -41,8 +41,10 @@ public class FunTroubleRecode {
 	}
 	@Override
 	public String toString() {
-		return "FunTroubleRecode [id=" + id + ", startTime=" + startTime + ", endTime=" + endTime + "]";
+		return "FunTroubleRecode [id=" + id + ", startTime=" + startTime + ", endTime=" + endTime + ", fun=" + fun
+				+ ", funTroubleVariable=" + funTroubleVariable + "]";
 	}
+
 	
 
 	

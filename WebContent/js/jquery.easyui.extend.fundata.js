@@ -60,7 +60,7 @@
             //如果获取了settings，则将它和options进行合并（这不是必须的，可以选择不这样做）
             settings = $.extend({}, settings, thisOptions);
             
-            // 如果每次都保存options，可以添加下面代码：
+            //每次都保存options
             
              $this.data('fundata', settings);
         }
@@ -93,7 +93,7 @@
         })      
     }
     
-    $.fn.fundata.methods =  {        
+    $.fn.fundata.methods = {        
         resize: function( jq, params){
 			var funCount = jq.length;
 			var height = $(window).height();
@@ -188,7 +188,7 @@
 		            }
 		            
 		            if(settings.fun==undefined){
-		            	$('.group',$this).attr('src', '../pic/loop' + thisOptions.fun.line + '.png');
+		            	$('.group', $this).attr('src', '../pic/loop' + thisOptions.fun.line + '.png');
 		            }
 	            }
 	            

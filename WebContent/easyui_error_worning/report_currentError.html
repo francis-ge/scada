@@ -25,7 +25,7 @@
 		$(function(){
 			$('#datagrid').datagrid({
 				toolbar:'#toolBar',
-				url:'',
+				url:'SHARPOWER_SCADA/ajaxGetCurrentError',
 				idField:'id',
 				fit:true,
 				striped:true,
@@ -42,12 +42,16 @@
 					field : 'fun.name',
 					title : '风机名称',
 					width : 150,
-					align : 'center'
+					align : 'center',
+					formatter: function(value,row,index){
+						return row.fun.name;}
 				},{
 					field : 'funTroubleVariable.code',
 					title : '代码',
 					width : 100,
-					align : 'center'
+					align : 'center',
+					formatter: function(value,row,index){
+						return row.funTroubleVariable.code;}
 				},{
 					field : 'startTime',
 					title : '发生时间',
@@ -62,7 +66,9 @@
 					field : 'funTroubleVariable.description',
 					title : '描述',
 					width : 200,
-					align : 'center'
+					align : 'center',
+					formatter: function(value,row,index){
+						return row.funTroubleVariable.description;}
 				}
 				]]
 			});
@@ -71,44 +77,68 @@
 				onChange:function(){
 					$('#datagrid').datagrid('loadData',{ total:0, rows:[] });
 				}
-			})
+			});
 			
-			$('#searchSubmit').click(
-				function(){
-					$('#datagrid').datagrid('loadData',{ total:0, rows:[] });
-					$.messager.progress();	// 显示进度条
-					$('#from1').form('submit', {
-						url:'SHARPOWER_SCADA/ajaxGetCurrentError',
-						onSubmit: function(){
-							var isValid = $(this).form('validate');
-							if (!isValid){
-								$.messager.progress('close');	// 如果表单是无效的则隐藏进度条
-							}
-							return isValid;	// 返回false终止表单提交
-						},
-						success: function(info){
-							$.messager.progress('close');	// 如果提交成功则隐藏进度条
-							info = eval("("+info+")");
-							
-							for(var o in info){
-								$('#datagrid').datagrid('appendRow',
-									{'id' : info[o].id,
-									'fun.name':info[o].fun.name,
-									'funTroubleVariable.code':info[o].funTroubleVariable.code,
-									'startTime':info[o].startTime,
-									'endTime':info[o].endTime,
-									'funTroubleVariable.description':info[o].funTroubleVariable.description
+			$('#SubmitBtn').click(
+					function(){
+						$('#datagrid').datagrid('loadData', { total:0, rows:[] });
+						
+						var isValid = $('#from1').form('validate');
+						if (!isValid){
+							return false;	// 返回false终止表单提交
+						}
+
+						$('#datagrid').datagrid('load', serializeForm($('#from1')));
+						
+					}
+				);
+			
+			$('#saveBtn').click(
+					function(){
+						$.messager.confirm('确认对话框', '确定要保存该报表吗？', function(r){
+							if (r){
+								//获取表头信息
+								var header = $('#datagrid').datagrid('options').columns[0];
+								var fields = "";
+								var titles = "";
+								for(var i = 0;i<header.length;i++){
+									var field = header[i].field;
+									var title = header[i].title;
+									var hiddenFlag = header[i].hidden;
+									
+									if(!hiddenFlag){
+										var dh = (i == (header.length -1) ? "" :",");
+										fields = fields + field + dh;
+										titles = titles + title + dh;
 									}
-								);
+								}
+								
+								var queryParams = $('#datagrid').datagrid('options').queryParams;
+
+								$.post('SHARPOWER_SCADA/ajaxGetCurrentError', queryParams, function(data){
+									//向后台发送请求  
+									$('#form2').form('load',{fields:fields,titles:titles,excelData:data});
+									
+									$('#form2').form('submit',{url:'../excelFileAction'});
+								});
 								
 							}
-						}
-					});
-				}
-			)
-			
+					})	
+				});
 		})
-		
+
+		//js方法：序列化表单 			
+		function serializeForm(form){
+			var obj = {};
+			$.each(form.serializeArray(),function(index){
+				if(obj[this['name']]){
+					obj[this['name']] = obj[this['name']] + ','+this['value'];
+				} else {
+					obj[this['name']] =this['value'];
+				}
+			});
+			return obj;
+		}
 	</script>
 
   </head>
@@ -119,14 +149,21 @@
 		</table>
 		
 		<div id="toolBar" style="height:25px,overflow:hidden" >
-				<form id="from1" method="post">   
+				<form id="from1" method="post" style="display: inline;">   
 					选择风机：<select id="funSelect" name="funId" class="easyui-combobox" style="width:200px;" 
 							url="SHARPOWER_SCADA/ajaxAllfun"  required="true" missingMessage="风机必选!" 
 							valueField="id" textField="name">
 							</select>
-							<a id="searchSubmit" class="easyui-linkbutton">查询</a>
+							<a id="SubmitBtn" class="easyui-linkbutton" href="javascript:void(0)" data-options="iconCls:'icon-search'">查询</a>
 				</form>
-		</div>	
+				<a id="saveBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" style="display:inline-block;">导出</a>
+		</div>
+		
+		<form id='form2' style='display:none' target='' method='post' action='' ajax='false'>
+			<input type='hidden' name='fields' />
+			<input type='hidden' name='titles' />
+			<input type='hidden' name='excelData' />
+		</form>
   </body>
 
 </html>

@@ -11,7 +11,7 @@
         <property name="name" type="java.lang.String">
             <column name="NAME" />
         </property>
-        <property name="dbName" type="java.lang.String">
+        <property name="dbName" type="java.lang.String" not-null="true" unique="true">
             <column name="DB_NAME" />
         </property>
         <property name="description" type="java.lang.String">

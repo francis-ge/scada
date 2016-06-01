@@ -13,7 +13,7 @@
             <column name="NAME" />
         </property>
         
-        <property name="dbName" type="java.lang.String" not-null="true">
+        <property name="dbName" type="java.lang.String" not-null="true" unique="true">
             <column name="DBNAME" />
         </property>
         

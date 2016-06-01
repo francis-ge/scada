@@ -8,7 +8,7 @@
             <column name="ID" />
             <generator class="native" />
         </id>
-        <property name="name" type="java.lang.String" access="field">
+        <property name="name" type="java.lang.String" access="field" not-null="true" unique="true">
             <column name="NAME" />
         </property>
     </class>

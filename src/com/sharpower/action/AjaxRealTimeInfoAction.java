@@ -1,6 +1,8 @@
 package com.sharpower.action;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -77,6 +79,14 @@ public class AjaxRealTimeInfoAction extends ActionSupport{
 	
 	public String mainInfo(){		
 		realtimeInfo.addAll(plcTypeDataQuartz.getDataMap().values());
+		
+		Collections.sort(realtimeInfo, new Comparator<Map<String, Object>>() {
+			@Override
+			public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+				return (int)o1.get("id")-(int)o2.get("id");
+			}
+		});
+		
 		return SUCCESS;
 	}
 	

@@ -21,10 +21,14 @@ public class AjaxMainRecodeAcrion extends ActionSupport {
 	private Date time;
 	private String variables;
 	
-	private String result;
+	private Map<String, Object> result = new HashMap<>();
 	private Map<String, Object> dataMap = new HashMap<>();
 	private List<Map<String, Object>> dataList = new ArrayList<>();
 	private List<Map<String, Object>> dataList1 = new ArrayList<>();
+	
+	private int page;
+	private int rows;
+	private String message;
 	
 	public void setRecodeService(RecodeService recodeService) {
 		this.recodeService = recodeService;
@@ -46,7 +50,7 @@ public class AjaxMainRecodeAcrion extends ActionSupport {
 		this.variables = variables;
 	}
 	
-	public String getResult() {
+	public Map<String, Object> getResult() {
 		return result;
 	}
 	
@@ -60,6 +64,16 @@ public class AjaxMainRecodeAcrion extends ActionSupport {
 	
 	public List<Map<String, Object>> getDataList1() {
 		return dataList1;
+	}
+	public String getMessage() {
+		return message;
+	}
+	
+	public void setPage(int page) {
+		this.page = page;
+	}
+	public void setRows(int rows) {
+		this.rows = rows;
 	}
 	
 	public String powerCurve(){
@@ -77,9 +91,9 @@ public class AjaxMainRecodeAcrion extends ActionSupport {
 		try {
 			list = recodeService.findMapByHql(hql, funId, beginTime, endTime);
 			dataMap = list.get(0); 
-			result = "查询成功！";
+			message = "查询成功！";
 		} catch (Exception e) {
-			result = "查询失败！"+ e.getMessage();
+			message = "查询失败！"+ e.getMessage();
 			e.printStackTrace();
 		}
 		
@@ -101,9 +115,9 @@ public class AjaxMainRecodeAcrion extends ActionSupport {
 		try {
 			list = recodeService.findMapByHql(hql, funId, beginTime, endTime);
 			dataMap = list.get(0); 
-			result = "查询成功！";
+			message = "查询成功！";
 		} catch (Exception e) {
-			result = "查询失败！"+ e.getMessage();
+			message = "查询失败！"+ e.getMessage();
 			e.printStackTrace();
 		}
 		
@@ -115,7 +129,7 @@ public class AjaxMainRecodeAcrion extends ActionSupport {
 		String hql = "SELECT new map(";
 		
 		if (varNames.length<=0) {
-			result = "请选择要查询的数据！";
+			message = "请选择要查询的数据！";
 			return SUCCESS;
 		}else{
 			for (String string : varNames) {
@@ -126,9 +140,9 @@ public class AjaxMainRecodeAcrion extends ActionSupport {
 			
 			try {
 				dataList = recodeService.findMapByHql(hql, funId, beginTime, endTime);
-				result = "查询成功！";
+				message = "查询成功！";
 			} catch (Exception e) {
-				result = "查询失败！"+ e.getMessage();
+				message = "查询失败！"+ e.getMessage();
 				e.printStackTrace();
 			}
 		}
@@ -171,9 +185,12 @@ public class AjaxMainRecodeAcrion extends ActionSupport {
 		
 		try {
 			dataList = recodeService.findMapByHql(hql, funId, beginTime, endTime);
-			result = "查询成功！";
+		
+			message = "查询成功！";
+			
 		} catch (Exception e) {
-			result = "查询失败！"+ e.getMessage();
+			message = "查询失败！" + e.getMessage();
+			
 			e.printStackTrace();
 		}
 		
@@ -209,7 +226,7 @@ public class AjaxMainRecodeAcrion extends ActionSupport {
 					Map<String, Object> map1 = (Map<String, Object>) dataList.get(n+1);
 					
 					if (map.get("state")!=null && map1.get("state")!=null) {
-						if (map.get("state").equals(map1.get("state"))==false) {
+						if (!(map.get("state").equals(map1.get("state")))) {
 							dataList1.add(map1);
 						}
 					}else if (map.get("state")!=null && map1.get("state")==null){
@@ -220,9 +237,28 @@ public class AjaxMainRecodeAcrion extends ActionSupport {
 				}
 			}
 			
-			result = "查询成功！";
+			if (rows!=0 ) {
+				if (page*rows<=(dataList1.size())) {
+					dataList = dataList1.subList((page-1)*rows, page*rows);
+				}else {
+					dataList = dataList1.subList((page-1)*rows, dataList1.size());
+				}
+			
+				result.put("rows", dataList);
+			}else {
+				result.put("rows", dataList1);
+			}
+			
+			int total = dataList1.size();
+			
+			message = "查询成功！";
+			
+			result.put("total", total);
+			result.put("message", message);
 		} catch (Exception e) {
-			result = "查询失败！"+ e.getMessage();
+			message = "查询失败！"+ e.getMessage();
+			result.put("message", message);
+			
 			e.printStackTrace();
 		}
 		
@@ -263,9 +299,9 @@ public class AjaxMainRecodeAcrion extends ActionSupport {
 		
 		try {
 			dataList = recodeService.findMapByHql(hql, thisBeginTime, thisEndTime);
-			result = "查询成功！";
+			message = "查询成功！";
 		} catch (Exception e) {
-			result = "查询失败！"+ e.getMessage();
+			message = "查询失败！"+ e.getMessage();
 			e.printStackTrace();
 		}
 		

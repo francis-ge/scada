@@ -9,9 +9,6 @@ import java.util.Map;
 import com.sharpower.dao.BaseDao;
 import com.sharpower.entity.Variable;
 
-/**
- * �����baseService,ר�����ڼ̳�
- */
 public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
 	private BaseDao<T> dao ;
@@ -52,7 +49,6 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 		dao.batchEntityByHQL(hql, objects);
 	}
 	
-	//ִ��ԭ���sql���
 	public void executeSQL(String sql,Object...objects){
 		dao.executeSQL(sql, objects);
 	}
@@ -69,23 +65,31 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 		return dao.findEntityByHQL(hql, objects);
 	}
 	
-	//��ѯ����ʵ��
-	public List<T> findAllEntities(){
-		String hql = "from " + clazz.getSimpleName() ;
-		return this.findEntityByHQL(hql);
+	public List<T> findEntityByHQLPaging(String hql, int page, int rows, Object... objects) {
+		return dao.findEntityByHQLPaging(hql, page, rows, objects);
 	}
 	
-	//��ֵ����,ȷ����ѯ�������ֻ��һ����¼
+	public List<T> findAllEntities(){
+		String hql = "from " + clazz.getSimpleName();
+		return this.findEntityByHQL(hql);
+	}
+	public List<T> findAllEntitiesPaging(int page, int rows){
+		String hql = "from " + clazz.getSimpleName();
+		return dao.findEntityByHQLPaging(hql, page, rows);
+	}
+	
 	public Object uniqueResult(String hql,Object...objects){
 		return dao.uniqueResult(hql, objects);
 	}
 	
-	//ִ��sqlԭ���ѯ
 	public List executeSQLQuery(Class clazz,String sql,Object...objects){
 		return dao.executeSQLQuery(clazz,sql, objects);
 	}
 	
 	public List executeHQLQuery(String Hql,Object...objects){
 		return dao.executeHQLQuery(Hql, objects);
+	}
+	public List executeHQLQueryPaging(String Hql, int page, int rows, Object...objects){
+		return dao.executeHQLQueryPaging(Hql, page, rows, objects);
 	}
 }

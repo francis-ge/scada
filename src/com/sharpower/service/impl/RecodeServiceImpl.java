@@ -39,5 +39,11 @@ public class RecodeServiceImpl implements RecodeService{
 		return recodeDao.get(id);
 	}
 
+	@Override
+	public List<Map<String, Object>> findMapByHqlPaging(String hql, int startIndex, int rows, Object... objects) {
+		
+		return recodeDao.findEntityMapByHqlPaging(hql, startIndex, rows, objects);
+	}
+
 
 }

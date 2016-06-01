@@ -20,7 +20,7 @@ public class AjaxFunTroubleVariableTypeAction extends ActionSupport {
 	private FunTroubleVariableTypeService funTroubleVariableTypeService;
 	private List<TroubleType> troubleTypes = new ArrayList<>();
 
-	private String resulte;
+	private String result;
 	
 	public void setFunTroubleVariableTypeService(FunTroubleVariableTypeService funTroubleVariableTypeService) {
 		this.funTroubleVariableTypeService = funTroubleVariableTypeService;
@@ -35,7 +35,7 @@ public class AjaxFunTroubleVariableTypeAction extends ActionSupport {
 			troubleTypes = funTroubleVariableTypeService.findAllEntities();
 			
 		} catch (Exception e) {
-			resulte = "获取失败！"+e.getMessage();
+			result = "获取失败！"+e.getMessage();
 		}
 		
 		return SUCCESS;

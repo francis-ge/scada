@@ -9,11 +9,10 @@
             <generator class="native" />
         </id>
         
-	    <property name="name" type="java.lang.String">
+	    <property name="name" type="java.lang.String" not-null="true" unique="true">
 	    	<column name="WINDFARM_NAME"></column>
 	    </property>
               
- 
         <set name="funs" table="FUN" lazy="true" inverse="true" fetch="join" order-by="id asc">
             <key column="WINDFARM_ID" />
             <one-to-many class="com.sharpower.entity.Fun" />

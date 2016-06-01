@@ -51,8 +51,51 @@
 	        var p = $('#date').datebox('panel'); //日期选择对象
 	        var tds = false; //日期选择对象中月份
 	        var span = p.find('span.calendar-text'); //显示月份层的触发控件
+	        
+			$('#saveBtn').click(
+					function(){
+						$.messager.confirm('确认对话框', '确定要保存该报表吗？', function(r){
+							if (r){
+								//获取表头信息
+								var header = $('#datagrid').datagrid('options').columns[0];
+								var fields = "";
+								var titles = "";
+								for(var i = 0;i<header.length;i++){
+									var field = header[i].field;
+									var title = header[i].title;
+									var hiddenFlag = header[i].hidden;
+									
+									if(!hiddenFlag){
+										var dh = (i == (header.length -1) ? "" :",");
+										fields = fields + field + dh;
+										titles = titles + title + dh;
+									}
+								}
+
+								$.post('', function(data){
+									$('#form2').form('load',{fields:fields,titles:titles,excelData:data});
+									
+									$('#form2').form('submit',{url:'../excelFileAction'});
+								});
+								
+							}
+					})	
+				});
 			
 		})
+		
+		//js方法：序列化表单 			
+		function serializeForm(form){
+			var obj = {};
+			$.each(form.serializeArray(),function(index){
+				if(obj[this['name']]){
+					obj[this['name']] = obj[this['name']] + ',' + this['value'];
+				} else {
+					obj[this['name']] = this['value'];
+				}
+			});
+			return obj;
+		}
 		
 	</script>
 
@@ -77,12 +120,17 @@
 		
 		<div id="toolBar" style="height:25px,overflow:hidden" >
 			
-				<form id="from1" method="post">   
+				<form id="from1" method="post" style="display: inline">   
 					选择月份:<input id="date" required="required"></input>
-					<a class="easyui-linkbutton" title="" href="javascript:void(0)">查询</a> 
+					<a id="SubmitBtn" class="easyui-linkbutton" title="" href="javascript:void(0)" data-options="iconCls:'icon-search'">查询</a> 
 				</form>
-				
-		</div>	
+				<a id="saveBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" style="display:inline-block;">导出</a>
+		</div>
+		<form id='form2' style='display:none' target='' method='post' action='' ajax='false'>
+			<input type='hidden' name='fields' />
+			<input type='hidden' name='titles' />
+			<input type='hidden' name='excelData' />
+		</form>
   </body>
 
 </html>

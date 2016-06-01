@@ -10,6 +10,14 @@
 	<constant name="struts.devMode" value="true" />
 	
 	<package name="ajaxPackage" extends="json-default">
+		<action name="excelFileAction" class="excelFileAction" method="excelFile">
+			<result type="stream">
+				<param name="contentType">application/octet-stream</param>
+       			<param name="inputName">inputStream</param>
+       			<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
 		<action name="ajaxLogin" class="ajaxUserAction" method="verificationUser" >
 			<result name="success" type="json">
 				<param name="noCache">true</param>
@@ -71,14 +79,6 @@
 			</result>		
 		</action>
 		
-		<action name="funExcelFile" class="ajaxFunAction" method="excelFile">
-			<result type="stream">
-				<param name="contentType">application/octet-stream</param>
-       			<param name="inputName">inputStream</param>
-       			<param name="bufferSize">1024</param>
-			</result>
-		</action>
-		
 		<action name="ajaxAllVariableType" class="ajaxVariableTypeAction" method="allVariableType">
 			<result type="json">
 				<param name="noCache">true</param>
@@ -99,9 +99,17 @@
 			<result type="json">
 				<param name="noCache">true</param>
 				<param name="contentType">text/html</param>
-				<param name="root">variables</param>
+				<param name="root">result</param>
 			</result>
 		</action>
+		
+		<action name="ajaxVariableForFun" class="ajaxVariableAction" method="variableForFun">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">variables</param>
+			</result>
+		</action>		
 		
 		<action name="ajaxAddVariable" class="ajaxVariableAction" method="saveOrUpdateVariable">
 			<result type="json">
@@ -135,7 +143,7 @@
 			<result type="json">
 				<param name="noCache">true</param>
 				<param name="contentType">text/html</param>
-				<param name="root">funTroubleVariables</param>
+				<param name="root">result</param>
 			</result>
 		</action>
 		
@@ -179,15 +187,16 @@
 			<result type="json">
 				<param name="noCache">true</param>
 				<param name="contentType">text/html</param>
-				<param name="root">statisticsList</param>
+				<param name="root">result</param>
 			</result>
 		</action>
+		
 		
 		<action name="ajaxGetTroubleStatistics" class="ajaxFunTroublRecodeAction" method="troubleStatistics">
 			<result type="json">
 				<param name="noCache">true</param>
 				<param name="contentType">text/html</param>
-				<param name="root">statisticsList</param>
+				<param name="root">result</param>
 			</result>
 		</action>
 		
@@ -195,7 +204,7 @@
 			<result type="json">
 				<param name="noCache">true</param>
 				<param name="contentType">text/html</param>
-				<param name="root">statisticsList</param>
+				<param name="root">result</param>
 			</result>
 		</action>
 				
@@ -297,7 +306,7 @@
 			<result type="json">
 				<param name="noCache">true</param>
 				<param name="contentType">text/html</param>
-				<param name="root">dataList1</param>
+				<param name="root">result</param>
 			</result>
 		</action>	
 		

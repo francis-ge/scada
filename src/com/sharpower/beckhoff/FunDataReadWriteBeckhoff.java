@@ -150,7 +150,7 @@ public class FunDataReadWriteBeckhoff {
 			data = getData(lj_pDataRead);
 			return data;
 		} else {
-			throw new AdsException("ADS Error, ErrorCode:" + err + ",AmsAddr:" + lj_AmsAddr.getNetIdString());
+			throw new AdsException("ADS Error, ErrorCode:" + err + "DataReader,AmsAddr:" + lj_AmsAddr.getNetIdString());
 		}
 		
 	}

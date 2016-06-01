@@ -54,5 +54,4 @@ public class Variable{
 		return "Variable [id=" + id + ", name=" + name + ", dbName=" + dbName + ", type=" + type + "]";
 	}
 		
-	
 }

@@ -63,24 +63,32 @@ public class TroubleQuartz {
 			init();
 			//创建风机故障检测线程
 			for (Fun fun : funs) {
-				FunTroubleThread funTroubleThread = new FunTroubleThread();
-				funTroubleThread.setFun(fun);
-				funTroubleThread.setFunTroubleRecodeMap(funTroubleRecodeMap);
 				
 				FunTroubleVariableReader funTroubleVariableReader;
 				if (fun.getPlcType().getPlcCommType().getName().equals("beckhoff")) {
 					funTroubleVariableReader = funTroubleBeckhoffService;
 				}else {
+					//其它种类的PLC读取
 					funTroubleVariableReader = funTroubleBeckhoffService;
 				}
 				
-				funTroubleThread.setFunTroubleBeckhoffService(funTroubleVariableReader);
-				funTroubleThread.setFunTroubleRecodeService(funTroubleRecodeService);
-				
-				Thread thread = new Thread(funTroubleThread);
-				thread.start();
+				//检查上轮线程状态，如已完成则创建新线程，未完成则不创建		
+				Boolean threadSta = readDataTheadStaMap.get(fun.getId());
+	
+				if (threadSta!=true) {
+					readDataTheadStaMap.put(fun.getId(), true);
 					
+					FunTroubleThread funTroubleThread = new FunTroubleThread();
+					funTroubleThread.setFun(fun);
+					funTroubleThread.setFunTroubleRecodeMap(funTroubleRecodeMap);
+					funTroubleThread.setFunTroubleBeckhoffService(funTroubleVariableReader);
+					funTroubleThread.setFunTroubleRecodeService(funTroubleRecodeService);
+					funTroubleThread.setReadDataTheadStaMap(readDataTheadStaMap);
+					
+					Thread thread = new Thread(funTroubleThread);
+					thread.start();
 				}
+			}
 		}
 	}
 	

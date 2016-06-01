@@ -65,6 +65,7 @@
 	<form id='form1' style='display:none' target='' method='post' action='' ajax='false'>
 		<input type='hidden' name='fields' />
 		<input type='hidden' name='titles' />
+		<input type='hidden' name='excelData' />
 	</form>
 	
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -147,7 +148,7 @@
 																{ids:ids}, 
 																function(info){
 																	info = eval("("+info+")");
-																	$.messager.show({title:'我的消息',msg:info.resulte,showType:'slide'});
+																	$.messager.show({title:'我的消息',msg:info.result,showType:'slide'});
 																	$('#table').datagrid('reload');
 																	$('#table').datagrid('clearChecked');
 																}
@@ -201,6 +202,7 @@
 									var field = header[i].field;
 									var title = header[i].title;
 									var hiddenFlag = header[i].hidden;
+									
 									if(!hiddenFlag){
 										var dh = (i == (header.length -1) ? "" :",");
 										fields = fields + field + dh;
@@ -208,9 +210,14 @@
 									}
 								}
 								//向后台发送请求  
-								$('#form1').form('load',{fields:fields,titles:titles});
-								
-								$('#form1').form('submit',{url:'../funExcelFile'});
+								var queryParams = $('#table').datagrid('options').queryParams;
+
+								$.post('SHARPOWER_SCADA/ajaxAllfun', queryParams, function(data){
+									//向后台发送请求  
+									$('#form1').form('load',{fields:fields,titles:titles,excelData:data});
+									
+									$('#form1').form('submit',{url:'../excelFileAction'});
+								});
 							}
 						});
 
@@ -234,12 +241,12 @@
 				success: function(info){
 					$.messager.progress('close');	// 如果提交成功则隐藏进度条
 					info = eval("("+info+")");
-					$.messager.show({title:'我的消息',msg:info.resulte,showType:'slide'});
+					$.messager.show({title:'我的消息',msg:info.result,showType:'slide'});
 					$('#table').datagrid('reload');
 				}
 			});
 			
-			});
+		});
 	
 	/**
 	 * 关闭窗口方法

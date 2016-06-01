@@ -2,10 +2,12 @@ package com.sharpower.utils;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 
-public class ExportExlUtils {
+public class ExportExlUtils{
 	/**
 	 * 设置sheet表头信息
 	 * @author David
@@ -20,6 +22,29 @@ public class ExportExlUtils {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
+	public static void outputColumnsforMap(String[] fieldIfo, List<Map<String, Object>> list, HSSFSheet sheet){
+		HSSFRow row ;
+		
+		for (int i = 0; i < list.size(); i++) {
+			row = sheet.createRow(1+i);
+			
+			for (int j = 0; j < fieldIfo.length; j++) {
+				String[] fieldNames = fieldIfo[j].split("\\.");
+				
+				Object result =list.get(i);
+				
+				for (String string : fieldNames) {
+					result = ((Map<String, Object>)result).get(string);
+				}
+				
+				if (result!=null) {
+					row.createCell(j).setCellValue(result.toString());
+				}
+			}
+		}
+		
+	}
 	/**
 	*输出内容
 	*/
@@ -29,6 +54,7 @@ public class ExportExlUtils {
 		HSSFRow row ;
 		int headerSize = headersInfo.length;
 		int columnSize = columnsInfo.size();
+		
 		//循环插入多少行
 		for (int i = 0; i < columnsInfo.size(); i++) {
 			row = sheet.createRow(rowIndex+i);
@@ -37,7 +63,6 @@ public class ExportExlUtils {
 			for (int j = 0; j < headersInfo.length; j++) {
 				String[] fieldNames = headersInfo[j].split("\\.");
 				
-				
 					Object result;
 					if (fieldNames.length==1) {
 						result = getFieldValueByName(fieldNames[0], obj);
@@ -45,7 +70,7 @@ public class ExportExlUtils {
 						result = getFieldValueByName(fieldNames[0], obj);
 						result = getFieldValueByName(fieldNames[1], result);
 					}else {
-						result="null";
+						result = "null";
 					}
 					
 					row.createCell(j).setCellValue(result.toString());

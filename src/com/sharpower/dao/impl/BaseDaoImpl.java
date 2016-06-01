@@ -14,9 +14,6 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
 
-/**
- * �����daoʵ��,ר�����ڼ̳�
- */
 @SuppressWarnings("unchecked")
 public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 	private SessionFactory sf;
@@ -32,7 +29,6 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	public BaseDaoImpl() {
-		// �õ����ͻ�����
 		ParameterizedType type = (ParameterizedType) this.getClass().getGenericSuperclass();
 		clazz = (Class<T>) type.getActualTypeArguments()[0];
 
@@ -54,9 +50,6 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 		sf.getCurrentSession().delete(t);
 	}
 
-	/**
-	 * ����HQL��������������
-	 */
 	public void batchEntityByHQL(String hql, Object... objects) {
 		Query q = sf.getCurrentSession().createQuery(hql);
 		for (int i = 0; i < objects.length; i++) {
@@ -65,7 +58,6 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 		q.executeUpdate();
 	}
 
-	// ִ��ԭ���sql���
 	public void executeSQL(String sql, Object... objects) {
 		SQLQuery q = sf.getCurrentSession().createSQLQuery(sql);
 		for (int i = 0; i < objects.length; i++) {
@@ -90,8 +82,15 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 		
 		return q.list();
 	}
+	public List<T> findEntityByHQLPaging(String hql, int page, int rows, Object... objects) {
+		Query q = sf.getCurrentSession().createQuery(hql).setFirstResult(page).setMaxResults(rows);
+		for (int i = 0; i < objects.length; i++) {
+			q.setParameter(i, objects[i]);
+		}
+		
+		return q.list();
+	}
 
-	// ��ֵ����,ȷ����ѯ�������ֻ��һ����¼
 	public Object uniqueResult(String hql, Object... objects) {
 		Query q = sf.getCurrentSession().createQuery(hql);
 		for (int i = 0; i < objects.length; i++) {
@@ -100,26 +99,36 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 		return q.uniqueResult();
 	}
 	
-	// ִ��ԭ���hql��ѯ
 	public List executeHQLQuery(String hql, Object... objects) {
 		Query q = sf.getCurrentSession().createQuery(hql);
 		
 		for (int i = 0; i < objects.length; i++) {
 			q.setParameter(i, objects[i]);
 		}
+		
 		return q.list();
 	}
-
-	// ִ��ԭ���sql��ѯ
-	public List executeSQLQuery(Class clazz, String sql, Object... objects) {
-		SQLQuery q = sf.getCurrentSession().createSQLQuery(sql);
-		// ���ʵ����
-		if (clazz != null) {
-			q.addEntity(clazz);
-		}
+	public List executeHQLQueryPaging(String hql, int page, int rows, Object... objects) {
+		Query q = sf.getCurrentSession().createQuery(hql).setFirstResult(page).setMaxResults(rows);
+		
 		for (int i = 0; i < objects.length; i++) {
 			q.setParameter(i, objects[i]);
 		}
+		
+		return q.list();
+	}
+
+	public List executeSQLQuery(Class clazz, String sql, Object... objects) {
+		SQLQuery q = sf.getCurrentSession().createSQLQuery(sql);
+
+		if (clazz != null) {
+			q.addEntity(clazz);
+		}
+		
+		for (int i = 0; i < objects.length; i++) {
+			q.setParameter(i, objects[i]);
+		}
+		
 		return q.list();
 	}
 }

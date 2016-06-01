@@ -8,6 +8,9 @@
             <column name="ID" />
             <generator class="native" />
         </id>
+        <property name="name" type="java.lang.String" not-null="true" unique="true">
+            <column name="NAME" />
+        </property>
         <list name="users" table="USER" inverse="false" lazy="true" fetch="join">
             <key>
                 <column name="ROLE" />

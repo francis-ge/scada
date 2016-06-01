@@ -16,6 +16,9 @@ public class AjaxReportDayRecodeAction extends ActionSupport {
 	private List<Map<String, Object>> reportDayRecodesMap = new ArrayList<>();
 	private Date date;
 	
+	private int page;
+	private int rows;
+	
 	public void setReportDayRecodeService(ReportDayRecodeService reportDayRecodeService) {
 		this.reportDayRecodeService = reportDayRecodeService;
 	}
@@ -26,6 +29,13 @@ public class AjaxReportDayRecodeAction extends ActionSupport {
 	
 	public void setDate(Date date) {
 		this.date = date;
+	}
+	
+	public void setPage(int page) {
+		this.page = page;
+	}
+	public void setRows(int rows) {
+		this.rows = rows;
 	}
 	
 	public String findMainRecode(){
