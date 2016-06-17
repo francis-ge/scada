@@ -18,7 +18,7 @@
   
   <body>
 
-		<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxReportDayFindMainRecode" 
+		<table id ="datagrid" class="easyui-datagrid" url="sharpower_scada/ajaxReportDayFindMainRecode" 
 				idField="id" singleSelect="true" fit="true" striped="true" fitColumns="true" rownumbers="true">
 			<thead>   
 		        <tr>   
@@ -90,7 +90,7 @@
 									}
 								}
 
-								$.post('SHARPOWER_SCADA/ajaxReportHourForOne', function(data){
+								$.post('sharpower_scada/ajaxReportHourForOne', function(data){
 									$('#form2').form('load',{fields:fields,titles:titles,excelData:data});
 									
 									$('#form2').form('submit',{url:'../excelFileAction'});

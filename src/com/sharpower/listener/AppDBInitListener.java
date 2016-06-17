@@ -144,7 +144,7 @@
 //		writer.write(document);
 //		writer.close();
 //		
-//		fileCopy(getClass().getClassLoader().getResource(xmlPath).getPath(),  "D://myEclipseWorkspace//eclipseWorkspace//SHARPOWER_SCADA//src//"+xmlPath);
+//		fileCopy(getClass().getClassLoader().getResource(xmlPath).getPath(),  "D://myEclipseWorkspace//eclipseWorkspace//sharpower_scada//src//"+xmlPath);
 //	}
 //	
 //	public static void fileCopy(String readfile,String writeFile) {  

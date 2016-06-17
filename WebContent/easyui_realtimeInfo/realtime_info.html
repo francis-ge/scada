@@ -6,6 +6,7 @@
     <title></title>
     
 	<!-- easyUI -->
+	<link href="../js/css/bootstrap.min.css" rel="stylesheet">
 	<link href="../jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
 	<link href="../jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
 	
@@ -16,59 +17,95 @@
 	<script src="../jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
 	<script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
 	
+	<script src="../js/bootstrap.min.js" charset="utf-8"></script>
+	
 	<style type="text/css">
 		* {margin: 0; padding: 0;}
 	</style>
-
+	
 	<script type="text/javascript">
+	
 		$(function(){
+			$.fn.extend({
+				refreshTable: function(data){
+				
+					 return this.each(function(){
+						 
+						var nameVals = $('.nameVal', this);
+						
+						nameVals.each(function(){
+							var name1 = $(this).attr('name');
+							$(this).next('td:first').html('<p>' + Math.round(data[name1]*100)/100  + '</p>');
+							$(this).next('td:first').attr('class','active');
+						});
+						
+						var nameStas = $('.nameSta', this);
+						
+						nameStas.each(function(){
+							var name2 = $(this).attr('name');
+							switch(data[name2]){
+							case true:
+								$(this).next('td:first').attr('class','success');
+								$(this).next('td:first').html('<p>' + data[name2] + '</p>');				
+								break;
+							case false:
+								$(this).next('td:first').attr('class','active');
+								$(this).next('td:first').html('<p>' + data[name2] + '</p>');				
+								break;
+							default:
+								$(this).next('td:first').attr('class','active');
+								$(this).next('td:first').html('<p>' + data[name2] + '</p>');
+							}
+						});
+						 
+					 });
+				}
+			});
+			
 			$('#datagrid').datagrid({
 				toolbar:'#toolBar',
 				loadMsg:''
 			});
 			
+			$('#funSelect').combobox({
+				onSelect:function(record){
+					
+				}
+			});
+			
 			$('#funSelect').combobox('select', 1);
 			
+			
 			setInterval(function(){
-					    	var funId = $('#funSelect').combobox('getValue');
-									
-					    	$('#datagrid').datagrid('load',{
-					    					funId:funId
-				    						} )
-				    }, 1000 );
+				var tables = $("table");
+			
+				var funId = $('#funSelect').combobox('getValue');
+				
+				$.post('sharpower_scada/ajaxRealTimeInfo', {funId:funId}, function(data){
+					data = eval('('+data+')');
+					tables.refreshTable(data[0]);
+				});
+				
+			}, 1000 );
 			
 		})
-		
+				
 	</script>
-
   </head>
   
   <body>
+  	选择风机:
+	<select id="funSelect" style="width:200px;" url="sharpower_scada/ajaxAllfun" valueField="id" textField="name">
+	</select>
+	
+  	<div id="tabs" class="easyui-tabs"  fit="true" border="false" justified="true" pill="true"">  
+  		<div title = "传动链" 		href = 'realtime_info_drivingChain.html' >	</div>
+  		<div title = "变桨系统" 		href = 'realtime_info_pitch.html' >			</div>
+  		<div title = "变频系统" 		href = 'realtime_info_converter.html' >		</div>
+  		<div title = "偏航及液压系统" 	href = 'realtime_info_profi.html' >			</div>
+  		<div title = "辅助系统" 		href = 'realtime_info_assist.html' >		</div>
+	</div> 
 
-		<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxRealTimeInfo" idField="id" singleSelect="true" fit="true" rownumbers="true">
-			<thead>   
-		        <tr>   
-		            <th data-options="field:'dateTime', width:150,
-		            	formatter:function(value,row,index){value=value.replace('T',' ');var date=new Date(value); return date.toLocaleString();}">时间</th>
-		            <th data-options="field:'windSpeed', width:150">风速</th>
-		            <th data-options="field:'_main__booltest1',  width:150">布尔值1</th>
-		            <th data-options="field:'_main__booltest2',  width:150">布尔值2</th>
-		            <th data-options="field:'_main__doubletest1',width:150">双精度浮点数1</th>
-		            <th data-options="field:'_main__longtest1',   width:150">整型1</th>
-		            <th data-options="field:'_main__longtest2',   width:150">整型2</th>
-		            <th data-options="field:'_main__longtest999',width:150">整型999</th>
-		            <th data-options="field:'_main__singletest1', width:150">浮点型1</th>
-		            <th data-options="field:'_main__singletest2', width:150">浮点型2</th>
-		            <th data-options="field:'_main__singletest3', width:150">浮点型3</th>
-		        </tr>   
-		    </thead>   
-		</table>
-		
-		<div id="toolBar" style="height:25px,overflow:hidden" >
-				选择风机:
-				<select id="funSelect" class="easyui-combobox" style="width:200px;" url="SHARPOWER_SCADA/ajaxAllfun" valueField="id" textField="name">
-				</select>
-		</div>	
   </body>
   
 </html>

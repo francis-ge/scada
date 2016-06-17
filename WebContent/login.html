@@ -23,7 +23,7 @@
 	<div id="header">
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-6" id="form" style="opacity:0">
+				<div class="col-lg-6" id="form" style="opacity:0;left:-220px">
 					<div >
 						<img src="js/assets/img/logo.png" alt="" style="width:150px"/>
 						<h1 >数据采集与监视控制系统</h1>
@@ -92,10 +92,10 @@
 	
 	<script type="text/javascript">
 		$(function(){
-			$('#form').velocity({opacity:1},{duration:5000});
-		
+			$('#form').velocity({opacity:1,left:0},{duration:4000});
+			
 			$('#submitBtn').click(function(){
-				$.post( 'SHARPOWER_SCADA/ajaxLogin', $("#form1").serialize(), function(data){
+				$.post( 'sharpower_scada/ajaxLogin', $("#form1").serialize(), function(data){
 					if(data.result=='验证成功！'){
 						window.location.href = "index.html";
 					}else {

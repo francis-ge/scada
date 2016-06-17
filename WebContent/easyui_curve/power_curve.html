@@ -17,7 +17,7 @@
   <body>
   	<form id="form1" method="post">
 		选择风机：
-		<select id="funSelect" name="funId" class="easyui-combobox" style="width:200px;" url="SHARPOWER_SCADA/ajaxAllfun"  valueField="id" textField="name" required="required"></select>
+		<select id="funSelect" name="funId" class="easyui-combobox" style="width:200px;" url="sharpower_scada/ajaxAllfun"  valueField="id" textField="name" required="required"></select>
                     开始时间：   
      	<input name="beginTime" type="text" class="easyui-datebox" required="required"></input>
      	结束时间：
@@ -106,7 +106,7 @@
 					$.messager.progress();
 					
 					$('#form1').form('submit',{
-						url:'SHARPOWER_SCADA/ajaxPowerCurve',
+						url:'sharpower_scada/ajaxPowerCurve',
 						onSubmit: function(){
 							var isValid = $(this).form('validate');
 							if (!isValid){

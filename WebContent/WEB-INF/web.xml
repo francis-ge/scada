@@ -3,7 +3,7 @@
   <display-name>sharpower_scada</display-name>
   <context-param>
     <param-name>webAppRootKey</param-name>
-    <param-value>SHARPOWER_SCADA.root</param-value>
+    <param-value>sharpower_scada.root</param-value>
   </context-param>
   <context-param>
     <param-name>log4jConfigLocation</param-name>

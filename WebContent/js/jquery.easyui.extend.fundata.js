@@ -48,8 +48,8 @@
             $('.funMode',$this).text('风机模式：' + defaults.___main_loop_mode_number);
             $('.windSpeed',$this).text('风速(s/m)：    ' + defaults.windSpeed);
             $('.power',$this).text('有功功率(kW/h)：' + defaults.power);
-            $('.energy',$this).text('日发电量：' + defaults.energy);
-            $('.energyCounter',$this).text('总发电量：' + defaults.energyCounter);
+            $('.energy',$this).text('日发电量(kW)：' + defaults.energy);
+            $('.energyCounter',$this).text('总发电量(kW)：' + defaults.energyCounter);
             
             //settings = $.extend({}, defaults, thisOptions);
 
@@ -91,10 +91,10 @@
                 });
             }
         })      
-    }
+    };
     
     $.fn.fundata.methods = {        
-        resize: function( jq, params){
+        resize: function( jq, params ){
 			var funCount = jq.length;
 			var height = $(window).height();
 			var width = $(window).width();
@@ -151,7 +151,7 @@
 	            		$('.fun1',$this).attr('src','../pic/tatong.png');
 	            		$('.yepian',$this).attr('src','../pic/yepian.png');
 	            		$('.yepian',$this).velocity('finish');
-	        			$('.yepian',$this).velocity({rotateZ:'360deg'},{ duration:5000,loop:true,easing:'linear'});
+	        			$('.yepian',$this).velocity({rotateZ:'360deg'},{ duration:6000,loop:true,easing:'linear'});
 	        			settings.funModeTest='运行';
 	            		break;
 	            	case 9:
@@ -177,7 +177,7 @@
 	            	$('.windSpeed',$this).text('风速(m/s):' + Math.round(thisOptions.___wind_speed*100)/100 );
 	            	$('.power',$this).text('有功功率(kW/h):' + Math.round(thisOptions.___visu_grid_power*100)/100 );
 	            	$('.energy',$this).text('日发电量(kW):' + Math.round(thisOptions.___visu_grid_energy) );
-	            	$('.energyCounter',$this).text('总发电量(kW):' + Math.round(thisOptions.___visu_grid_energy_counter) );
+	            	$('.energyCounter',$this).text('总发电量(kW):' + Math.round(thisOptions.___visu_grid_energy_counter));
 	            	
 		            if(thisOptions.___error_error_global==true){
 		            	$('.error',$this).attr('src','../pic/error.png');
@@ -187,10 +187,12 @@
 		            	$('.error',$this).attr('src','../pic/fun_null.png');
 		            }
 		            
-		            if(settings.fun==undefined){
-		            	$('.group', $this).attr('src', '../pic/loop' + thisOptions.fun.line + '.png');
-		            }
 	            }
+	            
+	            //只在首次刷新时设置该值。
+	            if(settings.fun==undefined){
+	            	$('.group', $this).attr('src', '../pic/loop' + thisOptions.fun.line + '.png');
+	            };
 	            
 	            settings = $.extend({}, settings, thisOptions);
 	

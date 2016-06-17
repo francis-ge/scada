@@ -96,7 +96,7 @@
     </div>
 
     <div id="south" data-options="region:'south',title:'',split:false" style="height:60px">
-    	<table id="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxWindFarmRealTimeInfo"
+    	<table id="datagrid" class="easyui-datagrid" url="sharpower_scada/ajaxWindFarmRealTimeInfo"
 			singleSelect="true" fit="true" striped="true" fitColumns="true" loadMsg="">
 		</table>
     </div> 
@@ -122,19 +122,19 @@
 				})
 				
 			function formatField(value){
-				return '<span style="font-size:25px">'+value+'</span>';
-			}
-			
-			
+				return '<h1 style="font-size:18px">'+Math.round(value*100)/100+'</h1>';
+			}		
+
 			var $loadMsg;
 			
 			$('#datagrid').datagrid({       
 			    columns:[[    
-			        {field:'communicationFailureFunCount',title:'通信故障',width:150,align:'center',formatter:formatField},    
-			        {field:'serviceFunCount',title:'维护',width:150,align:'center',formatter:formatField},    
-			        {field:'runFunCount',title:'运行',width:150,align:'center',formatter:formatField},    
-			        {field:'standbyFunCount',title:'待机',width:150,align:'center',formatter:formatField},    
-			        {field:'errorFunCount',title:'故障',width:150,align:'center',formatter:formatField},    
+			        {field:'runFunCount',title:'运行',width:80,align:'center',formatter:formatField,styler:function(){return 'background-color:#66FF00;'}},    
+			        {field:'standbyFunCount',title:'待机',width:80,align:'center',formatter:formatField,styler:function(){return 'background-color:#FFCC00;'}},    
+			        {field:'stopFunCount',title:'停机',width:80,align:'center',formatter:formatField,styler:function(){return 'background-color:#FF0000;'}},    
+			        {field:'serviceFunCount',title:'维护',width:80,align:'center',formatter:formatField,styler:function(){return 'background-color:#9900FF;'}},    
+			        {field:'communicationFailureFunCount',title:'通信故障',width:80,align:'center',formatter:formatField,styler:function(){return 'background-color:#0066FF;'}},    
+			        {field:'errorFunCount',title:'故障',width:80,align:'center',formatter:formatField,styler:function(){return 'background-color:#FF0000;'}},    
 			        {field:'power',title:'有功功率',width:150,align:'center',formatter:formatField},    
 			        {field:'reactivePower',title:'无功功率',width:150,align:'center',formatter:formatField},    
 			        {field:'energy',title:'本日发电量',width:150,align:'center',formatter:formatField},    
@@ -147,7 +147,7 @@
 			        {field:'averagePower',title:'平均功率',width:150,align:'center',formatter:formatField}    
 			    ]],
 			    rowStyler: function(index,row){
-		    			return 'height:40px';
+		    			return 'height:30px';
 			    	},
 				onLoadSuccess:function(){
 						if($loadMsg){

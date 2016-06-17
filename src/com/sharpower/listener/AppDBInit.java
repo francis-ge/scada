@@ -100,7 +100,7 @@ public class AppDBInit {
 		idElement.addAttribute("type", "java.lang.Long");
 		generateElement.addAttribute("class", "native");
 
-		Element funIdElement = classElement.addElement("many-to-one");
+		Element funIdElement = classElement.addElement("many-to-one"); 
 		funIdElement.addAttribute("name", "fun");
 		funIdElement.addAttribute("class", "com.sharpower.entity.Fun");
 		funIdElement.addAttribute("column", "FUN_ID");
@@ -127,8 +127,7 @@ public class AppDBInit {
 				propertyElement.addAttribute("column", dbName);
 				propertyElement.addAttribute("type","java.lang."+variableType);			
 			}
-			
-					
+			 
 			dbNames.add(dbName);
 			
 		}
@@ -141,7 +140,7 @@ public class AppDBInit {
 		writer.write(document);
 		writer.close();
 		
-		fileCopy(getClass().getClassLoader().getResource(xmlPath).getPath(), "D://myEclipseWorkspace//eclipseWorkspace//SHARPOWER_SCADA//src//"+xmlPath);
+		fileCopy(getClass().getClassLoader().getResource(xmlPath).getPath(), "D://myEclipseWorkspace//eclipseWorkspace//sharpower_scada//src//"+xmlPath);
 	}
 	
 	public static void fileCopy(String readfile,String writeFile) {  

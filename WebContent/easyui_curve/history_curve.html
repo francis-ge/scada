@@ -17,7 +17,7 @@
   <body>
   	<form id="form1" method="post">
 		<label for="funSelect">选择风机：</label>
-		<select id="funSelect" name="funId" class="easyui-combobox" style="width:200px;" data-options="url:'SHARPOWER_SCADA/ajaxAllfun',valueField:'id', textField:'name',required:'false'"></select>
+		<select id="funSelect" name="funId" class="easyui-combobox" style="width:200px;" data-options="url:'sharpower_scada/ajaxAllfun',valueField:'id', textField:'name',required:'false'"></select>
 		
         <label for="valSelect">选择数据：</label>   
         <select id="valSelect" name="variables" class="easyui-combobox" style="width:200px;" data-options="valueField:'dbName', textField:'showNameCN',multiple:'true',required:'false'" ></select>
@@ -123,7 +123,7 @@
  			$('#funSelect').combobox({
  				onSelect : function(recode){
  							$('#valSelect').combobox('clear');
- 							$('#valSelect').combobox('reload', 'SHARPOWER_SCADA/ajaxVariableForFun?plcTypeId=' + recode.plcType.id);
+ 							$('#valSelect').combobox('reload', 'sharpower_scada/ajaxVariableForFun?plcTypeId=' + recode.plcType.id);
 					}
  			});
 	 		
@@ -174,7 +174,7 @@
 				$.messager.progress();
 				
 				$('#form1').form('submit',{
-					url:'SHARPOWER_SCADA/ajaxMainRecodeForOne',
+					url:'sharpower_scada/ajaxMainRecodeForOne',
 					
 					onSubmit: function(){
 						var isValid = $(this).form('validate');

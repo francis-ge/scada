@@ -27,7 +27,7 @@
 	var flag='';
 	$(function() {
 		$('#table').datagrid({
-			url : 'SHARPOWER_SCADA/ajaxAllVariable',
+			url : 'sharpower_scada/ajaxAllVariable',
 			fitColumns : true,//列自适应宽度
 			striped : true,//条纹背景
 			rownumbers: true,
@@ -108,7 +108,7 @@
 															ids = ids + ',' + rows[i].id;
 														}
 														ids = ids.substring(1, ids.length);
-														$.post("SHARPOWER_SCADA/ajaxDeleteVariable", 
+														$.post("sharpower_scada/ajaxDeleteVariable", 
 																{ids:ids}, 
 																function(info){
 																	info = eval("("+info+")");
@@ -189,7 +189,7 @@
 								//向后台发送请求  
 								var queryParams = $('#table').datagrid('options').queryParams;
 
-								$.post('SHARPOWER_SCADA/ajaxAllVariable', queryParams, function(data){
+								$.post('sharpower_scada/ajaxAllVariable', queryParams, function(data){
 									data = eval("(" +data+")").rows;
 									data = JSON.stringify(data);
 									//向后台发送请求  
@@ -209,7 +209,7 @@
 		$('#submitBtn').click(function(){
 			$.messager.progress();	// 显示进度条
 			$('#form').form('submit', {
-				url:flag=='addVariable'?'SHARPOWER_SCADA/ajaxAddVariable':'SHARPOWER_SCADA/ajaxEditVariable',
+				url:flag=='addVariable'?'sharpower_scada/ajaxAddVariable':'sharpower_scada/ajaxEditVariable',
 				onSubmit: function(){
 					var isValid = $(this).form('validate');
 					if (!isValid){
@@ -288,7 +288,7 @@
 					<td><select id="variableType" name="variable.type.id"
 						class="easyui-combobox" required="true"
 						missingMessage="变量类型必填!" style="width:180px;" 
-						url="SHARPOWER_SCADA/ajaxAllVariableType" valueField="id" 
+						url="sharpower_scada/ajaxAllVariableType" valueField="id" 
 						textField="plcType" value="" ></select>
 					</td>
 				</tr>
@@ -297,7 +297,7 @@
 					<td><select id="plcType" name="variable.plcType.id"
 						class="easyui-combobox" required="true"
 						missingMessage="PLC类型必填!" style="width:180px;" 
-						url="SHARPOWER_SCADA/ajaxAllPlcType" valueField="id" 
+						url="sharpower_scada/ajaxAllPlcType" valueField="id" 
 						textField="name" value="" ></select>
 					</td>
 				</tr>

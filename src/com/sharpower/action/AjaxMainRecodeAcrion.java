@@ -113,7 +113,7 @@ public class AjaxMainRecodeAcrion extends ActionSupport {
 		List<Map<String, Object>> list = new ArrayList<>();
 		
 		try {
-			list = recodeService.findMapByHql(hql, funId, beginTime, endTime);
+			list = recodeService.findMapByHql( hql, funId, beginTime, endTime );
 			dataMap = list.get(0); 
 			message = "查询成功！";
 		} catch (Exception e) {
@@ -184,7 +184,7 @@ public class AjaxMainRecodeAcrion extends ActionSupport {
 				+ "GROUP by hour(mr.dateTime)";
 		
 		try {
-			dataList = recodeService.findMapByHql(hql, funId, beginTime, endTime);
+			dataList = recodeService.findMapByHql( hql, funId, beginTime, endTime);
 		
 			message = "查询成功！";
 			

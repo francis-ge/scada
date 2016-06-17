@@ -24,7 +24,7 @@
 	var flag='';
 	$(function() {
 		$('#table').datagrid({
-			url : 'SHARPOWER_SCADA/allFunTroubleVariable',
+			url : 'sharpower_scada/allFunTroubleVariable',
 			fitColumns : true,//列自适应宽度
 			striped : true,//条纹背景
 			rownumbers: true,
@@ -102,7 +102,7 @@
 															ids = ids + ',' + rows[i].id;
 														}
 														ids = ids.substring(1, ids.length);
-														$.post("SHARPOWER_SCADA/ajaxDeleteFunTroubleVariable", 
+														$.post("sharpower_scada/ajaxDeleteFunTroubleVariable", 
 																{ids:ids}, 
 																function(info){
 																	info = eval("("+info+")");
@@ -184,7 +184,7 @@
 								//向后台发送请求  
 								var queryParams = $('#table').datagrid('options').queryParams;
 
-								$.post('SHARPOWER_SCADA/allFunTroubleVariable', queryParams, function(data){
+								$.post('sharpower_scada/allFunTroubleVariable', queryParams, function(data){
 									data = eval("(" +data+")").rows;
 									data = JSON.stringify(data);
 									//向后台发送请求  
@@ -204,7 +204,7 @@
 		$('#submitBtn').click(function(){
 			$.messager.progress();	// 显示进度条
 			$('#form').form('submit', {
-				url:flag=='addFunTroubleVariable'?'SHARPOWER_SCADA/ajaxAddFunTroubleVariable':'SHARPOWER_SCADA/ajaxEditFunTroubleVariable',
+				url:flag=='addFunTroubleVariable'?'sharpower_scada/ajaxAddFunTroubleVariable':'sharpower_scada/ajaxEditFunTroubleVariable',
 				onSubmit: function(){
 					var isValid = $(this).form('validate');
 					if (!isValid){
@@ -288,7 +288,7 @@
 					<td><select id="variableType" name="funTroubleVariable.type.id"
 						class="easyui-combobox" required="true"
 						missingMessage="类型必填!" style="width:180px;" 
-						url="SHARPOWER_SCADA/ajaxAllFunTroubleType" valueField="id" 
+						url="sharpower_scada/ajaxAllFunTroubleType" valueField="id" 
 						textField="name" value="" ></select>
 					</td>
 				</tr>
@@ -298,7 +298,7 @@
 					<td><select id="plcType" name="funTroubleVariable.plcType.id"
 						class="easyui-combobox" required="true"
 						missingMessage="PLC类型必填!" style="width:180px;" 
-						url="SHARPOWER_SCADA/ajaxAllPlcType" valueField="id" 
+						url="sharpower_scada/ajaxAllPlcType" valueField="id" 
 						textField="name" value="" ></select>
 					</td>
 				</tr>

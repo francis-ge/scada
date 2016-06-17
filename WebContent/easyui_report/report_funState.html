@@ -25,7 +25,7 @@
   
   <body>
 
-		<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxFunChangeOfState" idField="id" singleSelect="true" fit="true" striped="true" fitColumns="true" rownumbers="true" pagination="true">
+		<table id ="datagrid" class="easyui-datagrid" url="sharpower_scada/ajaxFunChangeOfState" idField="id" singleSelect="true" fit="true" striped="true" fitColumns="true" rownumbers="true" pagination="true">
 			<thead>   
 		        <tr>   
 		            <th data-options="field:'name',width:'30px',align:'center'">风机名称</th>  
@@ -37,7 +37,7 @@
 		
 		<div id="toolBar" style="height:25px,overflow:hidden" >
 				<form id="from1" method="post" style="display: inline">   
-					选择风机：<select id="funSelect" name="funId" class="easyui-combobox" style="width:200px;" url="SHARPOWER_SCADA/ajaxAllfun"  valueField="id" textField="name" required="required">
+					选择风机：<select id="funSelect" name="funId" class="easyui-combobox" style="width:200px;" url="sharpower_scada/ajaxAllfun"  valueField="id" textField="name" required="required">
 							</select>
 					开始时间：<input name="beginTime" type="text" class="easyui-datetimebox" required="required"></input>
 					结束时间：<input name="endTime" type="text" class="easyui-datetimebox" required="required"></input>
@@ -99,7 +99,7 @@
 									
 									var queryParams = $('#datagrid').datagrid('options').queryParams;
 
-									$.post('SHARPOWER_SCADA/ajaxFunChangeOfState', queryParams, function(data){
+									$.post('sharpower_scada/ajaxFunChangeOfState', queryParams, function(data){
 										data = eval("(" +data+")").rows;
 										data = JSON.stringify(data);
 										//向后台发送请求  

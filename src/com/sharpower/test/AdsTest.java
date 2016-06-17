@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.sharpower.beckhoff.FunControlBeckhoffImpl;
 import com.sharpower.beckhoff.FunDataReadWriteBeckhoff;
+import com.sharpower.entity.Fun;
 import com.sharpower.entity.Variable;
 import com.sharpower.entity.VariableType;
 import com.sharpower.fun.control.FunControl;
@@ -52,8 +53,10 @@ public class AdsTest {
 	public void testWrite(){
 		FunControl funControl = new FunControlBeckhoffImpl();
 		//System.out.println(funControl.powerLimit("192.168.100.61.1.1:852",111.1f));
+		Fun fun = new Fun();
+		fun.setAddress("192.168.100.61.1.1:852");
 		try {
-			funControl.powerLimitCancel("192.168.100.61.1.1:852");
+			funControl.powerLimitCancel(fun);
 		} catch (PlcException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

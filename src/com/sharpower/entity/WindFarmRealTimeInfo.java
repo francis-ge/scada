@@ -6,6 +6,7 @@ public class WindFarmRealTimeInfo {
 	private int runFunCount;
 	private int standbyFunCount;
 	private int errorFunCount;
+	private int stopFunCount;
 	private float power;
 	private float reactivePower;
 	private float energy;
@@ -27,6 +28,12 @@ public class WindFarmRealTimeInfo {
 	}
 	public void setServiceFunCount(int serviceFunCount) {
 		this.serviceFunCount = serviceFunCount;
+	}
+	public int getStopFunCount() {
+		return stopFunCount;
+	}
+	public void setStopFunCount(int stopFunCount) {
+		this.stopFunCount = stopFunCount;
 	}
 	public int getRunFunCount() {
 		return runFunCount;

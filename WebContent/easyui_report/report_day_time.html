@@ -53,7 +53,7 @@
 									}
 								}
 								
-								$.post('SHARPOWER_SCADA/ajaxReportDayFindTimeRecode', function(data){
+								$.post('sharpower_scada/ajaxReportDayFindTimeRecode', function(data){
 									$('#form2').form('load',{fields:fields,titles:titles,excelData:data});
 									
 									$('#form2').form('submit',{url:'../excelFileAction'});
@@ -84,7 +84,7 @@
   
   <body>
 
-		<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxReportDayFindTimeRecode" 
+		<table id ="datagrid" class="easyui-datagrid" url="sharpower_scada/ajaxReportDayFindTimeRecode" 
 			idField="id" singleSelect="true" fit="true" striped="true" fitColumns="true"  rownumbers="true">
 			<thead>   
 		        <tr>   

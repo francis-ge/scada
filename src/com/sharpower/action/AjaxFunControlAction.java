@@ -9,7 +9,7 @@ public class AjaxFunControlAction extends ActionSupport{
 	private static final long serialVersionUID = 1L;
 
 	private Fun fun;
-	private float nfloat;
+	private float limitVal;
 	private FunControl funControl;
 	private String result;
 	
@@ -19,11 +19,11 @@ public class AjaxFunControlAction extends ActionSupport{
 	public void setFun(Fun fun) {
 		this.fun = fun;
 	}
-	public float getNfloat() {
-		return nfloat;
+	public float getLimitVal() {
+		return limitVal;
 	}
-	public void setNfloat(float nfloat) {
-		this.nfloat = nfloat;
+	public void setLimitVal(float limitVal) {
+		this.limitVal = limitVal;
 	}
 	
 	public FunControl getFunControl() {
@@ -39,7 +39,7 @@ public class AjaxFunControlAction extends ActionSupport{
 	
 	public String run(){
 		try {
-			funControl.run(fun.getAddress());
+			funControl.run(fun);
 			result=fun.getName()+"  启动命令已执行。";
 			return SUCCESS;
 		} catch (PlcException e) {
@@ -52,7 +52,7 @@ public class AjaxFunControlAction extends ActionSupport{
 	
 	public String stop(){
 		try {
-			funControl.stop(fun.getAddress());
+			funControl.stop(fun);
 			result=fun.getName()+"  停机命令已执行。";
 			return SUCCESS;
 		} catch (PlcException e) {
@@ -64,7 +64,7 @@ public class AjaxFunControlAction extends ActionSupport{
 	
 	public String reset(){
 		try {
-			funControl.reset(fun.getAddress());
+			funControl.reset(fun);
 			result=fun.getName()+"  复位命令已执行。";
 			return SUCCESS;
 		} catch (PlcException e) {
@@ -76,7 +76,7 @@ public class AjaxFunControlAction extends ActionSupport{
 	
 	public String service(){
 		try {
-			funControl.service(fun.getAddress());
+			funControl.service(fun);
 			result=fun.getName()+"  维护模式已执行。";
 			return SUCCESS;
 		} catch (PlcException e) {
@@ -88,7 +88,7 @@ public class AjaxFunControlAction extends ActionSupport{
 	
 	public String powerLimit(){
 		try {
-			funControl.powerLimit(fun.getAddress(), nfloat);
+			funControl.powerLimit(fun, limitVal);
 			result=fun.getName()+"  限功率命令已执行。";
 			return SUCCESS;
 		} catch (PlcException e) {
@@ -100,7 +100,7 @@ public class AjaxFunControlAction extends ActionSupport{
 	
 	public String powerLimitCancel(){
 		try {
-			funControl.powerLimitCancel(fun.getAddress());
+			funControl.powerLimitCancel(fun);
 			result=fun.getName()+"  取消功率限制已执行。";
 			return SUCCESS;
 		} catch (PlcException e) {

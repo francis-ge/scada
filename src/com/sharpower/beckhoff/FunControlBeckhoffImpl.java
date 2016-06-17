@@ -1,5 +1,6 @@
 package com.sharpower.beckhoff;
 
+import com.sharpower.entity.Fun;
 import com.sharpower.fun.control.FunControl;
 import com.sharpower.scada.exception.AdsException;
 import com.sharpower.scada.exception.PlcException;
@@ -74,40 +75,40 @@ public class FunControlBeckhoffImpl implements FunControl {
 	}
 	
 	@Override
-	public void run(String addr) throws PlcException{
-		writeBoolean(addr, ".visu_di_control_start_signal", true);
+	public void run(Fun fun) throws PlcException{
+		writeBoolean(fun.getAddress(), ".visu_di_control_start_signal", true);
 	}
 
 	@Override
-	public void stop(String addr) throws PlcException{
-		writeBoolean(addr, ".visu_di_control_stop_signal", true);
+	public void stop(Fun fun) throws PlcException{
+		writeBoolean(fun.getAddress(), ".visu_di_control_stop_signal", true);
 	}
 
 	@Override
-	public void service(String addr) throws PlcException{
-		writeBoolean(addr, ".visu_di_control_service_mode", true);
+	public void service(Fun fun) throws PlcException{
+		writeBoolean(fun.getAddress(), ".visu_di_control_service_mode", true);
 	}
 
 	@Override
-	public void reset(String addr) throws PlcException{
-		writeBoolean(addr, ".visu_di_control_reset_signal", true);
+	public void reset(Fun fun) throws PlcException{
+		writeBoolean(fun.getAddress(), ".visu_di_control_reset_signal", true);
 	}
 
 	@Override
-	public void yawLeft(String addr) throws PlcException{
-		writeBoolean(addr, ".commiss_yaw_left", true);
+	public void yawLeft(Fun fun) throws PlcException{
+		writeBoolean(fun.getAddress(), ".commiss_yaw_left", true);
 	}
 
 	@Override
-	public void yawRight(String addr) throws PlcException{
-		writeBoolean(addr, ".commiss_yaw_right", true);
+	public void yawRight(Fun fun) throws PlcException{
+		writeBoolean(fun.getAddress(), ".commiss_yaw_right", true);
 	}
 
 	@Override
-	public void powerLimit(String addr, float val) throws PlcException{
-		writeBoolean(addr, ".hmi_power_limit_enable", true);
+	public void powerLimit(Fun fun, float val) throws PlcException{
+		writeBoolean(fun.getAddress(), ".hmi_power_limit_enable", true);
 		
-		AmsAddr lj_AmsAddr = AddressConvertUtils.string2AmsAddr(addr);
+		AmsAddr lj_AmsAddr = AddressConvertUtils.string2AmsAddr(fun.getAddress());
 		
 		openPort();
 
@@ -124,8 +125,8 @@ public class FunControlBeckhoffImpl implements FunControl {
 	}
 
 	@Override
-	public void powerLimitCancel(String addr) throws PlcException{
-		writeBoolean(addr, ".hmi_power_limit_enable", false);
+	public void powerLimitCancel(Fun fun) throws PlcException{
+		writeBoolean(fun.getAddress(), ".hmi_power_limit_enable", false);
 	}
 
 }

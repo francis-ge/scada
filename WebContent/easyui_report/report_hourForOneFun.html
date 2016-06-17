@@ -19,7 +19,7 @@
   
   <body>
 
-		<table id ="datagrid" class="easyui-datagrid" idField="id" url="SHARPOWER_SCADA/ajaxReportHourForOne" singleSelect="true" fit="true" striped="true" fitColumns="true" rownumbers="true">
+		<table id ="datagrid" class="easyui-datagrid" idField="id" url="sharpower_scada/ajaxReportHourForOne" singleSelect="true" fit="true" striped="true" fitColumns="true" rownumbers="true">
 			<thead>   
 		        <tr>   
 		            <th data-options="field:'name',width:'10%',align:'center'">风机名称</th>  
@@ -38,7 +38,7 @@
 		<div id="toolBar" style="height:25px,overflow:hidden" >
 				<form id="from1" method="post" style="display: inline"> 
 					<label for="funSelect">选择风机 ：</label>  
-					<select id="funSelect" name="funId" class="easyui-combobox" style="width:200px;" url="SHARPOWER_SCADA/ajaxAllfun"  valueField="id" textField="name" required="required">
+					<select id="funSelect" name="funId" class="easyui-combobox" style="width:200px;" url="sharpower_scada/ajaxAllfun"  valueField="id" textField="name" required="required">
 					</select>
 					<label for="time">选择日期:</label>
 					<input name="time" class="easyui-datebox" required="required"></input>
@@ -106,7 +106,7 @@
 								}
 								
 
-								$.post('SHARPOWER_SCADA/ajaxReportHourForOne', function(data){
+								$.post('sharpower_scada/ajaxReportHourForOne', function(data){
 									$('#form2').form('load',{fields:fields,titles:titles,excelData:data});
 									
 									$('#form2').form('submit',{url:'../excelFileAction'});

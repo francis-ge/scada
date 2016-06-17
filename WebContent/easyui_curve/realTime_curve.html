@@ -26,7 +26,7 @@
   <body>
   	<form id="form" method="post">
 		<label for="funSelect">选择风机：</label>
-		<select id="funSelect" name="funId" style="width:200px;" data-options="url:'SHARPOWER_SCADA/ajaxAllfun',valueField:'id', textField:'name',required:'false'"></select>
+		<select id="funSelect" name="funId" style="width:200px;" data-options="url:'sharpower_scada/ajaxAllfun',valueField:'id', textField:'name',required:'false'"></select>
 		
         <label for="valSelect">选择数据：</label>   
         <select id="valSelect" name="variables" style="width:200px;" data-options="valueField:'dbName', textField:'showNameCN',multiple:'true',required:'false'" >
@@ -37,179 +37,179 @@
 	<div id="chart" style="height:500px"></div>
 		
 	<script type="text/javascript">
-		var chart = echarts.init(document.getElementById('chart'));
-		var dataItem = 1000;
-	
-		var option = {
-			    title : {
-			        text: '实时曲线',
-			        subtext: ''
-			    },
-			    tooltip : {
-			        trigger: 'axis',
-			        formatter: '{b}<br />{a0}: {c0}<br />{a1}: {c1}'
-			    },
-			    legend : [{
-			        data : [{name:''},{name:''}]
-			    }],
-			    toolbox : {
-			        show : true,
-			        feature : {
-			            restore : {show: true},
-			            saveAsImage : {show: true}
-			        }
-			    },
-			    xAxis : [
-					        {
-					            type : 'category',
-					            boundaryGap : true,
-					            data : (function (){
-					                var now = new Date();
-					                var res = [];
-					                var len = dataItem;
-					                while (len--) {
-					                    res.unshift(now.toLocaleTimeString().replace(/^\D*/,''));
-					                    now = new Date(now - 1000);
-					                }
-					                return res;
-					            })()
-					        }
-					    ],
-			    yAxis : [
-			        {
-			            type : 'value',
-			            scale: true,
-			            name : '',
-			            boundaryGap: [0.1, 0.1]
-			        },
-			        {
-			            type : 'value',
-			            scale: true,
-			            name : '',
-			            boundaryGap: [0.1, 0.1]
-			        }
-			    ],
-			    dataZoom :  [
-   						     {
-					            show: true,
-					            realtime: true,
-					            start: 0,
-					            end: 100
-						      },
-							  {
-						    	type: 'inside',
-						        show : true,
-						        start : 0,
-						        end : 100
-  							  }],
-			    series : [
-			        {
-			            name:'',
-			            type:'line',
-			            xAxisIndex: 0,
-			            yAxisIndex: 0,
-			            data:(function (){
-			                var res = [];
-			                var len = dataItem;
-			                while (len--) {
-			                    res.push(null);
-			                }
-			                return res;
-			            })()
-			        },
-			        {
-			            name:'',
-			            type:'line',
-			            xAxisIndex: 0,
-			            yAxisIndex: 1,
-			            data:(function (){
-			                var res = [];
-			                var len = dataItem;
-			                while (len--) {
-			                    res.push(null);
-			                }
-			                return res;
-			            })()
-			        }
-			    ]
-			};
+ 		$(function(){
+			var chart = echarts.init(document.getElementById('chart'));
+			var dataItem = 1000;
 		
-		chart.setOption(option);
+			var option = {
+				    title : {
+				        text: '实时曲线',
+				        subtext: ''
+				    },
+				    tooltip : {
+				        trigger: 'axis',
+				        formatter: '{b}<br />{a0}: {c0}<br />{a1}: {c1}'
+				    },
+				    legend : [{
+				        data : [{name:''},{name:''}]
+				    }],
+				    toolbox : {
+				        show : true,
+				        feature : {
+				            restore : {show: true},
+				            saveAsImage : {show: true}
+				        }
+				    },
+				    xAxis : [
+						        {
+						            type : 'category',
+						            boundaryGap : true,
+						            data : (function (){
+						                var now = new Date();
+						                var res = [];
+						                var len = dataItem;
+						                while (len--) {
+						                    res.unshift(now.toLocaleTimeString().replace(/^\D*/,''));
+						                    now = new Date(now - 1000);
+						                }
+						                return res;
+						            })()
+						        }
+						    ],
+				    yAxis : [
+				        {
+				            type : 'value',
+				            scale: true,
+				            name : '',
+				            boundaryGap: [0.1, 0.1]
+				        },
+				        {
+				            type : 'value',
+				            scale: true,
+				            name : '',
+				            boundaryGap: [0.1, 0.1]
+				        }
+				    ],
+				    dataZoom :  [
+	   						     {
+						            show: true,
+						            realtime: true,
+						            start: 0,
+						            end: 100
+							      },
+								  {
+							    	type: 'inside',
+							        show : true,
+							        start : 0,
+							        end : 100
+	  							  }],
+				    series : [
+				        {
+				            name:'',
+				            type:'line',
+				            xAxisIndex: 0,
+				            yAxisIndex: 0,
+				            data:(function (){
+				                var res = [];
+				                var len = dataItem;
+				                while (len--) {
+				                    res.push(null);
+				                }
+				                return res;
+				            })()
+				        },
+				        {
+				            name:'',
+				            type:'line',
+				            xAxisIndex: 0,
+				            yAxisIndex: 1,
+				            data:(function (){
+				                var res = [];
+				                var len = dataItem;
+				                while (len--) {
+				                    res.push(null);
+				                }
+				                return res;
+				            })()
+				        }
+				    ]
+				};
 			
-		var axisData;
-		var timeTicket;
-		
-		clearInterval(timeTicket);
-		
-		var previousVal1;
-		var previousVal2;
-		
-		timeTicket = setInterval(function (){
-			var funId = $('#funSelect').combobox('getValue');
-			var vals = $('#valSelect').combobox('getValues');
+			chart.setOption(option);
+				
+			var axisData;
+			var timeTicket;
 			
-			if(funId==''){
-				return;
-			}
+			clearInterval(timeTicket);
 			
-			$.post('SHARPOWER_SCADA/ajaxRealTimeInfo', {funId:funId}, function(data){
-				axisData = (new Date()).toLocaleTimeString().replace(/^\D*/,'');
-				var option2 = chart.getOption();
-
-				var data0 = option2.series[0].data;
-				var data1 = option2.series[1].data;
+			var previousVal1;
+			var previousVal2;
+			
+			timeTicket = setInterval(function (){
+				var funId = $('#funSelect').combobox('getValue');
+				var vals = $('#valSelect').combobox('getValues');
 				
-				if(vals[0]==previousVal1 && vals[0]!=undefined){
-					data0.shift();
-					if (data[0][vals[0]]!=undefined){
-						data0.push(data[0][vals[0]]);
-					}else{
-						data0.push(null);
-					}
-				}else{
-					data0.splice(0, data0.length);
-					  var len = dataItem;
-		                while (len--) {
-		                	data0.push(null);
-		                }
-				}		
-				
-				previousVal1 = vals[0];
-				
-				if(vals[1]==previousVal2 && vals[0]!=undefined ){
-					data1.shift();
-					if(data[0][vals[1]]!=undefined){
-						data1.push(data[0][vals[1]]);
-					}else{
-						data1.push(null);
-					}
-				}else{
-					data1.splice(0, data1.length);
-					  var len = dataItem;
-		                while (len--) {
-		                	data1.push(null);
-		                }
+				if(funId==''){
+					return;
 				}
 				
-				previousVal2 = vals[1];
+				$.post('sharpower_scada/ajaxRealTimeInfo', {funId:funId}, function(data){
+					axisData = (new Date()).toLocaleTimeString().replace(/^\D*/,'');
+					var option2 = chart.getOption();
+	
+					var data0 = option2.series[0].data;
+					var data1 = option2.series[1].data;
+					
+					if(vals[0]==previousVal1 && vals[0]!=undefined){
+						data0.shift();
+						if (data[0][vals[0]]!=undefined){
+							data0.push(data[0][vals[0]]);
+						}else{
+							data0.push(null);
+						}
+					}else{
+						data0.splice(0, data0.length);
+						  var len = dataItem;
+			                while (len--) {
+			                	data0.push(null);
+			                }
+					}		
+					
+					previousVal1 = vals[0];
+					
+					if(vals[1]==previousVal2 && vals[0]!=undefined ){
+						data1.shift();
+						if(data[0][vals[1]]!=undefined){
+							data1.push(data[0][vals[1]]);
+						}else{
+							data1.push(null);
+						}
+					}else{
+						data1.splice(0, data1.length);
+						  var len = dataItem;
+			                while (len--) {
+			                	data1.push(null);
+			                }
+					}
+					
+					previousVal2 = vals[1];
+				
+					option2.xAxis[0].data.shift();
+					option2.xAxis[0].data.push(axisData);
+					
+					var option3 = {
+							xAxis : [{data:option2.xAxis[0].data}],
+							series : [{data:data0},{data:data1}]
+					};
+					
+					chart.setOption(option3);
+				},'json');
+			}, 1000 );
 			
-				option2.xAxis[0].data.shift();
-				option2.xAxis[0].data.push(axisData);
-				
-				var option3 = {
-						xAxis : [{data:option2.xAxis[0].data}],
-						series : [{data:data0},{data:data1}]
-				};
-				
-				chart.setOption(option3);
-			},'json');
-		}, 1000 );
-		
- 		$(function(){
  			$('#funSelect').combobox({
  				onSelect : function(recode){
  							$('#valSelect').combobox('clear');
- 							$('#valSelect').combobox('reload', 'SHARPOWER_SCADA/ajaxVariableForFun?plcTypeId=' + recode.plcType.id);
+ 							$('#valSelect').combobox('reload', 'sharpower_scada/ajaxVariableForFun?plcTypeId=' + recode.plcType.id);
 					}
  			});
 	 		

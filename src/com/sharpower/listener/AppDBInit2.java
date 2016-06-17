@@ -106,7 +106,7 @@ public class AppDBInit2 {
 		writer.write(document);
 		writer.close();
 		
-		fileCopy(getClass().getClassLoader().getResource(xmlPath).getPath(),  "D://myEclipseWorkspace//eclipseWorkspace//SHARPOWER_SCADA//src//"+xmlPath);
+		fileCopy(getClass().getClassLoader().getResource(xmlPath).getPath(),  "D://myEclipseWorkspace//eclipseWorkspace//sharpower_scada//src//"+xmlPath);
 	}
 	
 	private static void fileCopy(String readfile,String writeFile) {  

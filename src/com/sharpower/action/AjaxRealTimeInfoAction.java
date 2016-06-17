@@ -97,28 +97,29 @@ public class AjaxRealTimeInfoAction extends ActionSupport{
 		int serviceFunCount = 0;
 		int runFunCount = 0;
 		int standbyFunCount = 0;
+		int stopFunCount = 0;
 		int errorFunCount = 0;
 		float power = 0;
 		float reactivePower = 0;
 		float energy = 0;
 		float energyCounter=0;
 		float maxWindSpeed=0;
-		float minWindSpeed=0;
+		float minWindSpeed=999;
 		float averageWindSpeed=0;
 		float maxPower=0;
-		float minPower=0;
+		float minPower=99999;
 		float averagePower = 0;
 		
-		int i = 0;
+		float sumWindSpeed = 0;
 		 
 		for ( Map<String, Object> map : dateMap.values() ){
-			i++;
+			
 			short mode = map.get("___main_loop_mode_number")!=null?(short)map.get("___main_loop_mode_number"):10;
 			
 			switch (mode) {
 			case 0:
 			case 1:
-				errorFunCount++;
+				stopFunCount++;
 				break;
 			case 2:
 				standbyFunCount++;
@@ -136,40 +137,55 @@ public class AjaxRealTimeInfoAction extends ActionSupport{
 				break;
 			}
 			
-			power = map.get("___visu_grid_power")!=null?(float)map.get("___visu_grid_power")+power : 0;
-			reactivePower = map.get("___visu_grid_reactive_power")!=null?(float)map.get("___visu_grid_reactive_power")+reactivePower : 0;
-			energy = map.get("___visu_grid_energy")!=null?(float)map.get("___visu_grid_energy")+energy : 0; 
-			energyCounter = map.get("___visu_grid_energy_counter")!=null?(float)map.get("___visu_grid_energy_counter")+energyCounter : 0;
+			if (map.get("___error_error_global")!=null) {
+				if ((boolean)map.get("___error_error_global")) {
+					errorFunCount++;
+				}
+			}
+			
+			power = map.get("___visu_grid_power")!=null?(float)map.get("___visu_grid_power")+power : power;
+			reactivePower = map.get("___visu_grid_reactive_power")!=null?(float)map.get("___visu_grid_reactive_power")+reactivePower : reactivePower;
+			energy = map.get("___visu_grid_energy")!=null?(float)map.get("___visu_grid_energy")+energy : energy; 
+			energyCounter = map.get("___visu_grid_energy_counter")!=null?(float)map.get("___visu_grid_energy_counter")+energyCounter : energyCounter;
 			
 			float windSpeed = 0;
 			if (map.get("___wind_speed")!=null) {
 				windSpeed = (float)map.get("___wind_speed");
-				maxWindSpeed = Float.compare(windSpeed, maxWindSpeed)<=0?maxWindSpeed:windSpeed; 
+				maxWindSpeed = Float.compare(windSpeed, maxWindSpeed)<=0?maxWindSpeed:windSpeed;
 				minWindSpeed = Float.compare(windSpeed, minWindSpeed)<=0?windSpeed:minWindSpeed;
-				
 			}
 			
-			float sumWindSpeed = 0;
 			sumWindSpeed = windSpeed + sumWindSpeed;
-			averageWindSpeed = sumWindSpeed / i;
 			
 			if(map.get("___visu_grid_power")!=null){	
 				float nPower = (float)map.get("___visu_grid_power");
 				maxPower = Float.compare(nPower, maxPower)<=0?maxPower:nPower;
 				minPower = Float.compare(nPower, minPower)<=0?minPower:nPower;
 			}
-			
-			averagePower = power / i;
 
+		}
+		
+		if (minWindSpeed==999) {
+			minWindSpeed=0;
+		}
+		
+		if (minPower==99999) {
+			minPower=0;
+		}
+		
+		if (dateMap.size()-communicationFailureFunCount>0) {
+			averageWindSpeed = sumWindSpeed / (dateMap.size()-communicationFailureFunCount);
+			averagePower = power / (dateMap.size()-communicationFailureFunCount);
 		}
 		
 		WindFarmRealTimeInfo windFarmRealTimeInfo1= new WindFarmRealTimeInfo();
 		
-		windFarmRealTimeInfo1.setErrorFunCount(errorFunCount);
+		windFarmRealTimeInfo1.setStopFunCount(stopFunCount);
 		windFarmRealTimeInfo1.setStandbyFunCount(standbyFunCount);
 		windFarmRealTimeInfo1.setRunFunCount(runFunCount);
 		windFarmRealTimeInfo1.setServiceFunCount(serviceFunCount);
 		windFarmRealTimeInfo1.setCommunicationFailureFunCount(communicationFailureFunCount);
+		windFarmRealTimeInfo1.setErrorFunCount(errorFunCount);
 		windFarmRealTimeInfo1.setPower(power);
 		windFarmRealTimeInfo1.setReactivePower(reactivePower);
 		windFarmRealTimeInfo1.setEnergy(energy);

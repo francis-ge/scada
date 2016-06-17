@@ -68,7 +68,7 @@
 								
 								var queryParams = $('#datagrid').datagrid('options').queryParams;
 
-								$.post('SHARPOWER_SCADA/ajaxGetTroubleStatistics', queryParams, function(data){
+								$.post('sharpower_scada/ajaxGetTroubleStatistics', queryParams, function(data){
 									data = eval("(" +data+")").rows;
 									data = JSON.stringify(data);
 									//向后台发送请求  
@@ -100,7 +100,7 @@
   </head>
   
   <body>
-		<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxGetTroubleStatistics" 
+		<table id ="datagrid" class="easyui-datagrid" url="sharpower_scada/ajaxGetTroubleStatistics" 
 			idField="id" singleSelect="true" fit="true" striped="true" fitColumns="true" rownumbers="true" pagination="true">
 			<thead>   
 		        <tr>   

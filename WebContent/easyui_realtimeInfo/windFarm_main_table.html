@@ -9,18 +9,52 @@
 	<link href="../jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
 	<link href="../jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
 	
+	<link href="../js/css/bootstrap.min.css" rel="stylesheet">
+	
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
 	<script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
+	
+	<script src="../js/bootstrap.min.js" charset="utf-8"></script>
 	
 	<!-- easyUI -->
 	<script src="../jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
 	<script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
 	
-	<style type="text/css">
+	<style type="text/css" >
 		* {margin: 0; padding: 0;}
+		
+		.panel-body {
+			margin: 0px;
+    		padding: 0px;
+		}
 	</style>
+	
 	<script type="text/javascript">
+		var limitDlgInterval;
+		
 		$(function(){
+			$('#powerLimit').dialog({
+				onOpen:function(){
+					var selectRow = $('#datagrid').datagrid('getSelected');
+					var funId = selectRow.fun.id;
+					
+					limitDlgInterval = setInterval(function(){
+						$.post('sharpower_scada/ajaxRealTimeInfo', {funId:funId}, function(data){
+							$('#ltPower').text(data[0].___visu_grid_power);
+							$('#ltMaxPower').text(data[0].___wind_speed);
+							$('#ltLimitSta').text(data[0]._hmi_power_limit_ok);
+						},'json');
+					},1000);
+				},
+				onClose:function(){
+					clearInterval(limitDlgInterval);
+					
+					$('#ltPower').text('');
+					$('#ltMaxPower').text('');
+					$('#ltLimitSta').text('');
+				}
+			});
+
 			$('#datagrid').datagrid({
 				columns:[[    
 				          { field:'fun',
@@ -121,7 +155,7 @@
 							});
 							
 							$('#form').form('submit', {
-								url:'SHARPOWER_SCADA/ajaxFunControlRun',
+								url:'sharpower_scada/ajaxFunControlRun',
 								success: function(info){
 									info = eval("("+info+")");
 									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
@@ -139,7 +173,7 @@
 							});
 							
 							$('#form').form('submit', {
-								url:'SHARPOWER_SCADA/ajaxFunControlStop',
+								url:'sharpower_scada/ajaxFunControlStop',
 								success: function(info){
 									info = eval("("+info+")");
 									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
@@ -157,7 +191,7 @@
 							});
 							
 							$('#form').form('submit', {
-								url:'SHARPOWER_SCADA/ajaxFunControlService',
+								url:'sharpower_scada/ajaxFunControlService',
 								success: function(info){
 									info = eval("("+info+")");
 									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
@@ -175,7 +209,7 @@
 							});
 							
 							$('#form').form('submit', {
-								url:'SHARPOWER_SCADA/ajaxFunControlReset',
+								url:'sharpower_scada/ajaxFunControlReset',
 								success: function(info){
 									info = eval("("+info+")");
 									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
@@ -185,21 +219,64 @@
 						
 						break;						
 					case '5':
-						$('#window').window('open');
+						$('#powerLimit').dialog({title:selectRow.fun.name+' 功率限制'});
+						$('#powerLimit').dialog('open');
 						break;
 					}
 				}
-			})
+			});
+			
+			$('#limitBtn').click(function(){
+				var selectRow = $('#datagrid').datagrid('getSelected');
+				if(selectRow!=null){
+					$('#form').form('load',{'fun.id': selectRow.fun.id,
+											'fun.name' : selectRow.fun.name,
+											'fun.address': selectRow.fun.address});
+					
+					var limitVal = $('#limitVal').val();
+					
+					$('#form').form('submit',{
+						url:'sharpower_scada/ajaxFunControlPowerLimit',
+						queryParams:{limitVal:limitVal},
+						success: function(info){
+							info = eval("("+info+")");
+							$.messager.show({title:'我的消息',msg:info,showType:'slide'});
+							}
+					});
+					
+					}
+				}
+			);
+			
+			$('#limitCancelBtn').click(function(){
+				var selectRow = $('#datagrid').datagrid('getSelected');
+				if(selectRow!=null){
+					$('#form').form('load',{'fun.id': selectRow.fun.id,
+											'fun.name' : selectRow.fun.name,
+											'fun.address': selectRow.fun.address});
+					
+					$('#form').form('submit',{
+						url:'sharpower_scada/ajaxFunControlPowerLimitCancel',
+						success: function(info){
+							info = eval("("+info+")");
+							$.messager.show({title:'我的消息',msg:info,showType:'slide'});
+							}
+					});
+					
+					}
+				}
+			);
 			
 			setInterval(function(){
-		    	$('#datagrid').datagrid('load')}, 
+		    	$('#datagrid').datagrid('load')},
 		    	1000
 			);
 		})
 	</script>
+	
 </head>
 <body>
-	<table id="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxMainInfo"
+	<table id="datagrid" class="easyui-datagrid" url="sharpower_scada/ajaxMainInfo"
 		idField="id" singleSelect="true" fit="true" striped="true" rownumbers="true" fitColumns="true" loadMsg="">
 	</table>
 	
@@ -208,14 +285,26 @@
 	    <div id="2" data-options="iconCls:'icon-stop'">停机</div>   
 	    <div id="3" data-options="iconCls:'icon-service'">维护</div>   
 	    <div id="4" data-options="iconCls:'icon-reset'">复位</div>   
-	    <div  class="menu-sep"></div>   
-	    <!-- <div id="5">偏航</div>  -->
-	</div>  
+	    <div class="menu-sep"></div> 
+	    <div id="5">功率限制</div>  
+	   <!--  <div id="6">偏航</div>  -->
+	</div>
 	
-	<div id="window" class="easyui-window"  title="偏航控制" style="width:600px;height:400px"
-		 data-options="modal:true" closed="true" >
+	<div id="powerLimit" class="easyui-dialog" title="功率限制" style="width:500px;height:220px;" data-options="closable:true,closed:true,modal:true" >
+		 <table id="limitTable" class="table">
+		 	<tbody>
+ 				<tr><td>当前功率(kW)：</td>  		<td><p id="ltPower"></p></td><td></td></tr>
+		 		<tr><td>理论最大功率(kW)：</td>  	<td><p id="ltMaxPower"></p></td><td></td></tr>
+		 		<tr><td>限功率状态：</td>     		<td><p id="ltLimitSta"></p></td><td><a id="limitCancelBtn" href="#" class="easyui-linkbutton">解除限制</a></td></tr>
+		 		<tr><td><label for="limitVal">功率限定值(kW)：</label></td>  <td><input id="limitVal" class="easyui-numberbox" name="limitVal" data-options="min:0,max:2000" /></td>
+		 		<td><a id="limitBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">设定</a></td></tr>			 	
+		 	</tbody>
+		 </table>
+	</div>
 	
-	</div>、
+	<div id="yaw" class="easyui-dialog"  title="偏航控制" style="width:600px;height:400px"
+		 data-options="modal:false,closed:true" >
+	</div>
 	
 	<form id="form" action="" method="post" style="display: none;">
 		<input type="text" name="fun.id" value="" />

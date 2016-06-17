@@ -25,7 +25,7 @@
   
   <body>
 
-		<table id ="datagrid" class="easyui-datagrid" url="SHARPOWER_SCADA/ajaxReportWindFarmHour" idField="id" singleSelect="true" fit="true" striped="true" fitColumns="true" rownumbers="true">
+		<table id ="datagrid" class="easyui-datagrid" url="sharpower_scada/ajaxReportWindFarmHour" idField="id" singleSelect="true" fit="true" striped="true" fitColumns="true" rownumbers="true">
 			<thead>   
 		        <tr>   
 		            <th data-options="field:'hour',width:30,align:'center'">小时段</th>
@@ -117,7 +117,7 @@
 								}
 								
 
-								$.post('SHARPOWER_SCADA/ajaxReportWindFarmHour', function(data){
+								$.post('sharpower_scada/ajaxReportWindFarmHour', function(data){
 									$('#form2').form('load',{fields:fields,titles:titles,excelData:data});
 									
 									$('#form2').form('submit',{url:'../excelFileAction'});

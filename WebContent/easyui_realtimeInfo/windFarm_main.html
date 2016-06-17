@@ -53,7 +53,7 @@
 	
 	<script type="text/javascript">
 		$(function(){
-			$.post('SHARPOWER_SCADA/ajaxMainInfo',{},function(data){
+			$.post('sharpower_scada/ajaxMainInfo',{},function(data){
 
 				for(var i in data){
 					$('#funs').append("<div class='easyui-fundata'></div>")
@@ -66,20 +66,18 @@
 			
 			setInterval(function(){
 		    	
-				$.post('SHARPOWER_SCADA/ajaxMainInfo',{},function(data){
-	
+				$.post('sharpower_scada/ajaxMainInfo',{},function(data){
 					$('.easyui-fundata').fundata('refresh',data);
 					
 				},'json');
 			},1000);
 			
 			$(window).resize(function(){
-				$.post('SHARPOWER_SCADA/ajaxMainInfo',{},function(data){
-					
+				$.post('sharpower_scada/ajaxMainInfo',{},function(data){
 					$('.easyui-fundata').fundata('resize',data);
 					
 				},'json');
-			})
+			});
 			
 			$('#menu').menu({
 				onClick:function(item){
@@ -88,14 +86,14 @@
 					switch(item.id){
 					case '1':
 						if(selectRow!=null){
-							$('#form').form('load',{
+							$('#form').form('load', {
 								'fun.id': selectRow.fun.id,
 								'fun.name' : selectRow.fun.name,
 								'fun.address': selectRow.fun.address
 							});
 							
 							$('#form').form('submit', {
-								url:'SHARPOWER_SCADA/ajaxFunControlRun',
+								url:'sharpower_scada/ajaxFunControlRun',
 								success: function(info){
 									info = eval("("+info+")");
 									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
@@ -106,14 +104,14 @@
 						break;
 					case '2':
 						if(selectRow!=null){
-							$('#form').form('load',{
+							$('#form').form('load', {
 								'fun.id': selectRow.fun.id,
 								'fun.name' : selectRow.fun.name,
 								'fun.address': selectRow.fun.address
 							});
 							
 							$('#form').form('submit', {
-								url:'SHARPOWER_SCADA/ajaxFunControlStop',
+								url:'sharpower_scada/ajaxFunControlStop',
 								success: function(info){
 									info = eval("("+info+")");
 									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
@@ -124,14 +122,14 @@
 						break;
 					case '3':
 						if(selectRow!=null){
-							$('#form').form('load',{
+							$('#form').form('load', {
 								'fun.id': selectRow.fun.id,
 								'fun.name' : selectRow.fun.name,
 								'fun.address': selectRow.fun.address
 							});
 							
 							$('#form').form('submit', {
-								url:'SHARPOWER_SCADA/ajaxFunControlService',
+								url:'sharpower_scada/ajaxFunControlService',
 								success: function(info){
 									info = eval("("+info+")");
 									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
@@ -149,7 +147,7 @@
 							});
 							
 							$('#form').form('submit', {
-								url:'SHARPOWER_SCADA/ajaxFunControlReset',
+								url:'sharpower_scada/ajaxFunControlReset',
 								success: function(info){
 									info = eval("("+info+")");
 									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
