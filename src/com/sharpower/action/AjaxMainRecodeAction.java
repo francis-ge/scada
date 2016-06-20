@@ -11,7 +11,7 @@ import java.util.Map;
 import com.opensymphony.xwork2.ActionSupport;
 import com.sharpower.service.RecodeService;
 
-public class AjaxMainRecodeAcrion extends ActionSupport {
+public class AjaxMainRecodeAction extends ActionSupport {
 	private static final long serialVersionUID = 1L;
 	
 	private RecodeService recodeService;

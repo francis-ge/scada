@@ -143,7 +143,7 @@ public class AppDBInit {
 		fileCopy(getClass().getClassLoader().getResource(xmlPath).getPath(), "D://myEclipseWorkspace//eclipseWorkspace//sharpower_scada//src//"+xmlPath);
 	}
 	
-	public static void fileCopy(String readfile,String writeFile) {  
+	public static void fileCopy(String readfile, String writeFile) {  
 	    try {  
 	        FileInputStream input = new FileInputStream(readfile);  
 	        FileOutputStream output = new FileOutputStream(writeFile);  

@@ -21,6 +21,29 @@ import com.sharpower.utils.ApplicationContextSingle;
 
 
 public class HibernateTest {
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testMainRecodeMapHbmXml(){
+		SessionFactory sessionFactory = null;
+		
+		Configuration configuration = new Configuration().configure("hibernate.cfg2.xml"); 
+		
+		sessionFactory = configuration.buildSessionFactory();
+		
+		Session session = sessionFactory.openSession();
+		
+		String hql = "SELECT new map( v.name as name, v.dbName as dbName, v.type.type as type) FROM Variable v";
+		
+		session.getTransaction().begin();
+		List<Map<String, Object>> list = session.createQuery(hql).list();
+		session.getTransaction().commit();
+		System.out.println(list);
+		
+		session.close();
+		sessionFactory.close();
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testreportHourForOne() throws ParseException{

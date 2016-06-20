@@ -201,6 +201,15 @@
 						});
 
 					}
+				}, '-' , {
+					text : 'RecodeMap',
+					iconCls : 'icon-save',
+					handler : function() {
+						$.post('sharpower_scada/ajaxGenerateMainRecodeHbmXml', function(data){
+							data = eval("(" +data+ ")");
+							$.messager.show({title:'我的消息', msg:data.info, showType:'slide'});
+						});
+					}
 				}
 			 ]
 

@@ -323,6 +323,13 @@
 				<param name="noCache">true</param>
 				<param name="contentType">text/html</param>
 			</result>
+		</action>	
+		
+		<action name="ajaxGenerateMainRecodeHbmXml" class="ajaxMainRecodeMapAction" method="generateMainRecodeHbmXml">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+			</result>
 		</action>		
 	</package>
 

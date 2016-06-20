@@ -238,10 +238,16 @@
 		<property name="funControl" ref="FunControlServiceBeckhoffImpl"></property>
 	</bean>
 	
-	<bean id="ajaxMainRecodeAcrion" 
-		class="com.sharpower.action.AjaxMainRecodeAcrion"
+	<bean id="ajaxMainRecodeAction" 
+		class="com.sharpower.action.AjaxMainRecodeAction"
 		scope="prototype">
 		<property name="recodeService" ref="recodeService"></property>
+	</bean>
+	
+	<bean id="ajaxMainRecodeMapAction"
+		class="com.sharpower.action.AjaxMainRecodeMapAction"
+		scope="prototype">
+		<property name="variableService" ref="variableService"></property>
 	</bean>
 	
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
