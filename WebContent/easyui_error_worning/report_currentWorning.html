@@ -25,7 +25,7 @@
 		$(function(){
 			$('#datagrid').datagrid({
 				toolbar:'#toolBar',
-				url:'sharpower_scada/ajaxGetCurrentWorning',
+				url:'/sharpower_scada/ajaxGetCurrentWorning',
 				idField:'id',
 				fit:true,
 				striped:true,
@@ -115,7 +115,7 @@
 								
 								var queryParams = $('#datagrid').datagrid('options').queryParams;
 
-								$.post('sharpower_scada/ajaxGetCurrentWorning', queryParams, function(data){
+								$.post('/sharpower_scada/ajaxGetCurrentWorning', queryParams, function(data){
 									//向后台发送请求  
 									$('#form2').form('load',{fields:fields,titles:titles,excelData:data});
 									
@@ -153,7 +153,7 @@
 		<div id="toolBar" style="height:25px,overflow:hidden" >
 				<form id="from1" method="post" style="display: inline;">   
 					选择风机：<select id="funSelect" name="funId" class="easyui-combobox" style="width:200px;" 
-							url="sharpower_scada/ajaxAllfun"  required="true" missingMessage="风机必选!" 
+							url="/sharpower_scada/ajaxAllfun"  required="true" missingMessage="风机必选!" 
 							valueField="id" textField="name">
 							</select>
 							<a id="SubmitBtn" class="easyui-linkbutton" href="javascript:void(0)" data-options="iconCls:'icon-search'">查询</a>

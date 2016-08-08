@@ -89,6 +89,7 @@ public class AjaxMainRecodeAction extends ActionSupport {
 		List<Map<String, Object>> list = new ArrayList<>();
 		
 		try {
+			
 			list = recodeService.findMapByHql(hql, funId, beginTime, endTime);
 			dataMap = list.get(0); 
 			message = "查询成功！";
@@ -101,13 +102,13 @@ public class AjaxMainRecodeAction extends ActionSupport {
 	}
 	
 	public String windFrequencyCurve(){
-		String hql ="SELECT new map(sum(CASE WHEN mr.___wind_speed>=0 AND mr.___wind_speed<1.5 THEN 1 ELSE 0 END), ";
+		String hql ="SELECT new map(sum(CASE WHEN mr.___wind_speed>=0 AND mr.___wind_speed<1.5 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_speed is not null THEN 1 ELSE 0 END)*10000, ";
 
 		for(int i = 0; i < 47; i++){
-			hql = hql + " sum( CASE WHEN mr.___wind_speed>=" + (1.5+i*0.5) + " AND mr.___wind_speed<" + (1.5+i*0.5+0.5) + " THEN 1 ELSE 0 END),";
+			hql = hql + " sum( CASE WHEN mr.___wind_speed>=" + (1.5+i*0.5) + " AND mr.___wind_speed<" + (1.5+i*0.5+0.5) + " THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_speed is not null THEN 1 ELSE 0 END)*10000,";
 		}
 		
-		hql = hql + " sum(CASE WHEN mr.___wind_speed>=25 THEN 1 ELSE 0 END)) " 
+		hql = hql + " sum(CASE WHEN mr.___wind_speed>=25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_speed is not null THEN 1 ELSE 0 END)*10000) " 
 				 + " FROM MainRecode mr WHERE mr.fun.id=? AND mr.dateTime>? AND mr.dateTime<?";
 		
 		List<Map<String, Object>> list = new ArrayList<>();
@@ -118,6 +119,123 @@ public class AjaxMainRecodeAction extends ActionSupport {
 			message = "查询成功！";
 		} catch (Exception e) {
 			message = "查询失败！"+ e.getMessage();
+			e.printStackTrace();
+		}
+		
+		return SUCCESS;
+	}
+	
+	public String windDirectionFrequency(){
+		String hql = "SELECT new map(sum(CASE WHEN (mr.___wind_direction>348.75 AND mr.___wind_direction<=360) OR ( mr.___wind_direction>=0 AND mr.___wind_direction<=11.25 ) THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>326.25 AND mr.___wind_direction<=348.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>303.75 AND mr.___wind_direction<=326.25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>281.25 AND mr.___wind_direction<=303.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>258.75 AND mr.___wind_direction<=281.25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>236.25 AND mr.___wind_direction<=258.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>213.75 AND mr.___wind_direction<=236.25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>191.25 AND mr.___wind_direction<=213.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>168.75 AND mr.___wind_direction<=191.25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>146.25 AND mr.___wind_direction<=168.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>123.75 AND mr.___wind_direction<=146.25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>101.25 AND mr.___wind_direction<=123.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>78.75 AND mr.___wind_direction<=101.25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>56.25 AND mr.___wind_direction<=78.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>33.75 AND mr.___wind_direction<=56.25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>11.25 AND mr.___wind_direction<=33.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000) "
+				+ "FROM MainRecode mr WHERE mr.fun.id=? AND mr.dateTime>? AND mr.dateTime<?";
+		
+		List<Map<String, Object>> list = new ArrayList<>();
+		
+		try {
+			list = recodeService.findMapByHql( hql, funId, beginTime, endTime );
+			dataMap = list.get(0); 
+			message = "查询成功！";
+		} catch (Exception e) {
+			message = "查询失败！"+ e.getMessage();
+			e.printStackTrace();
+		}
+		
+		return SUCCESS;
+	}
+	
+	public String windDirectionSpped(){		
+		String hql = "SELECT new map(avg(CASE WHEN (mr.___wind_direction>348.75 AND mr.___wind_direction<=360) OR ( mr.___wind_direction>=0 AND mr.___wind_direction<=11.25 ) THEN mr.___wind_speed END), "
+								+ "avg(CASE WHEN mr.___wind_direction>326.25 AND mr.___wind_direction<=348.75 THEN mr.___wind_speed END), "
+								+ "avg(CASE WHEN mr.___wind_direction>303.75 AND mr.___wind_direction<=326.25 THEN mr.___wind_speed END), "
+								+ "avg(CASE WHEN mr.___wind_direction>281.25 AND mr.___wind_direction<=303.75 THEN mr.___wind_speed END), "
+								+ "avg(CASE WHEN mr.___wind_direction>258.75 AND mr.___wind_direction<=281.25 THEN mr.___wind_speed END), "
+								+ "avg(CASE WHEN mr.___wind_direction>236.25 AND mr.___wind_direction<=258.75 THEN mr.___wind_speed END), "
+								+ "avg(CASE WHEN mr.___wind_direction>213.75 AND mr.___wind_direction<=236.25 THEN mr.___wind_speed END), "
+								+ "avg(CASE WHEN mr.___wind_direction>191.25 AND mr.___wind_direction<=213.75 THEN mr.___wind_speed END), "
+								+ "avg(CASE WHEN mr.___wind_direction>168.75 AND mr.___wind_direction<=191.25 THEN mr.___wind_speed END), "
+								+ "avg(CASE WHEN mr.___wind_direction>146.25 AND mr.___wind_direction<=168.75 THEN mr.___wind_speed END), "
+								+ "avg(CASE WHEN mr.___wind_direction>123.75 AND mr.___wind_direction<=146.25 THEN mr.___wind_speed END), "
+								+ "avg(CASE WHEN mr.___wind_direction>101.25 AND mr.___wind_direction<=123.75 THEN mr.___wind_speed END), "
+								+ "avg(CASE WHEN mr.___wind_direction>78.75 AND mr.___wind_direction<=101.25 THEN mr.___wind_speed END), "
+								+ "avg(CASE WHEN mr.___wind_direction>56.25 AND mr.___wind_direction<=78.75 THEN mr.___wind_speed END), "
+								+ "avg(CASE WHEN mr.___wind_direction>33.75 AND mr.___wind_direction<=56.25 THEN mr.___wind_speed END), "
+								+ "avg(CASE WHEN mr.___wind_direction>11.25 AND mr.___wind_direction<=33.75 THEN mr.___wind_speed END)) "
+								+ "FROM MainRecode mr WHERE mr.fun.id=? AND mr.dateTime>? AND mr.dateTime<?";
+		
+		List<Map<String, Object>> list = new ArrayList<>();
+		
+		try {
+			list = recodeService.findMapByHql( hql, funId, beginTime, endTime );
+			dataMap = list.get(0); 
+			message = "查询成功！";
+		} catch (Exception e) {
+			message = "查询失败！"+ e.getMessage();
+			e.printStackTrace();
+		}
+		
+		return SUCCESS;
+	}
+	
+	public String windRose(){
+		String hql = "SELECT new map(sum(CASE WHEN (mr.___wind_direction>348.75 AND mr.___wind_direction<=360) OR ( mr.___wind_direction>=0 AND mr.___wind_direction<=11.25 ) THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>326.25 AND mr.___wind_direction<=348.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>303.75 AND mr.___wind_direction<=326.25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>281.25 AND mr.___wind_direction<=303.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>258.75 AND mr.___wind_direction<=281.25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>236.25 AND mr.___wind_direction<=258.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>213.75 AND mr.___wind_direction<=236.25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>191.25 AND mr.___wind_direction<=213.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>168.75 AND mr.___wind_direction<=191.25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>146.25 AND mr.___wind_direction<=168.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>123.75 AND mr.___wind_direction<=146.25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>101.25 AND mr.___wind_direction<=123.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>78.75 AND mr.___wind_direction<=101.25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>56.25 AND mr.___wind_direction<=78.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>33.75 AND mr.___wind_direction<=56.25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>11.25 AND mr.___wind_direction<=33.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000) "
+				+ "FROM MainRecode mr WHERE mr.fun.id=? AND mr.dateTime>? AND mr.dateTime<?";
+		
+		String hql1 = "SELECT new map(avg(CASE WHEN (mr.___wind_direction>348.75 AND mr.___wind_direction<=360) OR ( mr.___wind_direction>=0 AND mr.___wind_direction<=11.25 ) THEN mr.___wind_speed END), "
+				+ "avg(CASE WHEN mr.___wind_direction>326.25 AND mr.___wind_direction<=348.75 THEN mr.___wind_speed END), "
+				+ "avg(CASE WHEN mr.___wind_direction>303.75 AND mr.___wind_direction<=326.25 THEN mr.___wind_speed END), "
+				+ "avg(CASE WHEN mr.___wind_direction>281.25 AND mr.___wind_direction<=303.75 THEN mr.___wind_speed END), "
+				+ "avg(CASE WHEN mr.___wind_direction>258.75 AND mr.___wind_direction<=281.25 THEN mr.___wind_speed END), "
+				+ "avg(CASE WHEN mr.___wind_direction>236.25 AND mr.___wind_direction<=258.75 THEN mr.___wind_speed END), "
+				+ "avg(CASE WHEN mr.___wind_direction>213.75 AND mr.___wind_direction<=236.25 THEN mr.___wind_speed END), "
+				+ "avg(CASE WHEN mr.___wind_direction>191.25 AND mr.___wind_direction<=213.75 THEN mr.___wind_speed END), "
+				+ "avg(CASE WHEN mr.___wind_direction>168.75 AND mr.___wind_direction<=191.25 THEN mr.___wind_speed END), "
+				+ "avg(CASE WHEN mr.___wind_direction>146.25 AND mr.___wind_direction<=168.75 THEN mr.___wind_speed END), "
+				+ "avg(CASE WHEN mr.___wind_direction>123.75 AND mr.___wind_direction<=146.25 THEN mr.___wind_speed END), "
+				+ "avg(CASE WHEN mr.___wind_direction>101.25 AND mr.___wind_direction<=123.75 THEN mr.___wind_speed END), "
+				+ "avg(CASE WHEN mr.___wind_direction>78.75 AND mr.___wind_direction<=101.25 THEN mr.___wind_speed END), "
+				+ "avg(CASE WHEN mr.___wind_direction>56.25 AND mr.___wind_direction<=78.75 THEN mr.___wind_speed END), "
+				+ "avg(CASE WHEN mr.___wind_direction>33.75 AND mr.___wind_direction<=56.25 THEN mr.___wind_speed END), "
+				+ "avg(CASE WHEN mr.___wind_direction>11.25 AND mr.___wind_direction<=33.75 THEN mr.___wind_speed END)) "
+				+ "FROM MainRecode mr WHERE mr.fun.id=? AND mr.dateTime>? AND mr.dateTime<?";
+		
+		List<Map<String, Object>> list = new ArrayList<>();
+		
+		try {
+			list = recodeService.findMapByHql( hql, funId, beginTime, endTime );
+			dataList.add(list.get(0)); 
+			list = recodeService.findMapByHql( hql1, funId, beginTime, endTime );
+			dataList.add(list.get(0)); 
+		} catch(Exception e){
 			e.printStackTrace();
 		}
 		

@@ -80,21 +80,9 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/log4j-1.2.16.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-json-plugin-2.3.24.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/cglib-nodep-3.2.0.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-security-acl-4.0.3.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-security-aspects-4.0.3.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-security-cas-4.0.3.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-security-config-4.0.3.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-security-core-4.0.3.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-security-crypto-4.0.3.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-security-data-4.0.3.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-security-ldap-4.0.3.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-security-messaging-4.0.3.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-security-openid-4.0.3.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-security-remoting-4.0.3.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-security-taglibs-4.0.3.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-security-test-4.0.3.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-security-web-4.0.3.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/poi-3.13-20150929.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/shiro-all-1.2.6.jar" sourcepath="C:/Users/gp/Downloads/shiro-root-1.2.6-source-release.zip"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/ehcache-core-2.4.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

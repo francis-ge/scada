@@ -1,11 +1,13 @@
 package com.sharpower.action;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import com.opensymphony.xwork2.ActionSupport;
+import com.sharpower.quartzs.ReportDayQuartz;
 import com.sharpower.service.ReportDayRecodeService;
 
 public class AjaxReportDayRecodeAction extends ActionSupport {
@@ -16,8 +18,12 @@ public class AjaxReportDayRecodeAction extends ActionSupport {
 	private List<Map<String, Object>> reportDayRecodesMap = new ArrayList<>();
 	private Date date;
 	
+	private String message;
+	
 	private int page;
 	private int rows;
+	
+	private ReportDayQuartz reportDayQuartz;
 	
 	public void setReportDayRecodeService(ReportDayRecodeService reportDayRecodeService) {
 		this.reportDayRecodeService = reportDayRecodeService;
@@ -25,6 +31,10 @@ public class AjaxReportDayRecodeAction extends ActionSupport {
 		
 	public List<Map<String, Object>> getReportDayRecodesMap() {
 		return reportDayRecodesMap;
+	}
+	
+	public String getMessage() {
+		return message;
 	}
 	
 	public void setDate(Date date) {
@@ -36,6 +46,10 @@ public class AjaxReportDayRecodeAction extends ActionSupport {
 	}
 	public void setRows(int rows) {
 		this.rows = rows;
+	}
+	
+	public void setReportDayQuartz(ReportDayQuartz reportDayQuartz) {
+		this.reportDayQuartz = reportDayQuartz;
 	}
 	
 	public String findMainRecode(){
@@ -79,6 +93,29 @@ public class AjaxReportDayRecodeAction extends ActionSupport {
 			e.printStackTrace();
 		}
 		
+		return SUCCESS;
+	}
+	
+	public String statistic(){
+		Calendar calendar = Calendar.getInstance();		
+		calendar.setTime(date);
+
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		
+		Date minDate = calendar.getTime();
+		
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.SECOND, 59);
+		calendar.set(Calendar.MILLISECOND, 999);
+		
+		Date maxDate = calendar.getTime();
+		
+		reportDayQuartz.statistic(minDate, maxDate);
+		message = "手动统计成功！请重新执行查询操作。";
 		return SUCCESS;
 	}
 	

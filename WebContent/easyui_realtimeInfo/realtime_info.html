@@ -81,7 +81,7 @@
 			
 				var funId = $('#funSelect').combobox('getValue');
 				
-				$.post('sharpower_scada/ajaxRealTimeInfo', {funId:funId}, function(data){
+				$.post('/sharpower_scada/ajaxRealTimeInfo', {funId:funId}, function(data){
 					data = eval('('+data+')');
 					tables.refreshTable(data[0]);
 				});
@@ -95,16 +95,16 @@
   
   <body>
   	选择风机:
-	<select id="funSelect" style="width:200px;" url="sharpower_scada/ajaxAllfun" valueField="id" textField="name">
+	<select id="funSelect" style="width:200px;" url="/sharpower_scada/ajaxAllfun" valueField="id" textField="name">
 	</select>
 	
   	<div id="tabs" class="easyui-tabs"  fit="true" border="false" justified="true" pill="true"">  
-  		<div title = "传动链" 		href = 'realtime_info_drivingChain.html' >	</div>
-  		<div title = "变桨系统" 		href = 'realtime_info_pitch.html' >			</div>
-  		<div title = "变频系统" 		href = 'realtime_info_converter.html' >		</div>
+  		<div title = "传动链" 			href = 'realtime_info_drivingChain.html' >	</div>
+  		<div title = "变桨系统" 			href = 'realtime_info_pitch.html' >			</div>
+  		<div title = "变频系统" 			href = 'realtime_info_converter.html' >		</div>
   		<div title = "偏航及液压系统" 	href = 'realtime_info_profi.html' >			</div>
-  		<div title = "辅助系统" 		href = 'realtime_info_assist.html' >		</div>
-	</div> 
+  		<div title = "辅助系统" 			href = 'realtime_info_assist.html' >		</div>
+	</div>
 
   </body>
   

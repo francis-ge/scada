@@ -1,0 +1,250 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title></title>
+	
+	<!-- easyUI -->
+	<link href="../jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
+	<link href="../jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
+	
+	<style type="text/css">
+		* {margin: 0; padding: 0;}
+	</style>
+
+  </head>
+  
+  <body>
+  	<form id="form1" method="post">
+		<label for="funSelect">选择风机：</label>
+		<select name="funId" class="easyui-combobox" style="width:200px;" url="/sharpower_scada/ajaxAllfun"  valueField="id" textField="name" required="required"></select>
+		
+        <label for="date1">选择时间：</label>   
+     	<input name="beginTime"  class="easyui-datebox" required="required"></input>
+	    <input name="endTime"  class="easyui-datebox" required="required"></input>
+    	<a class="easyui-linkbutton" id="submitBtn" title="" href="javascript:void(0)">查询</a>
+	</form>  
+  	
+	<div id="chart" style="height:500px"></div>
+	
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+	<script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
+	
+	<!-- easyUI -->
+	<script src="../jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
+	<script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
+	<script src="../js/echarts.min.js" charset="utf-8"></script>
+	
+	<script type="text/javascript">			
+			$(function(){
+				var height = $(window).height();
+				$('#chart').height(height*0.9);
+				
+				var chart = echarts.init(document.getElementById('chart'));
+				var option = {
+					    title : {
+					        text: '风玫瑰图',
+					        subtext: ''
+					    },
+					    tooltip : {
+					        trigger: 'axis'
+					    },
+					    legend: {
+					        data:['频率(%)','平均风速(m/s)']
+					    },
+					    toolbox: {
+					        show : true,
+					        feature : {
+					            dataView : {show: true, readOnly: false},
+					            restore : {show: true},
+					            saveAsImage : {show: true}
+					        }
+					    },
+					    radar: [
+					            {
+					                indicator: [
+					                    { name: 'N'  , max:100	},
+					                    { name: 'NNW', max:100 	},
+					                    { name: 'NW' , max:100	},
+					                    { name: 'WNW', max:100 	},
+					                    { name: 'W'  , max:100	},
+					                    { name: 'WSW', max:100 	},
+					                    { name: 'SW' , max:100	},
+					                    { name: 'SSW', max:100	},
+					                    { name: 'S'	 , max:100	},
+					                    { name: 'SSE', max:100	},
+					                    { name: 'SE' , max:100	},
+					                    { name: 'ESE', max:100	},
+					                    { name: 'E'	 , max:100	},
+					                    { name: 'ENE', max:100	},
+					                    { name: 'NE' , max:100 	},
+					                    { name: 'NNE', max:100	}
+					                ],
+					                center: ['25%', '55%'],
+					                radius: '75%',
+					                startAngle: 90,
+					                splitNumber: 4,
+					                //shape: 'circle',
+					                name: {
+					                    textStyle: {
+					                        color:'#72ACD1'
+					                    }
+					                },
+					                splitArea: {
+					                    areaStyle: {
+					                        color: ['rgba(114, 172, 209, 0.2)',
+					                        'rgba(114, 172, 209, 0.4)', 'rgba(114, 172, 209, 0.6)',
+					                        'rgba(114, 172, 209, 0.8)', 'rgba(114, 172, 209, 1)'],
+					                        shadowColor: 'rgba(0, 0, 0, 0.3)',
+					                        shadowBlur: 10
+					                    }
+					                },
+					                axisLine: {
+					                    lineStyle: {
+					                        color: 'rgba(255, 255, 255, 0.5)'
+					                    }
+					                },
+					                splitLine: {
+					                    lineStyle: {
+					                        color: 'rgba(255, 255, 255, 0.5)'
+					                    }
+					                }
+					            },
+					            {
+					                indicator: [
+					                    { name: 'N' },
+					                    { name: 'NNW' },
+					                    { name: 'NW' },
+					                    { name: 'WNW' },
+					                    { name: 'W' },
+					                    { name: 'WSW' },
+					                    { name: 'SW' },
+					                    { name: 'SSW' },
+					                    { name: 'S' },
+					                    { name: 'SSE' },
+					                    { name: 'SE' },
+					                    { name: 'ESE' },
+					                    { name: 'E' },
+					                    { name: 'ENE' },
+					                    { name: 'NE' },
+					                    { name: 'NNE' }
+					                ],
+					                center: ['75%', '55%'],
+					                radius: '75%',
+					                startAngle: 90,
+					                splitNumber: 4,
+					                //shape: 'circle',
+					                name: {
+					                    textStyle: {
+					                        color:'#72ACD1'
+					                    }
+					                },
+					                splitArea: {
+					                    areaStyle: {
+					                        color: ['rgba(200, 172, 180, 0.2)',
+					                        'rgba(200, 172, 180, 0.4)', 'rgba(200, 172, 180, 0.6)',
+					                        'rgba(200, 172, 180, 0.8)', 'rgba(200, 172, 180, 1)'],
+					                        shadowColor: 'rgba(0, 0, 0, 0.3)',
+					                        shadowBlur: 10
+					                    }
+					                },
+					                axisLine: {
+					                    lineStyle: {
+					                        color: 'rgba(255, 255, 255, 0.5)'
+					                    }
+					                },
+					                splitLine: {
+					                    lineStyle: {
+					                        color: 'rgba(255, 255, 255, 0.5)'
+					                    }
+					                }
+					            }],
+
+					    series: [
+							        {
+							            name:'频率(%)',
+							            type:'radar',
+							            radarIndex: 0,
+							            itemStyle: {normal: {areaStyle: {type: 'default'}}},
+							            tooltip: {
+							                 trigger: 'item'
+							             },
+							            data:[
+								            	{
+								            		value:[],
+								            		name:'频率(%)'
+								            	}
+							            ]
+							        },{
+							        	name:'平均风速(m/s)',
+							        	type:'radar',
+							        	radarIndex: 1,
+							        	itemStyle: {normal: {areaStyle: {type: 'default'}}},
+							            tooltip: {
+							                 trigger: 'item'
+							             },
+							        	data:[
+							        	      	{
+								        			value:[],
+								        			name:'平均风速(m/s)'
+							        			}
+							        		]
+							        }
+							    ]
+					};
+				
+				chart.setOption(option);
+					
+				$('#submitBtn').click(function(){
+					$.messager.progress();
+					
+					var option1 = chart.getOption();
+					
+					$('#form1').form('submit',{
+						url:'/sharpower_scada/ajaxWindRose',
+						onSubmit: function(){
+						
+							var isValid = $(this).form('validate');
+							if (!isValid){
+								$.messager.progress('close');	// 如果表单是无效的则隐藏进度条
+							}
+							return isValid;	// 返回false终止表单提交
+						},
+						success: function(info){
+							$.messager.progress('close');	// 如果提交成功则隐藏进度条
+							var dataList = eval("("+info+")");
+							var dataMap1 = dataList[0];
+							var dataMap2 = dataList[1];
+							var data1 = new Array();
+							var data2 = new Array();
+							
+							for (var key in dataMap1){
+								data1.push(dataMap1[key]/100);
+							}
+							option1.series[0].data[0].value = data1;
+							
+							for (var key in dataMap2){
+								data2.push(dataMap2[key]);
+							}
+							
+							option1.series[1].data[0].value = data2;
+							
+							chart.clear();							
+							chart.setOption(option1);
+							
+							//$.messager.show({title:'我的消息',msg:info.message,showType:'slide'});
+							
+						}
+					});
+					
+					
+					}
+				)
+			
+			})
+			
+	</script>
+  </body>
+  
+</html>

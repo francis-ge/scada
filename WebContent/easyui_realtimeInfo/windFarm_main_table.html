@@ -39,7 +39,7 @@
 					var funId = selectRow.fun.id;
 					
 					limitDlgInterval = setInterval(function(){
-						$.post('sharpower_scada/ajaxRealTimeInfo', {funId:funId}, function(data){
+						$.post('/sharpower_scada/ajaxRealTimeInfo', {funId:funId}, function(data){
 							$('#ltPower').text(data[0].___visu_grid_power);
 							$('#ltMaxPower').text(data[0].___wind_speed);
 							$('#ltLimitSta').text(data[0]._hmi_power_limit_ok);
@@ -84,7 +84,7 @@
 					        		case 9:
 					        			return '维护';
 					        		case 10:
-					        			return '通信断开';
+					        			return '通信中断';
 					        		default:
 					        			return '未知状态';
 				        			}
@@ -155,7 +155,7 @@
 							});
 							
 							$('#form').form('submit', {
-								url:'sharpower_scada/ajaxFunControlRun',
+								url:'/sharpower_scada/ajaxFunControlRun',
 								success: function(info){
 									info = eval("("+info+")");
 									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
@@ -173,7 +173,7 @@
 							});
 							
 							$('#form').form('submit', {
-								url:'sharpower_scada/ajaxFunControlStop',
+								url:'/sharpower_scada/ajaxFunControlStop',
 								success: function(info){
 									info = eval("("+info+")");
 									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
@@ -191,7 +191,7 @@
 							});
 							
 							$('#form').form('submit', {
-								url:'sharpower_scada/ajaxFunControlService',
+								url:'/sharpower_scada/ajaxFunControlService',
 								success: function(info){
 									info = eval("("+info+")");
 									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
@@ -209,7 +209,7 @@
 							});
 							
 							$('#form').form('submit', {
-								url:'sharpower_scada/ajaxFunControlReset',
+								url:'/sharpower_scada/ajaxFunControlReset',
 								success: function(info){
 									info = eval("("+info+")");
 									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
@@ -236,7 +236,7 @@
 					var limitVal = $('#limitVal').val();
 					
 					$('#form').form('submit',{
-						url:'sharpower_scada/ajaxFunControlPowerLimit',
+						url:'/sharpower_scada/ajaxFunControlPowerLimit',
 						queryParams:{limitVal:limitVal},
 						success: function(info){
 							info = eval("("+info+")");
@@ -256,7 +256,7 @@
 											'fun.address': selectRow.fun.address});
 					
 					$('#form').form('submit',{
-						url:'sharpower_scada/ajaxFunControlPowerLimitCancel',
+						url:'/sharpower_scada/ajaxFunControlPowerLimitCancel',
 						success: function(info){
 							info = eval("("+info+")");
 							$.messager.show({title:'我的消息',msg:info,showType:'slide'});
@@ -276,7 +276,7 @@
 	
 </head>
 <body>
-	<table id="datagrid" class="easyui-datagrid" url="sharpower_scada/ajaxMainInfo"
+	<table id="datagrid" class="easyui-datagrid" url="/sharpower_scada/ajaxMainInfo"
 		idField="id" singleSelect="true" fit="true" striped="true" rownumbers="true" fitColumns="true" loadMsg="">
 	</table>
 	
@@ -290,11 +290,11 @@
 	   <!--  <div id="6">偏航</div>  -->
 	</div>
 	
-	<div id="powerLimit" class="easyui-dialog" title="功率限制" style="width:500px;height:220px;" data-options="closable:true,closed:true,modal:true" >
+	<div id="powerLimit" class="easyui-dialog" title="功率限制" style="width:500px;height:260px;" data-options="closable:true,closed:true,modal:true" >
 		 <table id="limitTable" class="table">
 		 	<tbody>
  				<tr><td>当前功率(kW)：</td>  		<td><p id="ltPower"></p></td><td></td></tr>
-		 		<tr><td>理论最大功率(kW)：</td>  	<td><p id="ltMaxPower"></p></td><td></td></tr>
+		 		<tr><td>理论最大功率(kW)：</td>  	<td><p id="ltMaxPower1"></p></td><td></td></tr>
 		 		<tr><td>限功率状态：</td>     		<td><p id="ltLimitSta"></p></td><td><a id="limitCancelBtn" href="#" class="easyui-linkbutton">解除限制</a></td></tr>
 		 		<tr><td><label for="limitVal">功率限定值(kW)：</label></td>  <td><input id="limitVal" class="easyui-numberbox" name="limitVal" data-options="min:0,max:2000" /></td>
 		 		<td><a id="limitBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">设定</a></td></tr>			 	

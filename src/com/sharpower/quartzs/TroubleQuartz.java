@@ -43,7 +43,11 @@ public class TroubleQuartz {
 			plcTypes = plcTypeService.findEntityByHQL("FROM PlcType p LEFT JOIN FETCH p.funs");
 			
 			for ( PlcType plcType : plcTypes ) {
-				funs.addAll(plcType.getFuns());
+				for (Fun fun : plcType.getFuns()) {
+					if (!fun.isDisabled()) {
+						funs.add(fun);
+					}
+				}
 			}
 		
 			for (Fun fun : funs) {

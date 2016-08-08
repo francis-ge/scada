@@ -13,8 +13,12 @@
 	    <generator class="native" />
     </id>
 
-    <property name="name" type="java.lang.String" not-null="true" unique="true">
+    <property name="name" type="java.lang.String" not-null="true" >
 		<column name="NAME" />
+  	</property>
+  	
+  	<property name="disabled" type="boolean">
+  		<column name="DISABLED" />
   	</property>
   	
   	<many-to-one name="plcType" class="com.sharpower.entity.PlcType" fetch="join" lazy="false">

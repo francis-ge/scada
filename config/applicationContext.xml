@@ -6,10 +6,6 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
-<!-- 
-	<bean id="appDBInit" class="com.sharpower.listener.AppDBInit" init-method="contextInitialized">
-	</bean>
--->
 
 	<context:property-placeholder location="classpath:db.properties" />
 
@@ -81,6 +77,11 @@
 		class="com.sharpower.dao.impl.UserDaoImpl">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
+	
+	<bean id="roleDao"
+		class="com.sharpower.dao.impl.RoleDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
 
 	<bean id="funService" 
 		class="com.sharpower.service.impl.FunServiceImpl">
@@ -149,6 +150,11 @@
    		<property name="dao" ref="userDao"></property>
     </bean>
     
+    <bean id="roleService"
+    	class="com.sharpower.service.impl.RoleServiceImpl">
+    	<property name="dao" ref="roleDao"></property>	
+    </bean>
+    
     <bean id="FunControlServiceBeckhoffImpl"
     	class="com.sharpower.beckhoff.FunControlBeckhoffImpl">
     </bean>
@@ -170,10 +176,27 @@
 		scope="prototype">
 	</bean>
 	
+	<bean id="text2AudioAction"
+		class="com.sharpower.action.Text2AudioAction"
+		scope="prototype">
+	</bean>
+	
 	<bean id="ajaxUserAction"
 		class="com.sharpower.action.AjaxUserAction"
 		scope="prototype">
 		<property name="userService" ref="userService"></property>
+	</bean>
+	
+	<bean id="ajaxSessionAction"
+		class="com.sharpower.action.AjaxSessionAction"
+		scope="prototype">
+		<property name="sessionDAO" ref="sessionDAO"></property>
+	</bean>
+	
+	<bean id="ajaxRoleAction"
+		class="com.sharpower.action.AjaxRoleAction"
+		scope="prototype">
+		<property name="roleService" ref="roleService"></property>
 	</bean>
 	
 	<bean id="ajaxFunAction"
@@ -230,6 +253,7 @@
 		class="com.sharpower.action.AjaxReportDayRecodeAction"
 		scope="prototype">
 		<property name="reportDayRecodeService" ref="reportDayRecodeService"></property>
+		<property name="reportDayQuartz" ref="reportDayQuartz"></property>
 	</bean>
 	
 	<bean id="ajaxFunControlAction" 
@@ -250,6 +274,12 @@
 		<property name="variableService" ref="variableService"></property>
 	</bean>
 	
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor"/>
+	
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+	
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
 			<tx:method name="get*" read-only="true" />
@@ -258,14 +288,12 @@
 	</tx:advice>
 
 	<aop:config>
-		<aop:pointcut id="myTestPointcut"
-			expression="execution(* com.sharpower.test.FunService.*(..))" />
+		<aop:pointcut id="myTestPointcut" expression="execution(* com.sharpower.test.FunService.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="myTestPointcut" />
 	</aop:config>
 	
 	<aop:config>
-		<aop:pointcut  id="myPointcut" 
-			expression="execution(* com.sharpower.service.impl.*.*(..))" />
+		<aop:pointcut id="myPointcut" expression="execution(* com.sharpower.service.impl.*.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="myPointcut" />
 	</aop:config>
 
@@ -313,7 +341,7 @@
 	<!-- 风场日报表统计任务调度 -->
 	<bean id="reportDayStatistic" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="reportDayQuartz"></property>
-		<property name="targetMethod" value="statistic"></property>
+		<property name="targetMethod" value="aotuStatistic"></property>
 	</bean>   
     
     <bean id="dataReadTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
@@ -358,13 +386,14 @@
     	<property name="triggers">
     	<list>   	
     	<!-- 
-    		<ref bean="dataSaveTrigger"/>
     	  	<ref bean="reportDayStatisticTrigger"/>
+    	 	<ref bean="checkTroubleTrigger"/>
+    		<ref bean="dataSaveTrigger"/>
     	 -->
    			<ref bean="dataReadTrigger"/>
-    	 	<ref bean="checkTroubleTrigger"/>
 		
     	</list>
     	</property>
     </bean>
+    
    </beans>

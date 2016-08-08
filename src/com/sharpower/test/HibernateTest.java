@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -33,10 +34,37 @@ public class HibernateTest {
 		
 		Session session = sessionFactory.openSession();
 		
-		String hql = "SELECT new map( v.name as name, v.dbName as dbName, v.type.type as type) FROM Variable v";
+		String hql = "SELECT new map(sum(CASE WHEN (mr.___wind_direction>348.75 AND mr.___wind_direction<=360) OR ( mr.___wind_direction>=0 AND mr.___wind_direction<=11.25 ) THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>11.25 AND mr.___wind_direction<=33.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>33.75 AND mr.___wind_direction<=56.25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>56.25 AND mr.___wind_direction<=78.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>78.75 AND mr.___wind_direction<=101.25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>101.25 AND mr.___wind_direction<=123.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>123.75 AND mr.___wind_direction<=146.25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>146.25 AND mr.___wind_direction<=168.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>168.75 AND mr.___wind_direction<=191.25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>191.25 AND mr.___wind_direction<=213.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>213.75 AND mr.___wind_direction<=236.25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>236.25 AND mr.___wind_direction<=258.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>258.75 AND mr.___wind_direction<=281.25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>281.25 AND mr.___wind_direction<=303.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>303.75 AND mr.___wind_direction<=326.25 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000, "
+				+ "sum(CASE WHEN mr.___wind_direction>326.25 AND mr.___wind_direction<=348.75 THEN 1 ELSE 0 END)/sum(CASE WHEN mr.___wind_direction is not null THEN 1 ELSE 0 END)*10000) "
+				+ "FROM MainRecode mr WHERE mr.fun.id=? AND mr.dateTime>? AND mr.dateTime<?";
 		
 		session.getTransaction().begin();
-		List<Map<String, Object>> list = session.createQuery(hql).list();
+		Date date1 = new Date();
+		Date date2 = new Date();
+		
+		date1 = DateUtils.setYears(date1, 2015);
+		date1 = DateUtils.setMonths(date1, 6);
+		date1 = DateUtils.setDays(date1, 1);
+		
+		date2 = DateUtils.setYears(date2, 2016);
+		date2 = DateUtils.setMinutes(date2, 6);
+		date2 = DateUtils.setDays(date2, 1);
+		
+		List<Map<String, Object>> list = session.createQuery(hql).setParameter(0, 1).setParameter(1,date1).setParameter(2, date2).list();
 		session.getTransaction().commit();
 		System.out.println(list);
 		

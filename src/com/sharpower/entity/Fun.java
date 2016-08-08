@@ -9,6 +9,7 @@ public class Fun {
 	private PlcType plcType;
 	private String address;
 	private String line;
+	private boolean disabled=false;
 	private WindFarm windFarm;
 
 	public Integer getId() {
@@ -49,6 +50,14 @@ public class Fun {
 
 	public void setLine(String line) {
 		this.line = line;
+	}
+	
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
 	}
 
 	@JSON(serialize=false)

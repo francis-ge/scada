@@ -48,12 +48,15 @@ public class DataQuartz {
 			plcTypes = plcTypeService.findEntityByHQL("FROM PlcType p LEFT JOIN FETCH p.funs");
 			
 			for ( PlcType plcType : plcTypes ) {
-				funs.addAll(plcType.getFuns());
+				for (Fun fun : plcType.getFuns()) {
+					if (!fun.isDisabled()) {
+						funs.add(fun);
+					}
+				}
 			}
 		
 			for (Fun fun : funs) {
 				readDataTheadStaMap.put(fun.getId(), false);
-				
 				if (fun.getPlcType().getPlcCommType().getName().equals("beckhoff")) {					
 					AdsCallDllFunction.adsPortOpen();
 				}
@@ -75,10 +78,10 @@ public class DataQuartz {
 					plcDataReader = funDataReadWriteBeckhoffService;
 				}
 				
-				//检查上轮线程状态，如已完成则创建新线程，未完成则不创建		
+				//检查上轮线程状态，如已完成则创建新线程，未完成则不创建
 				Boolean threadSta = readDataTheadStaMap.get(fun.getId());
 	
-				if (threadSta!=true) {
+				if (threadSta!=true){
 					readDataTheadStaMap.put(fun.getId(), true);
 					
 					FunDataThread funDataThread = new FunDataThread();
@@ -90,7 +93,7 @@ public class DataQuartz {
 					
 					Thread thread = new Thread(funDataThread);
 					thread.start();
-	
+					
 				}
 					
 			}

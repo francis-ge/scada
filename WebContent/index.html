@@ -2,6 +2,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
+<META HTTP-EQUIV="expires" CONTENT="0">
 
 <!-- easyUI -->
 <link href="jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
@@ -9,6 +12,11 @@
 
 <style type="text/css">
 	* {margin: 0; border: 0; padding: 0;}
+	
+	.datagrid-cell, .datagrid-cell-group, .datagrid-header-rownumber, .datagrid-cell-rownumber{
+		//line-height: 50px;
+		font-size: 20px;
+	}
 </style>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
@@ -28,8 +36,9 @@
     <div data-options="region:'west',title:'导航栏',split:true" style="width:150px;">
 	    <div class="easyui-accordion" fit="true">
 	    	<div title="风场概览" style="overflow:auto;">
-	    	<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_realtimeInfo/windFarm_main.html" href="#">风场概览</a>
+	    		<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_realtimeInfo/windFarm_main.html" href="#">风场概览</a>
 	    		<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_realtimeInfo/windFarm_main_table.html" href="#">风场概览(表格)</a>
+	    		<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_realtimeInfo/windFarm_main_map.html" href="#">实景地图</a>
 	    	</div>
 	    	
 	    	<div title="瞬时信息" style="overflow:auto;">
@@ -41,6 +50,7 @@
 	    		<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_curve/history_curve.html" href="#">历史曲线</a>
 	    		<!-- <a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="" href="#">一年内日统计曲线</a> -->
 	    		<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_curve/windFrequency_curve.html" href="#">风频图</a>
+	    		<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_curve/wind_rose_curve.html" href="#">风玫瑰图</a>
 	    		<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_curve/power_curve.html" href="#">风速功率图</a>
 	    	</div>
 	    	
@@ -59,22 +69,22 @@
 		    	<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_report/report_funState.html" href="#">机组状态变化记录</a>
 		    	<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_report/report_hourForOneFun.html" href="#">单台小时报表</a>
 		    	<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_report/report_hour.html" href="#">风场小时报表</a>
-		    	<a class="easyui-menubutton" plain="true" style="display:block;width:100%;" title="" data-options="menu:'#dayReportMenu'" href="javascript:void(0)">风场日报表</a>   
-					<div class="accordionMenu" id="dayReportMenu" style="width:150px;">   
-					    <div><a title="easyui_report/report_day_main.html" href="#">主要信息（日报）</a></div>   
-					    <div><a title="easyui_report/report_day_time.html" href="#">时间统计（日报）</a></div>   
+		    	
+		    	<a class="easyui-menubutton" style="display:block;width:100%;" title="" data-options="menu:'#dayReportMenu'" href="javascript:void(0)">风场日报表</a>   
+					<div class="accordionMenu" id="dayReportMenu" noline="true" style="width:150px;">   
+					    <a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_report/report_day_main.html" href="#">主要信息（日报）</a> 
+					    <a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_report/report_day_time.html" href="#">时间统计（日报）</a>  
 					</div>
-		    	<a class="easyui-menubutton" plain="true" style="display:block;width:100%;" title="" data-options="menu:'#monthReportMenu'" href="javascript:void(0)">风场月报表</a>   
-					<div class="accordionMenu" id="monthReportMenu" style="width:150px;">   
-					   	<div><a title="easyui_report/report_month_main.html" href="#">主要信息（月报）</a></div>   
-					    <div><a title="easyui_report/report_month_time.html" href="#">时间统计（月报）</a></div> 
+		    	<a class="easyui-menubutton" style="display:block;width:100%;" title="" data-options="menu:'#monthReportMenu'" href="javascript:void(0)">风场月报表</a>   
+					<div class="accordionMenu" id="monthReportMenu" noline="true" style="width:150px;">   
+					   	<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_report/report_month_main.html" href="#">主要信息（月报）</a>   
+					    <a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_report/report_month_time.html" href="#">时间统计（月报）</a> 
 					</div> 
-		    	<a class="easyui-menubutton" plain="true" style="display:block;width:100%;" title="" data-options="menu:'#yearReportMenu'" href="javascript:void(0)">风场年报表</a>   
-					<div class="accordionMenu" id="yearReportMenu" style="width:150px;">   
-					   	<div><a title="easyui_report/report_year_main.html" href="#">主要信息（年报）</a></div>   
-					    <div><a title="easyui_report/report_year_time.html" href="#">时间统计（年报）</a></div> 
+		    	<a class="easyui-menubutton" style="display:block;width:100%;" title="" data-options="menu:'#yearReportMenu'" href="javascript:void(0)">风场年报表</a>   
+					<div class="accordionMenu" id="yearReportMenu" noline="true" style="width:150px;">   
+					   	<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_report/report_year_main.html" href="#">主要信息（年报）</a>   
+					    <a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_report/report_year_time.html" href="#">时间统计（年报）</a> 
 					</div>  
-
 	    	</div>
 	    	
 	    	<div title="风场控制" style="overflow:auto;">
@@ -82,30 +92,35 @@
 	    	</div>
 	    	
 	    	<div title="系统管理" style="overflow:auto;">
-	    		<!-- <a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="" href="#">用户管理</a>  -->
 	    		<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_manager/fun_manager.html" href="#">风机信息管理</a>
-                <a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_manager/variable_manager.html" href="#">风机变量管理</a>
+                <a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_manager/variable_manager.html"  href="#">风机变量管理</a>
                 <a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_manager/trouble_variable_manager.html" href="#">故障警告变量管理</a>
-                <a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="" href="#">退出系统</a>
+                <a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_manager/user_manager.html" href="#">用户管理</a>
+                <a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_manager/current_session_manager.html" href="#">在线用户管理</a>
+                <a class="easyui-linkbutton" plain="false" style="display:block;width:100%;" title="" href="/sharpower_scada/logout">退出系统</a>
 	    	</div>
 	    </div>
     </div>   
-    <div data-options="region:'center',title:''" style="overflow:hidden;background:#eee;" border="false" >
+    <div data-options="region:'center',title:'当前用户：[]'" style="overflow:hidden;background:#eee;" border="false" >
 	    <div id="tabs" class="easyui-tabs" fit="true" border="false" justified="true" pill="false">
 		</div>
     </div>
 
     <div id="south" data-options="region:'south',title:'',split:false" style="height:60px">
-    	<table id="datagrid" class="easyui-datagrid" url="sharpower_scada/ajaxWindFarmRealTimeInfo"
+    	<table id="datagrid" class="easyui-datagrid" url="/sharpower_scada/ajaxWindFarmRealTimeInfo"
 			singleSelect="true" fit="true" striped="true" fitColumns="true" loadMsg="">
 		</table>
     </div> 
 	
 	<script type="text/javascript">
 		$(function(){
+			$.post('/sharpower_scada/ajaxCurrentUser', function(data){
+				$('.easyui-layout').layout('panel', 'center').panel({'title':'当前用户：[' + data.result +']'});
+			},'json');
+			
 			$(".easyui-accordion a[plain='true'], .accordionMenu a").click(
 				function(){
-					var src = $(this).attr('title');
+					var src = $(this).attr('title') + '?ran=' + Math.random();;
 					var title = $(this).html();
 					
 					if (src=="") return false;
@@ -117,37 +132,37 @@
 							title : title,
 							content : '<iframe frameborder=0 style=height:100%;width:100%; src=' + src + '></iframe>',
 							closable : true
-							})		
+						})
 					}
 				})
 				
 			function formatField(value){
-				return '<h1 style="font-size:18px">'+Math.round(value*100)/100+'</h1>';
+				return '<h1 style="font-size:50px">' + Math.round(value*100)/100 + '</h1>';
 			}		
 
 			var $loadMsg;
 			
 			$('#datagrid').datagrid({       
 			    columns:[[    
-			        {field:'runFunCount',title:'运行',width:80,align:'center',formatter:formatField,styler:function(){return 'background-color:#66FF00;'}},    
-			        {field:'standbyFunCount',title:'待机',width:80,align:'center',formatter:formatField,styler:function(){return 'background-color:#FFCC00;'}},    
-			        {field:'stopFunCount',title:'停机',width:80,align:'center',formatter:formatField,styler:function(){return 'background-color:#FF0000;'}},    
-			        {field:'serviceFunCount',title:'维护',width:80,align:'center',formatter:formatField,styler:function(){return 'background-color:#9900FF;'}},    
-			        {field:'communicationFailureFunCount',title:'通信故障',width:80,align:'center',formatter:formatField,styler:function(){return 'background-color:#0066FF;'}},    
-			        {field:'errorFunCount',title:'故障',width:80,align:'center',formatter:formatField,styler:function(){return 'background-color:#FF0000;'}},    
-			        {field:'power',title:'有功功率',width:150,align:'center',formatter:formatField},    
-			        {field:'reactivePower',title:'无功功率',width:150,align:'center',formatter:formatField},    
-			        {field:'energy',title:'本日发电量',width:150,align:'center',formatter:formatField},    
-			        {field:'energyCounter',title:'累计发电量',width:150,align:'center',formatter:formatField},    
-			        {field:'maxWindSpeed',title:'最大风速',width:150,align:'center',formatter:formatField},    
-			        {field:'minWindSpeed',title:'最小风速',width:150,align:'center',formatter:formatField},    
-			        {field:'averageWindSpeed',title:'平均风速',width:150,align:'center',formatter:formatField},    
-			        {field:'maxPower',title:'最大功率',width:150,align:'center',formatter:formatField},    
-			        {field:'minPower',title:'最小功率',width:150,align:'center',formatter:formatField},    
-			        {field:'averagePower',title:'平均功率',width:150,align:'center',formatter:formatField}    
+			        {field:'runFunCount',title:'运行',width:60,align:'center',styler:function(){return 'background-color:#CCFF99;'}},    
+			        {field:'standbyFunCount',title:'待机',width:60,align:'center',styler:function(){return 'background-color:#FFFF99;'}},    
+			        {field:'stopFunCount',title:'停机',width:60,align:'center',styler:function(){return 'background-color:#FF6666;'}},    
+			        {field:'serviceFunCount',title:'维护',width:60,align:'center',styler:function(){return 'background-color:#CCCCFF;'}},    
+			        {field:'communicationFailureFunCount',title:'通信中断',width:60,align:'center',styler:function(){return 'background-color:#99CCFF;'}},    
+			        {field:'errorFunCount',title:'故障',width:60,align:'center',styler:function(){return 'background-color:#FF6666;'}},    
+			        {field:'power',title:'有功功率(kW)',width:150,align:'center'},    
+			        {field:'reactivePower',title:'无功功率(kVar)',width:150,align:'center'},    
+			        {field:'maxPower',title:'最大功率(kW)',width:150,align:'center'},    
+			        {field:'minPower',title:'最小功率(kW)',width:150,align:'center'},    
+			        {field:'averagePower',title:'平均功率',width:150,align:'center'},    
+			        {field:'maxWindSpeed',title:'最大风速(m/s)',width:150,align:'center'},    
+			        {field:'minWindSpeed',title:'最小风速(m/s)',width:150,align:'center'},    
+			        {field:'averageWindSpeed',title:'平均风速(m/s)',width:150,align:'center'},    
+			        {field:'energy',title:'本日发电量(KWh)',width:150,align:'center'},    
+			        {field:'energyCounter',title:'累计发电量(kWh)',width:150,align:'center'}    
 			    ]],
 			    rowStyler: function(index,row){
-		    			return 'height:30px';
+		    			return 'height:30px;font-weight:900;';
 			    	},
 				onLoadSuccess:function(){
 						if($loadMsg){

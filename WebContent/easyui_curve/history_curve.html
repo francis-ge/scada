@@ -17,7 +17,7 @@
   <body>
   	<form id="form1" method="post">
 		<label for="funSelect">选择风机：</label>
-		<select id="funSelect" name="funId" class="easyui-combobox" style="width:200px;" data-options="url:'sharpower_scada/ajaxAllfun',valueField:'id', textField:'name',required:'false'"></select>
+		<select id="funSelect" name="funId" class="easyui-combobox" style="width:200px;" data-options="url:'/sharpower_scada/ajaxAllfun',valueField:'id', textField:'name',required:'false'"></select>
 		
         <label for="valSelect">选择数据：</label>   
         <select id="valSelect" name="variables" class="easyui-combobox" style="width:200px;" data-options="valueField:'dbName', textField:'showNameCN',multiple:'true',required:'false'" ></select>
@@ -40,90 +40,94 @@
 	<script src="../js/echarts.min.js" charset="utf-8"></script>
 		
 	<script type="text/javascript">
-		var chart = echarts.init(document.getElementById('chart'));
-		var dataItem = 1000;
-	
-		var option = {
-			    title : {
-			        text: '历史曲线',
-			        subtext: ''
-			    },
-			    tooltip : {
-			        trigger: 'axis',
-			        formatter: '{b}<br />{a0}: {c0}<br />{a1}: {c1}'
-			    },
-			    legend : [{
-			        data : [{name:' '},{name:' '}]
-			    }],
-			    toolbox : {
-			        show : true,
-			        feature : {
-			            dataView : {show: true, readOnly: false},
-			            magicType : {show: true, type: ['line', 'bar']},
-			            restore : {show: true},
-			            saveAsImage : {show: true}
-			        }
-			    },
-			    xAxis : [
-					        {
-					            type : 'category',
-					            name: '时间',
-					            boundaryGap : true,
-					            data :[]
-					        }
-					    ],
-			    yAxis : [
-			        {
-			            type : 'value',
-			            scale: true,
-			            name : ' ',
-			            boundaryGap: [0.1, 0.1],
-			            data:[]
-			        },
-			        {
-			            type : 'value',
-			            scale: true,
-			            name : ' ',
-			            boundaryGap: [0.1, 0.1],
-			            data:[]
-			        }
-			    ],
-			    dataZoom :  [
-						     {
-					            show: true,
-					            realtime: true,
-					            start: 0,
-					            end: 100
-						      },
-						      {
-						    	type: 'inside',
-						        show : true,
-						        start : 0,
-						        end : 100
-						    }],
-			    series : [
-			        {
-			            name:' ',
-			            type:'line',
-			            xAxisIndex: 0,
-			            yAxisIndex: 0,
-			        },
-			        {
-			            name:' ',
-			            type:'line',
-			            xAxisIndex: 0,
-			            yAxisIndex: 1,
-			        }
-			    ]
-			};
+		$(function(){
+			var height = $(window).height();
+			$('#chart').height(height*0.9);
+			
+			var chart = echarts.init(document.getElementById('chart'));
+			var dataItem = 1000;
 		
-		chart.setOption(option);	
+			var option = {
+				    title : {
+				        text: '历史曲线',
+				        subtext: ''
+				    },
+				    tooltip : {
+				        trigger: 'axis',
+				        formatter: '{b}<br />{a0}: {c0}<br />{a1}: {c1}'
+				    },
+				    legend : [{
+				        data : [{name:' '},{name:' '}]
+				    }],
+				    toolbox : {
+				        show : true,
+				        feature : {
+				            dataView : {show: true, readOnly: false},
+				            magicType : {show: true, type: ['line', 'bar']},
+				            restore : {show: true},
+				            saveAsImage : {show: true}
+				        }
+				    },
+				    xAxis : [
+						        {
+						            type : 'category',
+						            name: '时间',
+						            boundaryGap : true,
+						            data :[]
+						        }
+						    ],
+				    yAxis : [
+				        {
+				            type : 'value',
+				            scale: true,
+				            name : ' ',
+				            boundaryGap: [0.1, 0.1],
+				            data:[]
+				        },
+				        {
+				            type : 'value',
+				            scale: true,
+				            name : ' ',
+				            boundaryGap: [0.1, 0.1],
+				            data:[]
+				        }
+				    ],
+				    dataZoom :  [
+							     {
+						            show: true,
+						            realtime: true,
+						            start: 0,
+						            end: 100
+							      },
+							      {
+							    	type: 'inside',
+							        show : true,
+							        start : 0,
+							        end : 100
+							    }],
+				    series : [
+				        {
+				            name:' ',
+				            type:'line',
+				            xAxisIndex: 0,
+				            yAxisIndex: 0,
+				        },
+				        {
+				            name:' ',
+				            type:'line',
+				            xAxisIndex: 0,
+				            yAxisIndex: 1,
+				        }
+				    ]
+				};
+			
+			chart.setOption(option);	
 		
- 		$(function(){
+
  			$('#funSelect').combobox({
  				onSelect : function(recode){
  							$('#valSelect').combobox('clear');
- 							$('#valSelect').combobox('reload', 'sharpower_scada/ajaxVariableForFun?plcTypeId=' + recode.plcType.id);
+ 							$('#valSelect').combobox('reload', '/sharpower_scada/ajaxVariableForFun?plcTypeId=' + recode.plcType.id);
 					}
  			});
 	 		
@@ -174,7 +178,7 @@
 				$.messager.progress();
 				
 				$('#form1').form('submit',{
-					url:'sharpower_scada/ajaxMainRecodeForOne',
+					url:'/sharpower_scada/ajaxMainRecodeForOne',
 					
 					onSubmit: function(){
 						var isValid = $(this).form('validate');

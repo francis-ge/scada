@@ -37,7 +37,7 @@
 		<input type="text" name="fun.address" value="" />
 		<input type="hidden" name="fun.windFarm.id" value="1" />
 	</form>
-		
+	
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
 	<script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
 	
@@ -53,7 +53,7 @@
 	
 	<script type="text/javascript">
 		$(function(){
-			$.post('sharpower_scada/ajaxMainInfo',{},function(data){
+			$.post('/sharpower_scada/ajaxMainInfo',{},function(data){
 
 				for(var i in data){
 					$('#funs').append("<div class='easyui-fundata'></div>")
@@ -66,14 +66,14 @@
 			
 			setInterval(function(){
 		    	
-				$.post('sharpower_scada/ajaxMainInfo',{},function(data){
+				$.post('/sharpower_scada/ajaxMainInfo',{},function(data){
 					$('.easyui-fundata').fundata('refresh',data);
 					
 				},'json');
 			},1000);
 			
 			$(window).resize(function(){
-				$.post('sharpower_scada/ajaxMainInfo',{},function(data){
+				$.post('/sharpower_scada/ajaxMainInfo',{},function(data){
 					$('.easyui-fundata').fundata('resize',data);
 					
 				},'json');
@@ -93,7 +93,7 @@
 							});
 							
 							$('#form').form('submit', {
-								url:'sharpower_scada/ajaxFunControlRun',
+								url:'/sharpower_scada/ajaxFunControlRun',
 								success: function(info){
 									info = eval("("+info+")");
 									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
@@ -111,7 +111,7 @@
 							});
 							
 							$('#form').form('submit', {
-								url:'sharpower_scada/ajaxFunControlStop',
+								url:'/sharpower_scada/ajaxFunControlStop',
 								success: function(info){
 									info = eval("("+info+")");
 									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
@@ -129,7 +129,7 @@
 							});
 							
 							$('#form').form('submit', {
-								url:'sharpower_scada/ajaxFunControlService',
+								url:'/sharpower_scada/ajaxFunControlService',
 								success: function(info){
 									info = eval("("+info+")");
 									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
@@ -147,7 +147,7 @@
 							});
 							
 							$('#form').form('submit', {
-								url:'sharpower_scada/ajaxFunControlReset',
+								url:'/sharpower_scada/ajaxFunControlReset',
 								success: function(info){
 									info = eval("("+info+")");
 									$.messager.show({title:'我的消息',msg:info,showType:'slide'});

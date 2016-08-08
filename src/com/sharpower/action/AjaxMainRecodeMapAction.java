@@ -86,7 +86,7 @@ public class AjaxMainRecodeMapAction extends ActionSupport{
 		funIdElement.addAttribute("not-null", "true");
 		funIdElement.addAttribute("fetch", "join");
 		
-		Element dateElement = classElement.addElement("property");
+		Element dateElement = classElement.addElement("property");  
 		dateElement.addAttribute("name", "dateTime");
 		dateElement.addAttribute("column", "DATE_TIME");
 		dateElement.addAttribute("type", "timestamp");
@@ -108,7 +108,7 @@ public class AjaxMainRecodeMapAction extends ActionSupport{
 			dbNames.add(dbName);
 		}
 		
-		OutputStream out = new FileOutputStream(new File(getClass().getClassLoader().getResource(xmlFile).getPath()));			
+		OutputStream out = new FileOutputStream(new File(getClass().getClassLoader().getResource(xmlFile).getPath()));
 		XMLWriter writer = new XMLWriter(out);
 		
 		writer.write(document);

@@ -4,9 +4,10 @@ import java.util.Date;
 
 public class User {
 	private Integer id;
+	private String name="";
+	private String password="";
+	private Boolean disabled=false;
 	private Date creatDate;
-	private String name;
-	private String password;
 	private Role role;
 	
 	public Integer getId() {
@@ -32,6 +33,12 @@ public class User {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public Boolean getDisabled() {
+		return disabled;
+	}
+	public void setDisabled(Boolean disabled) {
+		this.disabled = disabled;
 	}
 	public Role getRole() {
 		return role;

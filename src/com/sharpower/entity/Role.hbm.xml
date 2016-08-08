@@ -11,7 +11,7 @@
         <property name="name" type="java.lang.String" not-null="true" unique="true">
             <column name="NAME" />
         </property>
-        <list name="users" table="USER" inverse="false" lazy="true" fetch="join">
+        <list name="users" table="USER" inverse="false" lazy="false" fetch="join">
             <key>
                 <column name="ROLE" />
             </key>
@@ -19,6 +19,16 @@
 				<column name="ID"></column>            
             </list-index>
             <one-to-many class="com.sharpower.entity.User" />
+        </list>
+        <list name="resources" table="ROLE_RES" inverse="false" lazy="false" fetch="join">
+            <key>
+                <column name="ROLE_ID" />
+            </key>
+            <list-index>
+				<column name="ID"></column>            
+            </list-index>
+            <many-to-many class="com.sharpower.entity.Resource" column="RES_ID" unique="false">
+            </many-to-many>
         </list>
     </class>
 </hibernate-mapping>

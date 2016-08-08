@@ -108,6 +108,7 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 		
 		return q.list();
 	}
+	
 	public List executeHQLQueryPaging(String hql, int page, int rows, Object... objects) {
 		Query q = sf.getCurrentSession().createQuery(hql).setFirstResult(page).setMaxResults(rows);
 		

@@ -26,7 +26,7 @@
   <body>
   	<form id="form" method="post">
 		<label for="funSelect">选择风机：</label>
-		<select id="funSelect" name="funId" style="width:200px;" data-options="url:'sharpower_scada/ajaxAllfun',valueField:'id', textField:'name',required:'false'"></select>
+		<select id="funSelect" name="funId" style="width:200px;" data-options="url:'/sharpower_scada/ajaxAllfun',valueField:'id', textField:'name',required:'false'"></select>
 		
         <label for="valSelect">选择数据：</label>   
         <select id="valSelect" name="variables" style="width:200px;" data-options="valueField:'dbName', textField:'showNameCN',multiple:'true',required:'false'" >
@@ -38,6 +38,9 @@
 		
 	<script type="text/javascript">
  		$(function(){
+			var height = $(window).height();
+			$('#chart').height(height*0.9);
+			
 			var chart = echarts.init(document.getElementById('chart'));
 			var dataItem = 1000;
 		
@@ -153,7 +156,7 @@
 					return;
 				}
 				
-				$.post('sharpower_scada/ajaxRealTimeInfo', {funId:funId}, function(data){
+				$.post('/sharpower_scada/ajaxRealTimeInfo', {funId:funId}, function(data){
 					axisData = (new Date()).toLocaleTimeString().replace(/^\D*/,'');
 					var option2 = chart.getOption();
 	
@@ -209,7 +212,7 @@
  			$('#funSelect').combobox({
  				onSelect : function(recode){
  							$('#valSelect').combobox('clear');
- 							$('#valSelect').combobox('reload', 'sharpower_scada/ajaxVariableForFun?plcTypeId=' + recode.plcType.id);
+ 							$('#valSelect').combobox('reload', '/sharpower_scada/ajaxVariableForFun?plcTypeId=' + recode.plcType.id);
 					}
  			});
 	 		

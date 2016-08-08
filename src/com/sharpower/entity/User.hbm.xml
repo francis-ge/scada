@@ -8,16 +8,19 @@
             <column name="ID" />
             <generator class="native" />
         </id>
-        <property name="creatDate" type="java.util.Date">
-            <column name="CREATDATE" />
-        </property>
-        <property name="name" type="java.lang.String" not-null="true" unique="true">
-            <column name="NAME" />
+        <property name="name" type="java.lang.String" >
+            <column name="NAME" not-null="true" unique="true" />
         </property>
         <property name="password" type="java.lang.String">
             <column name="PASSWORD" />
         </property>
-        <many-to-one name="role" class="com.sharpower.entity.Role" fetch="join">
+        <property name="creatDate" type="java.util.Date">
+            <column name="CREATDATE" />
+        </property>
+        <property name="disabled" type="boolean" >
+            <column name="DISABLED" />
+        </property>
+        <many-to-one name="role" class="com.sharpower.entity.Role" fetch="join" lazy="false">
             <column name="ROLE" />
         </many-to-one>
     </class>

@@ -30,11 +30,9 @@ public class ReportDayQuartz {
 	public void setRecodeService(RecodeService recodeService) {
 		this.recodeService = recodeService;
 	}
-
-	public void statistic(){
-		List<Map<String, Object>> list = new ArrayList<>();
-		Calendar calendar = Calendar.getInstance();
-		
+	
+	public void aotuStatistic(){
+		Calendar calendar = Calendar.getInstance();		
 		calendar.setTime(new Date());
 
 		calendar.add(Calendar.DAY_OF_MONTH, -1);
@@ -52,6 +50,13 @@ public class ReportDayQuartz {
 		
 		Date maxDate = calendar.getTime();
 		
+		statistic(minDate, maxDate);
+		
+	}
+
+	public void statistic( Date minDate, Date maxDate ){
+		List<Map<String, Object>> list = new ArrayList<>();
+		
 		String hql = "SELECT new map( "
 				+ "mr.dateTime as date, "
 				+ "mr.fun.id as funId, "
@@ -63,7 +68,7 @@ public class ReportDayQuartz {
 				+ "max(mr.___visu_grid_power) as maxPower, "
 				+ "avg(mr.___availability_ratio) as availabilityRatio, "
 				+ "avg(mr.___visu_nacelle_outdoor_temperature) as nacelleOutdoorTemperature, "
-				+ "(max(mr.___data_time_energy) - min(mr.___data_time_energy)) as dataTimeEnergy, "
+				+ "(max(mr.A___data_time_energy) - min(mr.A___data_time_energy)) as dataTimeEnergy, "
 				+ "(max(mr.___data_time_service) - min(mr.___data_time_service)) as dataTimeService, "
 				+ "(max(mr.___data_time_all_error) - min(mr.___data_time_all_error)) as dataTimeAllError, "
 				+ "(max(mr.___data_time_normal) - min(mr.___data_time_normal)) as dataTimeNormal, "
@@ -75,6 +80,16 @@ public class ReportDayQuartz {
 			list = recodeService.findMapByHql(hql, minDate, maxDate);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		
+		if (list.size()>0) {
+			String hql1 = "FROM ReportDayRecode rdr WHERE rdr.date=?";
+			List<ReportDayRecode> recodes= reportDayRecodeService.findEntityByHQL(hql1, minDate);
+			
+			for (ReportDayRecode reportDayRecode2 : recodes) {
+				reportDayRecodeService.deleteEntity(reportDayRecode2);
+			}
+			
 		}
 		
 		for (Map<String, Object> map : list) {

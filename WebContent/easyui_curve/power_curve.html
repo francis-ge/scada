@@ -17,7 +17,7 @@
   <body>
   	<form id="form1" method="post">
 		选择风机：
-		<select id="funSelect" name="funId" class="easyui-combobox" style="width:200px;" url="sharpower_scada/ajaxAllfun"  valueField="id" textField="name" required="required"></select>
+		<select id="funSelect" name="funId" class="easyui-combobox" style="width:200px;" url="/sharpower_scada/ajaxAllfun"  valueField="id" textField="name" required="required"></select>
                     开始时间：   
      	<input name="beginTime" type="text" class="easyui-datebox" required="required"></input>
      	结束时间：
@@ -36,77 +36,80 @@
 	<script src="../js/echarts.min.js" charset="utf-8"></script>
 	
 	<script type="text/javascript">
-		var chart = echarts.init(document.getElementById('chart'));
-		
-		var option = {
-			    title : {
-			        text: '风速功率图',
-			        subtext: ''
-			    },
-			    tooltip : {
-			        trigger: 'axis',
-			        formatter:'风速：{b}m/s<br />{a0}: {c0}'
-			    },
-			    legend: {
-			        data:['功率(kWh)']
-			    },
-			    toolbox: {
-			        show : true,
-			        feature : {
-			            dataView : {show: true, readOnly: false},
-			            magicType : {show: true, type: ['line', 'bar']},
-			            restore : {show: true},
-			            saveAsImage : {show: true}
-			        }
-			    },
-			    xAxis : [
-			        {
-			            type : 'category',
-			            name : '风速(m/s)',
-			            boundaryGap : true,
-			            data : ['<1.5',1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,
-			                    8.5,9,9.5,10,10.5,11,11.5,12,12.5,13,13.5,
-			                    14,14.5,15,15.5,16,16.5,17,17.5,18,18.5,19,
-			                    19.5,20,20.5,21,21.5,22,22.5,23,23.5,24,24.5,'>25']
-			        }
-			    ],
-			    yAxis : [
-			        {
-			            type : 'value',
-			            scale: true,
-			            name : '功率(kWh)',
-			            boundaryGap: [0.2, 0.2]
-			        }
-			    ],
-			    dataZoom :  [
-   						     {
-					            show: true,
-					            realtime: true,
-					            start: 0,
-					            end: 100
-						      },
-							  {
-						    	type: 'inside',
-						        show : true,
-						        start : 0,
-						        end : 100
-  							  }],
-			    series : [
-			        {
-			            name:'功率(kWh)',
-			            type:'bar'
-			         }
-			    ]
-			};
-		
-			chart.setOption(option);
+		$(function(){
+			var height = $(window).height();
+			$('#chart').height(height*0.9);
 			
-			$(function(){
+			var chart = echarts.init(document.getElementById('chart'));
+			
+			var option = {
+				    title : {
+				        text: '风速功率图',
+				        subtext: ''
+				    },
+				    tooltip : {
+				        trigger: 'axis',
+				        formatter:'风速：{b}m/s<br />{a0}: {c0}'
+				    },
+				    legend: {
+				        data:['功率(kW)']
+				    },
+				    toolbox: {
+				        show : true,
+				        feature : {
+				            dataView : {show: true, readOnly: false},
+				            magicType : {show: true, type: ['line', 'bar']},
+				            restore : {show: true},
+				            saveAsImage : {show: true}
+				        }
+				    },
+				    xAxis : [
+				        {
+				            type : 'category',
+				            name : '风速(m/s)',
+				            boundaryGap : true,
+				            data : ['<1.5',1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,
+				                    8.5,9,9.5,10,10.5,11,11.5,12,12.5,13,13.5,
+				                    14,14.5,15,15.5,16,16.5,17,17.5,18,18.5,19,
+				                    19.5,20,20.5,21,21.5,22,22.5,23,23.5,24,24.5,'>25']
+				        }
+				    ],
+				    yAxis : [
+				        {
+				            type : 'value',
+				            scale: true,
+				            name : '功率(kW)',
+				            boundaryGap: [0.2, 0.2]
+				        }
+				    ],
+				    dataZoom :  [
+	   						     {
+						            show: true,
+						            realtime: true,
+						            start: 0,
+						            end: 100
+							      },
+								  {
+							    	type: 'inside',
+							        show : true,
+							        start : 0,
+							        end : 100
+	  							  }],
+				    series : [
+				        {
+				            name:'功率(kW)',
+				            type:'bar'
+				         }
+				    ]
+				};
+			
+				chart.setOption(option);
+				
 				$('#submitBtn').click(function(){
 					$.messager.progress();
 					
 					$('#form1').form('submit',{
-						url:'sharpower_scada/ajaxPowerCurve',
+						url:'/sharpower_scada/ajaxPowerCurve',
 						onSubmit: function(){
 							var isValid = $(this).form('validate');
 							if (!isValid){
@@ -133,7 +136,7 @@
 							chart.clear();
 							chart.setOption(option1);
 							
-							$.messager.show({ title:'我的消息', msg:info.result, showType:'slide'});
+							$.messager.show({ title:'我的消息', msg:info.message, showType:'slide'});
 						}
 					});
 					

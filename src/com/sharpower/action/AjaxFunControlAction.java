@@ -40,11 +40,11 @@ public class AjaxFunControlAction extends ActionSupport{
 	public String run(){
 		try {
 			funControl.run(fun);
-			result=fun.getName()+"  启动命令已执行。";
+			result=fun.getName()+"  启动命令已下达。符合起动条件时风机自动启动。";
 			return SUCCESS;
 		} catch (PlcException e) {
 			e.printStackTrace();
-			result=fun.getName()+"  启动命令未执行:,"+e.getMessage();
+			result=fun.getName()+"  启动命令未下达:,"+e.getMessage();
 			return SUCCESS;
 		}
 

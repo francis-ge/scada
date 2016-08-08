@@ -18,7 +18,7 @@
   
   <body>
 
-		<table id ="datagrid" class="easyui-datagrid" url="sharpower_scada/ajaxReportDayFindMainRecode" 
+		<table id ="datagrid" class="easyui-datagrid" url="/sharpower_scada/ajaxReportDayFindMainRecode" 
 				idField="id" singleSelect="true" fit="true" striped="true" fitColumns="true" rownumbers="true">
 			<thead>   
 		        <tr>   
@@ -42,6 +42,7 @@
 					<a id="SubmitBtn" class="easyui-linkbutton" title="" href="javascript:void(0)" data-options="iconCls:'icon-search'">查询</a> 
 				</form>
 				<a id="saveBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" style="display:inline-block;">导出</a>
+				<a id="statsBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit'" style="display:inline-block;float: right;">手动统计</a>
 		</div>	
 		<form id='form2' style='display:none' target='' method='post' action='' ajax='false'>
 			<input type='hidden' name='fields' />
@@ -90,7 +91,7 @@
 									}
 								}
 
-								$.post('sharpower_scada/ajaxReportHourForOne', function(data){
+								$.post('/sharpower_scada/ajaxReportHourForOne', function(data){
 									$('#form2').form('load',{fields:fields,titles:titles,excelData:data});
 									
 									$('#form2').form('submit',{url:'../excelFileAction'});
@@ -100,6 +101,19 @@
 					})	
 				});
 			
+			$('#statsBtn').click(
+				function(){
+					$.messager.confirm('确认对话框', '确定要手动统计吗？手动统计会删除之前的统计记录。', function(r){
+						if (r){
+							$.post('sharower_scada/ajaxReportDayStatistic', serializeForm($('#from1')),function(info){
+								info = eval("("+info+")");
+								$.messager.show({ title:'我的消息', msg:info.message, showType:'slide'});
+							});
+							
+						}
+				})	
+			});
+		
 		})
 		
 		//js方法：序列化表单 			

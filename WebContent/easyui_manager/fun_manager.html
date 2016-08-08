@@ -2,6 +2,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
+<META HTTP-EQUIV="expires" CONTENT="0">
+
 <title></title>
 
 <!-- easyUI -->
@@ -35,7 +39,7 @@
 					<td><select id="plcType" name="fun.plcType.id"
 						class="easyui-combobox" required="true"
 						missingMessage="主控类型必填!" style="width:180px;" 
-						url="sharpower_scada/ajaxAllPlcType" valueField="id" 
+						url="/sharpower_scada/ajaxAllPlcType" valueField="id" 
 						textField="name" value="" ></select>
 					</td>
 				</tr>
@@ -81,7 +85,7 @@
 	var flag='';
 	$(function() {
 		$('#table').datagrid({
-			url : 'sharpower_scada/ajaxAllfun',
+			url : '/sharpower_scada/ajaxAllfun',
 			fitColumns : true,//列自适应宽度
 			striped : true,//条纹背景
 			rownumbers: true,//显示行号
@@ -144,7 +148,7 @@
 															ids = ids + ',' + rows[i].id;
 														}
 														ids = ids.substring(1, ids.length);
-														$.post("sharpower_scada/ajaxDeleteFun", 
+														$.post("/sharpower_scada/ajaxDeleteFun", 
 																{ids:ids}, 
 																function(info){
 																	info = eval("("+info+")");
@@ -212,7 +216,7 @@
 								//向后台发送请求  
 								var queryParams = $('#table').datagrid('options').queryParams;
 
-								$.post('sharpower_scada/ajaxAllfun', queryParams, function(data){
+								$.post('/sharpower_scada/ajaxAllfun', queryParams, function(data){
 									//向后台发送请求  
 									$('#form1').form('load',{fields:fields,titles:titles,excelData:data});
 									
@@ -230,7 +234,7 @@
 		$('#submitBtn').click(function(){
 			$.messager.progress();	// 显示进度条
 			$('#form').form('submit', {
-				url:flag=='addFun'?'sharpower_scada/ajaxAddfun':'sharpower_scada/ajaxEditFun',
+				url:flag=='addFun'?'/sharpower_scada/ajaxAddfun':'/sharpower_scada/ajaxEditFun',
 				onSubmit: function(){
 					var isValid = $(this).form('validate');
 					if (!isValid){

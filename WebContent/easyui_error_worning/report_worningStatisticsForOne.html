@@ -36,7 +36,7 @@
 				function(){
 					$('#datagrid').datagrid('loadData',{ total:0, rows:[] });
 					
-					//$('#datagrid').datagrid({url : 'sharpower_scada/ajaxGetErrorStatisticsForOne'});
+					//$('#datagrid').datagrid({url : '/sharpower_scada/ajaxGetErrorStatisticsForOne'});
 					
 					var isValid = $('#from1').form('validate');
 					if (!isValid){
@@ -70,7 +70,7 @@
 								
 								var queryParams = $('#datagrid').datagrid('options').queryParams;
 
-								$.post('sharpower_scada/ajaxGetTroubleStatisticsForOne', queryParams, function(data){
+								$.post('/sharpower_scada/ajaxGetTroubleStatisticsForOne', queryParams, function(data){
 									data = eval("(" +data+")").rows;
 									data = JSON.stringify(data);
 									//向后台发送请求  
@@ -103,7 +103,7 @@
   </head>
   
   <body>
-		<table id ="datagrid" class="easyui-datagrid" url="sharpower_scada/ajaxGetTroubleStatisticsForOne" 
+		<table id ="datagrid" class="easyui-datagrid" url="/sharpower_scada/ajaxGetTroubleStatisticsForOne" 
 			idField="id" singleSelect="true" fit="true" striped="true" fitColumns="true" rownumbers="true" pagination="true">
 			<thead>   
 		        <tr>   
@@ -118,7 +118,7 @@
 		
 		<div id="toolBar" style="height:25px,overflow:hidden" >
 			<form id="from1" method="post" style="display: inline;">
-				选择风机：<select id="funSelect" name="funTroubleRecode.fun.id" class="easyui-combobox" style="width:200px;" url="sharpower_scada/ajaxAllfun"  valueField="id" textField="name" required="required">
+				选择风机：<select id="funSelect" name="funTroubleRecode.fun.id" class="easyui-combobox" style="width:200px;" url="/sharpower_scada/ajaxAllfun"  valueField="id" textField="name" required="required">
 						</select>
 						<input name="funTroubleRecode.funTroubleVariable.type.id" value="2" type="hidden"></input>
 				开始时间：<input name="funTroubleRecode.startTime"  class="easyui-datetimebox" required="required"></input>

@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
+<META HTTP-EQUIV="expires" CONTENT="0">
+<title></title>
+<!-- easyUI -->
+<link href="../jquery-easyui-1.4.4/themes/bootstrap/easyui.css"
+	rel="stylesheet">
+<link href="../jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
+
+<style type="text/css">
+	* {margin: 0;padding: 0;}
+</style>
+
+</head>
+
+<body>
+	<table id="table">
+	</table>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="../jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
+
+<!-- easyUI -->
+<script src="../jquery-easyui-1.4.4/jquery.easyui.min.js"
+	charset="utf-8"></script>
+<script src="../jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js"
+	charset="utf-8"></script>
+
+<script type="text/javascript">
+	$(function() {
+		$('#table').datagrid({
+			url : '/sharpower_scada/ajaxCurrentUsers',
+			fitColumns : true,//列自适应宽度
+			striped : true,//条纹背景
+			rownumbers: true,//显示行号
+			idField : 'id',
+			method : 'post',
+			columns : [ [ {
+				field : 'id',
+				title : 'ID',
+				width : 100,
+				align : 'right',
+				checkbox: true
+			}, {
+				field : 'attributes',
+				title : '用户名',
+				width : 100,
+				align : 'center',
+				formatter: function(value,row,index){
+					return value['userName'];
+				}
+			}, {
+				field : 'host',
+				title : '登录主机',
+				width : 100,
+				align : 'center'
+			}, {
+				field : 'startTimestamp',
+				title : '登录时间',
+				width : 100,
+				align : 'center',
+			},{
+				field : 'lastAccessTime',
+				title : '最后操作时间',
+				width : 100,
+				align : 'center',
+			},{
+				field : 'timeout',
+				title : '超时时间',
+				width : 100,
+				align : 'center'
+			} ] ],
+			toolbar : [ {
+				text : '刷新',
+				iconCls : 'icon-reload',
+				handler : function() {
+					$('#table').datagrid('load');
+					$('#table').datagrid('uncheckAll');
+				}
+			},{
+				text : '强制退出',
+				iconCls : 'icon-cancel',
+				handler : function(){
+					var rows = $('#table').datagrid('getSelections');
+					if(rows.lenght==0){
+						$.messager.show({title:'我的消息',msg:'请选择用户',showType:'slide'});
+						return;
+					}
+					
+					var sessionIds = new Array();
+					
+					for(var i in rows){
+						var sessionId = rows[i].id;
+						if(sessionId!=undefined){
+							sessionIds.push(sessionId);
+						}
+					}
+					
+					var params = $.param({'sessionIds':sessionIds},true);  
+					
+					$.post('/sharpower_scada/ajaxForceLogout', params, function(info){
+						$('#table').datagrid('load');
+						$('#table').datagrid('uncheckAll');
+						$.messager.show({title:'我的消息',msg:info.result,showType:'slide'});
+					},'json');
+				}
+			}]
+
+		});
+		
+		$('#submitBtn').click(function(){
+			$.messager.progress();	// 显示进度条
+			$('#form').form('submit', {
+				//url:flag=='addUser'?'/sharpower_scada/ajaxAddUser':'/sharpower_scada/ajaxEditUser',
+				url:'ajaxAddOrUpdateUser',
+				onSubmit: function(){
+					var isValid = $(this).form('validate');
+					if (!isValid){
+						$.messager.progress('close');	// 如果表单是无效的则隐藏进度条
+					}
+					return isValid;	// 返回false终止表单提交
+				},
+				success: function(info){
+					$.messager.progress('close');	// 如果提交成功则隐藏进度条
+					info = eval("("+info+")");
+					$.messager.show({title:'我的消息',msg:info.result,showType:'slide'});
+					$('#table').datagrid('reload');
+				}
+			});
+			
+		});
+	
+	/**
+	 * 关闭窗口方法
+	 */
+	$('#closeBtn').click(function(){
+		$('#dialog').dialog('close');
+	});
+
+});
+	
+</script>	
+</body>
+</html>

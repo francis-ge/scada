@@ -17,8 +17,72 @@
        			<param name="bufferSize">1024</param>
 			</result>
 		</action>
+		
+		<action name="baiduText2audioAction" class="text2AudioAction" method="textToAudio">
+			<result type="stream">
+				<param name="contentType">audio/mp3</param>
+				<param name="inputName">inputStream</param>
+       			<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		
+		<action name="ajaxAllUsers" class="ajaxUserAction" method="allUsers" >
+			<result name="success" type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">users</param>
+			</result>
+		</action>
 
-		<action name="ajaxLogin" class="ajaxUserAction" method="verificationUser" >
+		<action name="ajaxAllRoles" class="ajaxRoleAction" method="allRoles" >
+			<result name="success" type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">roles</param>
+			</result>
+		</action>
+				
+		<action name="ajaxAddOrUpdateUser" class="ajaxUserAction" method="addOrUpdateUser" >
+			<result name="success" type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="includeProperties">result</param>
+			</result>
+		</action>
+
+		<action name="ajaxDeleteUser" class="ajaxUserAction" method="deleteUser" >
+			<result name="success" type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="includeProperties">result</param>
+			</result>
+		</action>
+
+		<action name="ajaxCurrentUsers" class="ajaxSessionAction" method="currentUsers" >
+			<result name="success" type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">sessions</param>
+			</result>
+		</action>
+		
+		<action name="ajaxForceLogout" class="ajaxSessionAction" method="forceLogout" >
+			<result name="success" type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="includeProperties">result</param>
+			</result>
+		</action>
+				
+		<action name="ajaxLogin" class="ajaxUserAction" method="login" >
+			<result name="success" type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="includeProperties">result</param>
+			</result>
+		</action>
+		
+		<action name="ajaxCurrentUser" class="ajaxUserAction" method="loadCurrentUser" >
 			<result name="success" type="json">
 				<param name="noCache">true</param>
 				<param name="contentType">text/html</param>
@@ -230,7 +294,14 @@
 				<param name="contentType">text/html</param>
 				<param name="root">reportDayRecodesMap</param>
 			</result>
-		</action>	
+		</action>
+		
+		<action name="ajaxReportDayStatistic" class="ajaxReportDayRecodeAction" method="statistic">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+			</result>
+		</action>		
 		
 		<action name="ajaxFunControlRun" class="ajaxFunControlAction" method="run">
 			<result type="json">
@@ -280,21 +351,21 @@
 			</result>
 		</action>
 		
-		<action name="ajaxWindFrequencyCurve" class="ajaxMainRecodeAcrion" method="windFrequencyCurve">
+		<action name="ajaxWindFrequencyCurve" class="ajaxMainRecodeAction" method="windFrequencyCurve">
 			<result type="json">
 				<param name="noCache">true</param>
 				<param name="contentType">text/html</param>
 			</result>
 		</action>
 		
-		<action name="ajaxPowerCurve" class="ajaxMainRecodeAcrion" method="powerCurve">
+		<action name="ajaxPowerCurve" class="ajaxMainRecodeAction" method="powerCurve">
 			<result type="json">
 				<param name="noCache">true</param>
 				<param name="contentType">text/html</param>
 			</result>
 		</action>
 		
-		<action name="ajaxReportHourForOne" class="ajaxMainRecodeAcrion" method="reportHourForOne">
+		<action name="ajaxReportHourForOne" class="ajaxMainRecodeAction" method="reportHourForOne">
 			<result type="json">
 				<param name="noCache">true</param>
 				<param name="contentType">text/html</param>
@@ -302,7 +373,7 @@
 			</result>
 		</action>		
 		
-		<action name="ajaxFunChangeOfState" class="ajaxMainRecodeAcrion" method="funChangeOfState">
+		<action name="ajaxFunChangeOfState" class="ajaxMainRecodeAction" method="funChangeOfState">
 			<result type="json">
 				<param name="noCache">true</param>
 				<param name="contentType">text/html</param>
@@ -310,7 +381,7 @@
 			</result>
 		</action>	
 		
-		<action name="ajaxReportWindFarmHour" class="ajaxMainRecodeAcrion" method="reportWindFarmHour">
+		<action name="ajaxReportWindFarmHour" class="ajaxMainRecodeAction" method="reportWindFarmHour">
 			<result type="json">
 				<param name="noCache">true</param>
 				<param name="contentType">text/html</param>
@@ -318,12 +389,36 @@
 			</result>
 		</action>		
 		
-		<action name="ajaxMainRecodeForOne" class="ajaxMainRecodeAcrion" method="mainRecodeForOne">
+		<action name="ajaxMainRecodeForOne" class="ajaxMainRecodeAction" method="mainRecodeForOne">
 			<result type="json">
 				<param name="noCache">true</param>
 				<param name="contentType">text/html</param>
 			</result>
 		</action>	
+		
+		<action name="ajaxWindDirectionFrequency" class="ajaxMainRecodeAction" method="windDirectionFrequency">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
+		<action name="ajaxWindDirectionSpped" class="ajaxMainRecodeAction" method="windDirectionSpped">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">dataMap</param>
+			</result>
+		</action>		
+		
+		<action name="ajaxWindRose" class="ajaxMainRecodeAction" method="windRose">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">dataList</param>
+			</result>
+		</action>		
 		
 		<action name="ajaxGenerateMainRecodeHbmXml" class="ajaxMainRecodeMapAction" method="generateMainRecodeHbmXml">
 			<result type="json">

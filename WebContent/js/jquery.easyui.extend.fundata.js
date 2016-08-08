@@ -10,6 +10,7 @@
         				  "<img class='error'  src='../pic/fun_null.png' style='height:100%;width:100%;position:absolute;left:0;top:0' />"+
         				  "<img class='trouble' src='../pic/fun_null.png' style='height:100%;width:100%;position:absolute;left:0;top:0' />"+
         				  "<img class='group' src='../pic/fun_null.png' style='height:100%;width:100%;position:absolute;left:0;top:0' />"+
+        				  "<audio id='audio' autoplay='autoplay'></audio>" +
 					  "</div>"+
 					  "<div class='data1' data-options=region:'center',border:false style='overflow:hidden;'>"+
 					  	"<p class='funName' style='font-family: Verdana;'></p>"+
@@ -41,13 +42,14 @@
                 worning: false,
                 error: false,
                 url:'',
+                errorSta: '',
                 onSomeEvent: function(){}
             }
             
             $('.funName',$this).text(defaults.funName);
             $('.funMode',$this).text('风机模式：' + defaults.___main_loop_mode_number);
             $('.windSpeed',$this).text('风速(s/m)：    ' + defaults.windSpeed);
-            $('.power',$this).text('有功功率(kW/h)：' + defaults.power);
+            $('.power',$this).text('有功功率(kW)：' + defaults.power);
             $('.energy',$this).text('日发电量(kW)：' + defaults.energy);
             $('.energyCounter',$this).text('总发电量(kW)：' + defaults.energyCounter);
             
@@ -164,7 +166,7 @@
 	            		$('.fun1',$this).attr('src','../pic/fun_blue.png');
 	            		$('.yepian',$this).attr('src','../pic/fun_null.png');
 	            		$('.yepian',$this).velocity('finish');
-	            		settings.funModeTest='通信故障';
+	            		settings.funModeTest='通信中断';
 	            		break;
 	            	}
 	            }
@@ -174,18 +176,25 @@
 	            
 	            if(thisOptions.___wind_speed!=undefined){
 	            	
-	            	$('.windSpeed',$this).text('风速(m/s):' + Math.round(thisOptions.___wind_speed*100)/100 );
-	            	$('.power',$this).text('有功功率(kW/h):' + Math.round(thisOptions.___visu_grid_power*100)/100 );
-	            	$('.energy',$this).text('日发电量(kW):' + Math.round(thisOptions.___visu_grid_energy) );
+	            	$('.windSpeed',$this).text('风速(m/s):' + Math.round(thisOptions.___wind_speed*100)/100);
+	            	$('.power',$this).text('有功功率(kW):' + Math.round(thisOptions.___visu_grid_power*100)/100);
+	            	$('.energy',$this).text('日发电量(kW):' + Math.round(thisOptions.___visu_grid_energy));
 	            	$('.energyCounter',$this).text('总发电量(kW):' + Math.round(thisOptions.___visu_grid_energy_counter));
 	            	
 		            if(thisOptions.___error_error_global==true){
 		            	$('.error',$this).attr('src','../pic/error.png');
+		            	
+		            	if (settings.errorSta!=true){
+			            	$('#audio',$this).attr('src','../baiduText2audioAction?vol=9&text=' + thisOptions.fun.name + '故障' + ',' + thisOptions.fun.name + '故障');
+			            	settings.errorSta=true;
+		            	}
 		            }else if(thisOptions.___warning_warning_global==true){
 		            	$('.error',$this).attr('src','../pic/warning.png');
 		            }else{
 		            	$('.error',$this).attr('src','../pic/fun_null.png');
 		            }
+		            
+		            settings.errorSta=thisOptions.___error_error_global;
 		            
 	            }
 	            

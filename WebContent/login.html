@@ -27,9 +27,9 @@
 					<div >
 						<img src="js/assets/img/logo.png" alt="" style="width:150px"/>
 						<h1 >数据采集与监视控制系统</h1>
-						<h2 class="subtitle">Supervisory Control And Data Acquisition</h2>
+						<h2 class="subtitle" >Supervisory Control And Data Acquisition</h2>
 					</div>
-					<form id="form1" class="form-horizontal form-group-lg col-lg-11 signup" action="javascript:void(0)" role="form" >
+					<form id="form1" class="form-horizontal form-group-lg col-lg-11 signup"  action="javascript:void(0)" role="form" >
 						<div class="form-group" >
 							<label class="col-sm-3 control-label" id="unLabel" for="userName">用户名：</label>
 							<div class="col-sm-9">
@@ -45,10 +45,11 @@
 						<div class="form-group has-error">
 							<label class="col-sm-6 control-label" id="vldInfo"></label>
 							<div class="col-sm-6">
-								<button id="submitBtn" type="submit" class="btn btn-theme col-sm-8 col-sm-offset-4">登陆</button>
+								<button id="submitBtn" class="btn btn-theme col-sm-8 col-sm-offset-4" type="button">登陆</button>
 							</div>
 						</div>
 					</form>					
+
 				</div>
 				<div class="col-lg-5 col-lg-offset-1" style="margin-top:100px">
 					<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
@@ -95,9 +96,10 @@
 			$('#form').velocity({opacity:1,left:0},{duration:4000});
 			
 			$('#submitBtn').click(function(){
-				$.post( 'sharpower_scada/ajaxLogin', $("#form1").serialize(), function(data){
+				
+				$.post( '/sharpower_scada/ajaxLogin', $("#form1").serialize(), function(data){
 					if(data.result=='验证成功！'){
-						window.location.href = "index.html";
+						window.location.href = "/sharpower_scada/index.html";
 					}else {
 						$('#vldInfo').text(data.result);
 					}
@@ -105,6 +107,10 @@
 			});	
 		})
 			
+		$('#form :input').keyup(function(){
+			$('#vldInfo').text('');
+		})
+		
 		//js方法：序列化表单
 		function serializeForm(form){
 			var obj = {};
