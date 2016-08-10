@@ -50,10 +50,8 @@
 			$('#btn1').click(function(){
 				var param = $('#audioText').textbox('getText');
 				$.post('/baiduopenapi/oauth/2.0/token?grant_type=client_credentials&client_id=dcFP41BoCqemHDhIy00zcPX1Pgu7MKUV&client_secret=j7pytnwQP5aAeOtlLUU1WI651xfUPp8L',function(data){
-					
 					$('#audio').attr('src', '/baidutsn/text2audio?tex=' + param + '&ctp=1&cuid=54EE7593B904&lan=zh&tok=' + data.access_token);
-					
-				},'json')
+				},'json');
 			});
 		})
 	</script> 

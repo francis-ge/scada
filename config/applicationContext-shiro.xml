@@ -51,6 +51,9 @@
 		<property name="loginUrl" value="/login.html" />
 		<property name="successUrl" value="/index.html" />
 		<property name="unauthorizedUrl" value="/login.html" />
+		<property name="filterChainDefinitionMap">
+			<list ></list>
+		</property>
 		<!-- The 'filters' property is not necessary since any declared javax.servlet.Filter bean defined will be automatically acquired and available via its beanName in chain definitions, but you can perform overrides or parent/child consolidated configuration here if you like: -->
 		<!-- <property name="filters"> <util:map> <entry key="aName" value-ref="someFilterPojo"/> </util:map> </property> -->
 		<property name="filterChainDefinitions">

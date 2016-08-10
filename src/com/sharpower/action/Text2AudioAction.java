@@ -54,6 +54,7 @@ public class Text2AudioAction extends ActionSupport{
 			inputStream = urlConnection1.getInputStream();
 			
 			contentLength = inputStream.available();
+			
 			contentDisposition = "inline;filename=\"Donwload_" + new Date() + ".mp3\"";
 	    
 		} catch (Exception e) {
