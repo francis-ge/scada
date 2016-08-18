@@ -83,6 +83,11 @@
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
 
+	<bean id="userOperationRecodeDao"
+		class="com.sharpower.dao.impl.UserOperationRecodeDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
 	<bean id="funService" 
 		class="com.sharpower.service.impl.FunServiceImpl">
 		<property name="dao" ref="funDao"></property>
@@ -154,7 +159,12 @@
     	class="com.sharpower.service.impl.RoleServiceImpl">
     	<property name="dao" ref="roleDao"></property>	
     </bean>
-    
+
+    <bean id="userOperationRecodeService"
+    	class="com.sharpower.service.impl.UserOperationRecodeServiceImpl">
+    	<property name="dao" ref="userOperationRecodeDao"></property>	
+    </bean>
+        
     <bean id="FunControlServiceBeckhoffImpl"
     	class="com.sharpower.beckhoff.FunControlBeckhoffImpl">
     </bean>
@@ -272,6 +282,12 @@
 		class="com.sharpower.action.AjaxMainRecodeMapAction"
 		scope="prototype">
 		<property name="variableService" ref="variableService"></property>
+	</bean>
+	
+	<bean id="ajaxUserOperationRecodeAction"
+		class="com.sharpower.action.AjaxUserOperationRecodeAction"
+		scope="prototype">
+		<property name="userOperationRecodeService" ref="userOperationRecodeService"></property>
 	</bean>
 	
     <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor"/>

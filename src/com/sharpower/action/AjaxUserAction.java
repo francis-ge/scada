@@ -132,7 +132,7 @@ public class AjaxUserAction extends ActionSupport{
 		return SUCCESS;
 	}
 	
-	public String loadCurrentUser(){
+	public String loadCurrentUserName(){
 		Subject subject = SecurityUtils.getSubject();
 		PrincipalCollection collection = subject.getPrincipals();
 		
@@ -142,5 +142,26 @@ public class AjaxUserAction extends ActionSupport{
         
 		return SUCCESS;
 	}
+	
+	public String loadCurrentUser(){
+		Subject subject = SecurityUtils.getSubject();
+		
+		Object obj = subject.getPrincipal();
+		
+		if (obj!=null) {
+			String userName = (String)obj;
+			
+			List<User> users = userService.findEntityByHQL("from User u where u.name=?", userName);
+			
+			if (users!=null && !users.isEmpty()) {
+				user = users.iterator().next();
+			}
+			
+		}
+		return SUCCESS;
+	}
+	
+	
+	
 
 }

@@ -7,8 +7,8 @@
 <META HTTP-EQUIV="expires" CONTENT="0">
 
 <!-- easyUI -->
-<link href="jquery-easyui-1.4.4/themes/bootstrap/easyui.css" rel="stylesheet">
-<link href="jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet">
+<link href="jquery-easyui-1.5/themes/bootstrap/easyui.css" rel="stylesheet">
+<link href="jquery-easyui-1.5/themes/icon.css" rel="stylesheet">
 
 <style type="text/css">
 	* {margin: 0; border: 0; padding: 0;}
@@ -20,20 +20,25 @@
 </style>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
-<script src="jquery-easyui-1.4.4/jquery.min.js" charset="utf-8"></script>
+<script src="jquery-easyui-1.5/jquery.min.js" charset="utf-8"></script>
 
 <!-- easyUI -->
-<script src="jquery-easyui-1.4.4/jquery.easyui.min.js" charset="utf-8"></script>
-<script src="jquery-easyui-1.4.4/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
+<script src="jquery-easyui-1.5/jquery.easyui.min.js" charset="utf-8"></script>
+<script src="jquery-easyui-1.5/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
 
 <title></title>
 </head>
 
 <body class="easyui-layout" fit="true">   
     <div id="north" data-options="region:'north',title:'',split:false" style="height:9%;background:#85B9FF">
-    	<a href="http://www.sharpower.cn" target="_blank"><img alt="logo" src="pic/logo.png" style="height:100%;"></a>
-    </div>   
-    <div data-options="region:'west',title:'导航栏',split:true" style="width:150px;">
+    	<a href="http://www.sharpower.cn" target="_blank"><img alt="logo" src="pic/logo.png" style="height: 100%"></a>
+    	<div style="position:absolute;right:50px;bottom:2px">
+	    	<a id="user" href="#" style="color:#707070"></a>	
+	    	<a href="/sharpower_scada/logout" style="color:#008000">退出</a>
+    	</div>
+    </div>
+
+    <div id="west" data-options="region:'west',title:'导航栏',split:true" style="width:200px;">
 	    <div class="easyui-accordion" fit="true">
 	    	<div title="风场概览" style="overflow:auto;">
 	    		<a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_realtimeInfo/windFarm_main.html" href="#">风场概览</a>
@@ -97,11 +102,11 @@
                 <a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_manager/trouble_variable_manager.html" href="#">故障警告变量管理</a>
                 <a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_manager/user_manager.html" href="#">用户管理</a>
                 <a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_manager/current_session_manager.html" href="#">在线用户管理</a>
-                <a class="easyui-linkbutton" plain="false" style="display:block;width:100%;" title="" href="/sharpower_scada/logout">退出系统</a>
+                <a class="easyui-linkbutton" plain="true" style="display:block;width:100%;" title="easyui_manager/user_operation_query.html" href="#">用户操作查询</a>
 	    	</div>
 	    </div>
     </div>   
-    <div data-options="region:'center',title:'当前用户：[]'" style="overflow:hidden;background:#eee;" border="false" >
+    <div data-options="region:'center'" style="overflow:hidden;background:#eee;" border="false" >
 	    <div id="tabs" class="easyui-tabs" fit="true" border="false" justified="true" pill="false">
 		</div>
     </div>
@@ -111,21 +116,91 @@
 			singleSelect="true" fit="true" striped="true" fitColumns="true" loadMsg="">
 		</table>
     </div> 
+    
+    <div id="dialog" title="密码修改" modal="true" draggable="false"
+		class="easyui-dialog" closed="true" style="width: 280px;">
+		<form id="form" action="" method="post">
+			<input type="hidden" name="user.id" value="" />
+			<table>
+				<tr>
+					<td>用户名:</td>
+					<td><input type="text" name="user.name" class="easyui-textbox"
+						required="true" editable="false" validType="midLength[1,10]"
+						missingMessage="用户名必填!" invalidMessage="用户名必须在1到10个字符之间!"
+						value="" /></td>
+				</tr>
+				<tr>
+					<td>密码：</td>
+					<td><input id="password" type="password" name="user.password"
+						class="easyui-textbox" required="true" 
+						missingMessage="密码必填!" 
+						validType="length[4,64]" value="" />
+					</td>
+				</tr>
+				<tr>
+					<td>再次输入密码:</td>
+					<td><input id="rePassword" type="password" name="rePassword"
+						class="easyui-textbox" required="true"
+						missingMessage="密码必填!" value="" 
+						validType="equalTo['#password']" 
+						invalidMessage="两次输入密码不匹配" />
+					</td>
+				</tr>
+				<tbody style="display: none">
+					<tr>
+						<td>角色:</td>
+						<td><select id="plcType" name="user.role.id"
+							class="easyui-combobox" required="true"
+							missingMessage="角色必填!" style="width:180px;"
+							url="/sharpower_scada/ajaxAllRoles" valueField="id"
+							textField="name" value="" ></select>
+						</td>
+					</tr>
+					<tr>
+						<td>创建日期:</td>
+						<td><input type="text" name="user.creatDate"
+							class="easyui-textbox" editable="false" value=""  />
+						</td>
+					</tr>
+					<tr>
+						<td>禁用：</td>
+						<td>				
+							<input name="user.disabled" type="checkbox" value="true" />
+						</td>
+						
+					</tr>
+				</tbody>
+				<tr align="right">
+					<td colspan="2">
+						<a id="submitBtn" class="easyui-linkbutton">确定</a>
+						<a id="closeBtn"  class="easyui-linkbutton">关闭</a>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+    
 	
 	<script type="text/javascript">
 		$(function(){
-			$.post('/sharpower_scada/ajaxCurrentUser', function(data){
-				$('.easyui-layout').layout('panel', 'center').panel({'title':'当前用户：[' + data.result +']'});
+			$.post('/sharpower_scada/ajaxCurrentUserName', function(data){
+				$('#user').text('当前用户：['+ data.result +']');
 			},'json');
+			
+			$('#tabs').tabs('add',{
+				title : '风场概览',
+				content : '<iframe frameborder=0 style=height:100%;width:100%; src=easyui_realtimeInfo/windFarm_main.html></iframe>',
+				closable : true
+			});
 			
 			$(".easyui-accordion a[plain='true'], .accordionMenu a").click(
 				function(){
-					var src = $(this).attr('title') + '?ran=' + Math.random();;
-					var title = $(this).html();
+					var src = $(this).attr('title') + '?ran=' + Math.random();
+					var title = $(this).text();
 					
 					if (src=="") return false;
 					
-					if($('.easyui-tabs').tabs('exists', title)==true){
+					if($('.easyui-tabs').tabs('exists', title)){
 						$('.easyui-tabs').tabs('select',title);
 					}else{
 						$('#tabs').tabs('add',{
@@ -134,7 +209,7 @@
 							closable : true
 						})
 					}
-				})
+				});
 				
 			function formatField(value){
 				return '<h1 style="font-size:50px">' + Math.round(value*100)/100 + '</h1>';
@@ -149,7 +224,7 @@
 			        {field:'stopFunCount',title:'停机',width:60,align:'center',styler:function(){return 'background-color:#FF6666;'}},    
 			        {field:'serviceFunCount',title:'维护',width:60,align:'center',styler:function(){return 'background-color:#CCCCFF;'}},    
 			        {field:'communicationFailureFunCount',title:'通信中断',width:60,align:'center',styler:function(){return 'background-color:#99CCFF;'}},    
-			        {field:'errorFunCount',title:'故障',width:60,align:'center',styler:function(){return 'background-color:#FF6666;'}},    
+			        {field:'errorFunCount',title:'故障',width:60,align:'center',styler:function(){return 'background-color:#FF0000;'}},    
 			        {field:'power',title:'有功功率(kW)',width:150,align:'center'},    
 			        {field:'reactivePower',title:'无功功率(kVar)',width:150,align:'center'},    
 			        {field:'maxPower',title:'最大功率(kW)',width:150,align:'center'},    
@@ -159,7 +234,7 @@
 			        {field:'minWindSpeed',title:'最小风速(m/s)',width:150,align:'center'},    
 			        {field:'averageWindSpeed',title:'平均风速(m/s)',width:150,align:'center'},    
 			        {field:'energy',title:'本日发电量(KWh)',width:150,align:'center'},    
-			        {field:'energyCounter',title:'累计发电量(kWh)',width:150,align:'center'}    
+			        {field:'energyCounter',title:'累计发电量(kWh)',width:220,align:'center'}    
 			    ]],
 			    rowStyler: function(index,row){
 		    			return 'height:30px;font-weight:900;';
@@ -186,6 +261,68 @@
 				}, 		
 				1000 
 			);
+			
+			$('#user').click(function(){
+				$.post('/sharpower_scada/ajaxCurrentUser', function(data){
+					$('#form').form('reset');
+					$('#form').form('load',{'user.id':null});
+					
+					$('#form').form('load', {'user.id':data.id,
+						'user.name':data.name,
+						'user.password':data.password,
+						'rePassword':data.password,
+						'user.role.id':data.role.id,
+						'user.creatDate':data.creatDate,
+						'user.disabled':data.disabled});
+					},'json');		
+				
+					$('#dialog').dialog('open');
+			});
+			
+			$('#submitBtn').click(function(){
+				$.messager.progress();	// 显示进度条
+				$('#form').form('submit', {
+					url:'ajaxAddOrUpdateUser',
+					onSubmit: function(){
+						var isValid = $(this).form('validate');
+						if (!isValid){
+							$.messager.progress('close');	// 如果表单是无效的则隐藏进度条
+						}
+						return isValid;	// 返回false终止表单提交
+					},
+					success: function(info){
+						$.messager.progress('close');	// 如果提交成功则隐藏进度条
+						info = eval("("+info+")");
+						$.messager.show({title:'我的消息',msg:info.result,showType:'slide'});
+						
+						if(info.result=="操作成功！"){
+							window.location.href='/sharpower_scada/logout';
+						}
+					}
+				});
+				
+			});
+
+			/**
+			 * 关闭窗口方法
+			 */
+			$('#closeBtn').click(function(){
+				$('#dialog').dialog('close');
+			});
+			
+			
+			/**
+			 * easyui validatebox验证扩展 验证两次输入密码的一致性
+			 */
+			$.extend($.fn.validatebox.defaults.rules, {  
+			    /*必须和某个字段相等*/
+			    equalTo: {
+			        validator:function(value,param){
+			            return $(param[0]).val() == value;
+			        },
+					message:'字段不匹配'
+			    }
+			});
 
 				/*
 				$(window).resize(function(){

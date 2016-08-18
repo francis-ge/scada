@@ -25,7 +25,7 @@
 	<bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.MemorySessionDAO">
 	</bean>
 	
-	<bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie"> 
+	<bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
 		<property name="name" value="sid"></property>
 		<property name="httpOnly" value="true"></property>
 	</bean>
@@ -35,6 +35,7 @@
 		<property name="sessionIdCookie" ref="sessionIdCookie"></property>
 		<property name="sessionIdCookieEnabled" value="true"></property>
 		<property name="globalSessionTimeout" value="100000"></property>
+		<!-- <property name="authorizer.permissionResolver" ref="urlPermissionResolver"/> -->
 	</bean>
 	
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
@@ -46,24 +47,26 @@
 	
 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"></bean>
 	
+	<bean id="userOperationRecode" class="com.sharpower.shiro.OperationRecodeFilter">
+		<property name="userService" ref="userService"></property>
+		<property name="userOperationRecodeService" ref="userOperationRecodeService"></property>
+	</bean>
+	
 	<bean class="org.apache.shiro.spring.web.ShiroFilterFactoryBean" id="shiroFilter">
 		<property name="securityManager" ref="securityManager" />
 		<property name="loginUrl" value="/login.html" />
 		<property name="successUrl" value="/index.html" />
 		<property name="unauthorizedUrl" value="/login.html" />
-		<property name="filterChainDefinitionMap">
-			<list ></list>
-		</property>
 		<!-- The 'filters' property is not necessary since any declared javax.servlet.Filter bean defined will be automatically acquired and available via its beanName in chain definitions, but you can perform overrides or parent/child consolidated configuration here if you like: -->
 		<!-- <property name="filters"> <util:map> <entry key="aName" value-ref="someFilterPojo"/> </util:map> </property> -->
 		<property name="filterChainDefinitions">
 			<value>
 				/ajaxLogin = anon
 				/js/** = anon
-				/jquery-easyui-1.4.4/** = anon
+				/jquery-easyui-1.5/** = anon
 				/pic/** = anon
 				/logout = logout
-				/easyui_manager/** = roles[manager]
+				/easyui_manager/** = roles[manager],userOperationRecode
 				/** = authc
 			</value>
 		</property>

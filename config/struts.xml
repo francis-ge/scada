@@ -82,14 +82,22 @@
 			</result>
 		</action>
 		
-		<action name="ajaxCurrentUser" class="ajaxUserAction" method="loadCurrentUser" >
+		<action name="ajaxCurrentUserName" class="ajaxUserAction" method="loadCurrentUserName" >
 			<result name="success" type="json">
 				<param name="noCache">true</param>
 				<param name="contentType">text/html</param>
 				<param name="includeProperties">result</param>
 			</result>
 		</action>
-		
+
+		<action name="ajaxCurrentUser" class="ajaxUserAction" method="loadCurrentUser" >
+			<result name="success" type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">user</param>
+			</result>
+		</action>
+				
 		<action name="ajaxMainInfo" class="ajaxRealTimeInfoAction" method="mainInfo" >
 			<result type="json">
 				<param name="noCache">true</param>
@@ -426,6 +434,15 @@
 				<param name="contentType">text/html</param>
 			</result>
 		</action>		
+
+		<action name="ajaxFindUserOperationRecode" class="ajaxUserOperationRecodeAction" method="findUserOperationRecode">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+				<param name="root">result</param>
+			</result>
+		</action>		
+		
 	</package>
 
 </struts>
