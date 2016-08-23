@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-8-12 10:51:09 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="com.sharpower.entity.UserOperationRecode" table="USEROPERATIONRECODE">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        <property name="dateTime" type="java.util.Date">
+            <column name="DATETIME" />
+        </property>
+        <property name="url" type="java.lang.String">
+            <column name="URL" />
+        </property>
+        <property name="description" type="java.lang.String">
+            <column name="DESCRIPTION" />
+        </property>
+        <many-to-one name="user" class="com.sharpower.entity.User" fetch="join" lazy="false">
+            <column name="USER_ID" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

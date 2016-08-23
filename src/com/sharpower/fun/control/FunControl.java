@@ -12,5 +12,4 @@ public interface FunControl {
 	public void yawRight(Fun fun) throws PlcException;
 	public void powerLimit(Fun fun, float val) throws PlcException;
 	public void powerLimitCancel(Fun fun) throws PlcException;
-	
 }

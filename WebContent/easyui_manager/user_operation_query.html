@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
+<META HTTP-EQUIV="expires" CONTENT="0">
+<title></title>
+<!-- easyUI -->
+<link href="../jquery-easyui-1.5/themes/bootstrap/easyui.css" rel="stylesheet">
+<link href="../jquery-easyui-1.5/themes/icon.css" rel="stylesheet">
+
+<style type="text/css">
+	* {margin: 0;padding: 0;}
+</style>
+
+</head>
+
+<body>
+	<table id ="datagrid"></table>
+	<div id="toolBar" style="height:25px,overflow:hidden" >
+		<form id="from1" method="post" style="display: inline">   
+			选择用户：<select id="userSelect" name="userId" class="easyui-combobox" style="width:200px;" url="/sharpower_scada/ajaxAllUsers"  valueField="id" textField="name" required="required">
+					</select>
+			开始时间：<input name="beginTime" type="text" class="easyui-datetimebox" required="required"></input>
+			结束时间：<input name="endTime" type="text" class="easyui-datetimebox" required="required"></input>
+			<a id="SubmitBtn" class="easyui-linkbutton" title="" href="javascript:void(0)" data-options="iconCls:'icon-search'">查询</a> 
+		</form>
+		<a id="saveBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" style="display:inline-block;">导出</a>
+	</div>	
+	
+	<form id='form2' style='display:none' target='' method='post' action='' ajax='false'>
+		<input type='hidden' name='fields' />
+		<input type='hidden' name='titles' />
+		<input type='hidden' name='excelData' />
+	</form>
+	
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="../jquery-easyui-1.5/jquery.min.js" charset="utf-8"></script>
+
+<!-- easyUI -->
+<script src="../jquery-easyui-1.5/jquery.easyui.min.js"
+	charset="utf-8"></script>
+<script src="../jquery-easyui-1.5/locale/easyui-lang-zh_CN.js"
+	charset="utf-8"></script>
+
+<script type="text/javascript">
+	var flag='';
+	$(function() {
+		$('#datagrid').datagrid({
+			url : '/sharpower_scada/ajaxFindUserOperationRecode',
+			fitColumns : true,//列自适应宽度
+			fit:true,
+			striped : true,//条纹背景
+			rownumbers: true,//显示行号
+			pagination: true,
+			idField : 'id',
+			toolbar: '#toolBar',
+			method : 'post',
+			columns : [ [ {
+				field : 'id',
+				title : 'ID',
+				width : 100,
+				align : 'right',
+				checkbox: true
+			}, {
+				field : 'user.name',
+				title : '用户',
+				width : 100,
+				align : 'center',
+				formatter: function(value,row,index){
+					return row.user.name;
+				}
+			}, {
+				field : 'dateTime',
+				title : '时间',
+				width : 100,
+				align : 'center'
+			}, {
+				field : 'description',
+				title : '操作',
+				width : 100,
+				align : 'center'
+			} ] ]
+		});
+		
+		$('#SubmitBtn').click(function(){
+			$('#datagrid').datagrid('loadData',{ total:0, rows:[] });
+
+			$('#datagrid').datagrid('load', serializeForm($('#from1')));
+			
+			}
+		);
+		
+		$('#saveBtn').click(
+				function(){
+					$.messager.confirm('确认对话框', '确定要保存该报表吗？', function(r){
+						if (r){
+							//获取表头信息
+							var header = $('#datagrid').datagrid('options').columns[0];
+							var fields = "";
+							var titles = "";
+							for(var i = 0;i<header.length;i++){
+								var field = header[i].field;
+								var title = header[i].title;
+								var hiddenFlag = header[i].hidden;
+								
+								if(!hiddenFlag){
+									var dh = (i == (header.length -1) ? "" :",");
+									fields = fields + field + dh;
+									titles = titles + title + dh;
+								}
+							}
+							
+							var queryParams = $('#datagrid').datagrid('options').queryParams;
+
+							$.post('/sharpower_scada/ajaxFindUserOperationRecode', queryParams, function(data){
+								$('#form2').form('load',{fields:fields,titles:titles,excelData:data});
+								
+								$('#form2').form('submit',{url:'../excelFileAction'});
+							});
+							
+						}
+				})	
+			});
+		
+
+});
+	//js方法：序列化表单 			
+	function serializeForm(form){
+		var obj = {};
+		$.each(form.serializeArray(),function(index){
+			if(obj[this['name']]){
+				obj[this['name']] = obj[this['name']] + ','+this['value'];
+			} else {
+				obj[this['name']] =this['value'];
+			}
+		});
+		return obj;
+	}
+</script>	
+</body>
+</html>

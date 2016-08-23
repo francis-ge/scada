@@ -34,7 +34,7 @@
     	<a href="http://www.sharpower.cn" target="_blank"><img alt="logo" src="pic/logo.png" style="height: 100%"></a>
     	<div style="position:absolute;right:50px;bottom:2px">
 	    	<a id="user" href="#" style="color:#707070"></a>	
-	    	<a href="/sharpower_scada/logout" style="color:#008000">退出</a>
+	    	<a id="logout" href="#" style="color:#008000">退出</a>
     	</div>
     </div>
 
@@ -298,6 +298,15 @@
 						if(info.result=="操作成功！"){
 							window.location.href='/sharpower_scada/logout';
 						}
+					}
+				});
+				
+			});
+			
+			$('#logout').click(function(){
+				$.messager.confirm('确认对话框','您想要退出系统吗？',function(r){
+					if(r){
+						window.location.href='/sharpower_scada/logout';
 					}
 				});
 				

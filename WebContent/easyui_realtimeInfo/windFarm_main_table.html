@@ -157,7 +157,6 @@
 							$('#form').form('submit', {
 								url:'/sharpower_scada/ajaxFunControlRun',
 								success: function(info){
-									info = eval("("+info+")");
 									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
 								}
 							});
@@ -175,7 +174,6 @@
 							$('#form').form('submit', {
 								url:'/sharpower_scada/ajaxFunControlStop',
 								success: function(info){
-									info = eval("("+info+")");
 									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
 								}
 							});
@@ -193,7 +191,6 @@
 							$('#form').form('submit', {
 								url:'/sharpower_scada/ajaxFunControlService',
 								success: function(info){
-									info = eval("("+info+")");
 									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
 								}
 							});
@@ -211,7 +208,6 @@
 							$('#form').form('submit', {
 								url:'/sharpower_scada/ajaxFunControlReset',
 								success: function(info){
-									info = eval("("+info+")");
 									$.messager.show({title:'我的消息',msg:info,showType:'slide'});
 								}
 							});

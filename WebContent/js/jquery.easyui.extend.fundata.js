@@ -2,7 +2,7 @@
     var init = function(target) {
         var $this = $(target);
         
-        $this.attr({style:'display:inline-block;'});
+        $this.attr({style:'display:inline-block;border-style:ridge;border-color:LightGrey'});
         
         $this.append( "<div class='fun' data-options=region:'west',border:false>"+
         				  "<img class='fun1' src='../pic/fun_gray.png'   style='height:100%;width:100%;position:absolute;left:0;top:0' />"+
@@ -199,9 +199,9 @@
 	            }
 	            
 	            //只在首次刷新时设置该值。
-	            if(settings.fun==undefined){
-	            	$('.group', $this).attr('src', '../pic/loop' + thisOptions.fun.line + '.png');
-	            };
+//	            if(settings.fun==undefined){
+//	            	$('.group', $this).attr('src', '../pic/loop' + thisOptions.fun.line + '.png');
+//	            };
 	            
 	            settings = $.extend({}, settings, thisOptions);
 	

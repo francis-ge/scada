@@ -116,7 +116,7 @@ public class FunControlBeckhoffImpl implements FunControl {
 
 		byte[] pData = ByteUtil.getBytes(val);
 
-		JNIByteBuffer lj_pData = new JNIByteBuffer(pData);	
+		JNIByteBuffer lj_pData = new JNIByteBuffer(pData);
 		
 		execute(lj_AmsAddr, handle,lj_pData.getUsedBytesCount(),lj_pData);
 		
